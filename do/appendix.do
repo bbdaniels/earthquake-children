@@ -85,7 +85,7 @@
 
 	use "${directory}/data/analysis_children.dta", clear
 
-	keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
+	keep if m_missing == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
 
 	* Create false observations for representative sample checks (tested vs all)
 		expand 2 if indiv_tested == 1, gen(false)
@@ -97,8 +97,8 @@
 			indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
 
 		reftab `stats_to_tab'	 ///
-		using "${appendix}/A1c_tested_rep.xls" ///
-		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
+		using "${directory}/outputs/TA1c_tested_rep.xls" ///
+		, controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
 			by(indiv_tested) refcat(0) se n replace ///
 			title("Table 4A1c. Tested Children Representative Sample") sheet("Table A1c") ///
 			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
