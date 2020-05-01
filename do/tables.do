@@ -235,7 +235,7 @@
 		xml_tab `theVarlist' ///
 			indiv_health_height indiv_health_weight indiv_health_height24 indiv_health_weight24 ///
 	  , replace ///
-      save("$directory/outputs/T2b_recovery.xls") ///
+      save("${directory}/outputs/T2b_recovery.xls") ///
 			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) ///
 			cnames(`theCols' "Adult Height" "Adult Height" "Adult Weight" "Adult Weight" ) ///
 			showeq ceq(${numbering}) c("Constant") stats(N r2 mean) ///
@@ -275,7 +275,7 @@
 		depvar(indiv_theta_mean) rhs(hh_faultdist i.false_age*hh_faultdist `fault_controls' `other_controls') cl(village_code)
 
   xitab ///
-		using "$directory/outputs/T3_impacts.xls" ///
+		using "${directory}/outputs/T3_impacts.xls" ///
 		, replace stats(mean)
 
 * Table 4a. Mother's Education OLS
@@ -301,7 +301,7 @@
 		depvar(indiv_health_zanthro_height) rhs(hh_faultdist m_indiv_edu_binary m_edu_fault  `fault_controls' `other_controls') cl(village_code)
 
 	xitab ///
-		using "$directory/outputs/T4a_momedu_ols.xls" ///
+		using "${directory}/outputs/T4a_momedu_ols.xls" ///
 		, replace stats(mean)
 
 * Table 4b. Mother's Education IV
@@ -362,7 +362,7 @@
 
 	xml_tab ///
 		reg1 reg2 reg3 reg4 ///
-		, save("$directory/outputs/T4b_momedu_iv.xls") ///
+		, save("${directory}/outputs/T4b_momedu_iv.xls") ///
 		  replace below stats(m N f  ) ///
 			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
 

@@ -1,142 +1,129 @@
-** Earthquake appendix (final)
+** Earthquake appendix
+
+* Table A1a. Testing coverage
+
+	use "${directory}/data/analysis_children.dta", clear
+
+	keep if indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
+
+	replace indiv_test_status = 5 if indiv_test_status == .
+	replace indiv_test_status = 6 if m_missing == 1 & indiv_test_status == 0
+		label def indiv_test_status 6 "Tested but Missing Mother" , modify
+
+	ta indiv_test_status indiv_age ///
+	, matcell(test_completion)
+
+	mat i = J(colsof(test_completion),1,1)
+		mat test_completion = test_completion , test_completion*i
+	mat i = J(1,rowsof(test_completion),1)
+		mat test_completion = test_completion \ i*test_completion
+
+	matrix rownames test_completion = "Tested" "Temporarily Away" "No Longer in HH" "Disabled" "Working" "No Reason Given" "Tested but Missing Mother" "Total"
+	matrix colnames test_completion = 7 8 9 10 11 12 13 14 15 Total
+
+	mat test_completion = test_completion'
+
+	xml_tab test_completion ///
+	, save("${directory}/outputs/TA1a_tested.xls") ///
+		title("Table A1. Test Completion by Age") sheet("Table A1") ///
+		lines(COL_NAMES 3 9 2 LAST_ROW 3)  format( (SCLB0)  (SCCB0 NCRR0))
 
 
-cd "$directory/outputs/shock/temp/"
+* Table A1b. Measurement Coverage
 
-** Tables
+	use "${directory}/data/analysis_children.dta", clear
+	cap mat drop _all
+	keep if indiv_dead == 0 & indiv_age < 16
 
-if 0 {
+	gen measnomiss = indiv_measured == 1 & m_missing == 1
 
-qui { // Completion and representativeness
+	forvalues i = 3/15 {
+		qui count if indiv_age == `i'
+		mat theTotal = nullmat(theTotal) \ [`r(N)']
+		qui count if indiv_measured == 1 & m_missing == 0 & indiv_age == `i'
+		mat theMeasured = nullmat(theMeasured) \ [`r(N)']
+		qui count if indiv_measured == 1 & m_missing == 1 & indiv_age == `i'
+		mat theMissing = nullmat(theMissing) \ [`r(N)']
+		qui sum indiv_health_height if indiv_age == `i'
+		mat theCM = nullmat(theCM) \ [`r(mean)']
+		qui sum indiv_health_zanthro_height if indiv_age == `i'
+		mat theHA = nullmat(theHA) \ [`r(mean)']
+		qui sum indiv_health_weight if indiv_age == `i'
+		mat theKG = nullmat(theKG) \ [`r(mean)']
+		qui sum indiv_health_zanthro_weight if indiv_age == `i'
+		mat theWA = nullmat(theWA) \ [`r(mean)']
+		}
 
+	qui count if indiv_age > 2
+		mat more = [`r(N)']
+	qui count if indiv_measured == 1 & m_missing == 0
+		mat more = more , [`r(N)']
+	qui count if indiv_measured == 1 & m_missing == 1
+		mat more = more , [`r(N)']
 
-	* Table A1a. Testing coverage
+	qui sum indiv_health_height
+		mat more = more , [`r(mean)']
+	qui sum indiv_health_zanthro_height
+		mat more = more , [`r(mean)']
+	qui sum indiv_health_weight
+		mat more = more , [`r(mean)']
+	qui sum indiv_health_zanthro_weight
+		mat more = more , [`r(mean)']
 
-		use "${directory}/data/analysis_children.dta", clear
+	mat measured = theTotal , theMeasured , theMissing , theCM , theHA , theKG , theWA
+	mat measured = measured \ more
 
-		keep if indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
+	matrix colnames measured = "Eligible" "Measured and Matched" "Measured and Unmatched" "Mean Height (cm)" "Mean Height-for-Age" "Mean Weight (kg)" "Mean Weight-for-Age"
+	matrix rownames measured = 3 4 5 6 7 8 9 10 11 12 13 14 15 Total
 
-		replace indiv_test_status = 5 if indiv_test_status == .
-		replace indiv_test_status = 6 if m_missing == 1 & indiv_test_status == 0
-			label def indiv_test_status 6 "Tested but Missing Mother" , modify
+	xml_tab measured ///
+	, save("${directory}/outputs/TA1b_measured.xls")	replace ///
+		title("Table A1b. Measurement Completion by Age") sheet("Table A1b") ///
+		lines(COL_NAMES 3 13 2 LAST_ROW 3)  format( (SCLB0)  (SCCB0 NCRR2))
 
-		ta indiv_test_status indiv_age ///
-		, matcell(test_completion)
+* Table A1c. Tested Representative Sample
 
-		mat i = J(colsof(test_completion),1,1)
-			mat test_completion = test_completion , test_completion*i
-		mat i = J(1,rowsof(test_completion),1)
-			mat test_completion = test_completion \ i*test_completion
+	use "${directory}/data/analysis_children.dta", clear
 
-		matrix rownames test_completion = "Tested" "Temporarily Away" "No Longer in HH" "Disabled" "Working" "No Reason Given" "Tested but Missing Mother" "Total"
-		matrix colnames test_completion = 7 8 9 10 11 12 13 14 15 Total
+	keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
 
-		mat test_completion = test_completion'
+	* Create false observations for representative sample checks (tested vs all)
+		expand 2 if indiv_tested == 1, gen(false)
+		replace indiv_tested = 0 if false == 1
 
-		xml_tab test_completion ///
-		using "${appendix}/A1a_tested.xls" ///
-		, 	replace ///
-			title("Table A1. Test Completion by Age") sheet("Table A1") ///
-			lines(COL_NAMES 3 9 2 LAST_ROW 3)  format( (SCLB0)  (SCCB0 NCRR0))
+		local stats_to_tab ///
+			indiv_male indiv_age indiv_health_height indiv_health_weight ///
+			hh_assets_pca_post indiv_edu_binary indiv_father_edu m_indiv_edu_binary m_indiv_age ///
+			indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
 
+		reftab `stats_to_tab'	 ///
+		using "${appendix}/A1c_tested_rep.xls" ///
+		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
+			by(indiv_tested) refcat(0) se n replace ///
+			title("Table 4A1c. Tested Children Representative Sample") sheet("Table A1c") ///
+			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
 
-	* Table A1b. Measurement Coverage
+* Table A1d. Measured Sample
 
-		use "${directory}/data/analysis_children.dta", clear
-		cap mat drop _all
-		keep if indiv_dead == 0 & indiv_age < 16
+	use "${directory}/data/analysis_children.dta", clear
+	cap mat drop _all
+	keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 2
 
-		gen measnomiss = indiv_measured == 1 & m_missing == 1
+	* Create false observations for representative sample checks (tested vs all)
+		expand 2 if indiv_measured == 1, gen(false)
+		replace indiv_measured = 0 if false == 1
 
-		forvalues i = 3/15 {
-			qui count if indiv_age == `i'
-			mat theTotal = nullmat(theTotal) \ [`r(N)']
-			qui count if indiv_measured == 1 & m_missing == 0 & indiv_age == `i'
-			mat theMeasured = nullmat(theMeasured) \ [`r(N)']
-			qui count if indiv_measured == 1 & m_missing == 1 & indiv_age == `i'
-			mat theMissing = nullmat(theMissing) \ [`r(N)']
-			qui sum indiv_health_height if indiv_age == `i'
-			mat theCM = nullmat(theCM) \ [`r(mean)']
-			qui sum indiv_health_zanthro_height if indiv_age == `i'
-			mat theHA = nullmat(theHA) \ [`r(mean)']
-			qui sum indiv_health_weight if indiv_age == `i'
-			mat theKG = nullmat(theKG) \ [`r(mean)']
-			qui sum indiv_health_zanthro_weight if indiv_age == `i'
-			mat theWA = nullmat(theWA) \ [`r(mean)']
-			}
+		local stats_to_tab ///
+			indiv_male indiv_age ///
+			hh_assets_pca_post indiv_edu_binary indiv_father_edu m_indiv_edu_binary m_indiv_age ///
+			indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
 
-		qui count if indiv_age > 2
-			mat more = [`r(N)']
-		qui count if indiv_measured == 1 & m_missing == 0
-			mat more = more , [`r(N)']
-		qui count if indiv_measured == 1 & m_missing == 1
-			mat more = more , [`r(N)']
-
-		qui sum indiv_health_height
-			mat more = more , [`r(mean)']
-		qui sum indiv_health_zanthro_height
-			mat more = more , [`r(mean)']
-		qui sum indiv_health_weight
-			mat more = more , [`r(mean)']
-		qui sum indiv_health_zanthro_weight
-			mat more = more , [`r(mean)']
-
-		mat measured = theTotal , theMeasured , theMissing , theCM , theHA , theKG , theWA
-		mat measured = measured \ more
-
-		matrix colnames measured = "Eligible" "Measured and Matched" "Measured and Unmatched" "Mean Height (cm)" "Mean Height-for-Age" "Mean Weight (kg)" "Mean Weight-for-Age"
-		matrix rownames measured = 3 4 5 6 7 8 9 10 11 12 13 14 15 Total
-
-		xml_tab measured ///
-		using "${appendix}/A1b_measured.xls" ///
-		, 	replace ///
-			title("Table A1b. Measurement Completion by Age") sheet("Table A1b") ///
-			lines(COL_NAMES 3 13 2 LAST_ROW 3)  format( (SCLB0)  (SCCB0 NCRR2))
-
-	* Table A1c. Tested Representative Sample
-
-		use "${directory}/data/analysis_children.dta", clear
-
-		keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
-
-		* Create false observations for representative sample checks (tested vs all)
-			expand 2 if indiv_tested == 1, gen(false)
-			replace indiv_tested = 0 if false == 1
-
-			local stats_to_tab ///
-				indiv_male indiv_age indiv_health_height indiv_health_weight ///
-				hh_assets_pca_post indiv_edu_binary indiv_father_edu m_indiv_edu_binary m_indiv_age ///
-				indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
-
-			reftab `stats_to_tab'	 ///
-			using "${appendix}/A1c_tested_rep.xls" ///
-			, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
-				by(indiv_tested) refcat(0) se n replace ///
-				title("Table 4A1c. Tested Children Representative Sample") sheet("Table A1c") ///
-				lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
-
-	* Table A1d. Measured Sample
-
-		use "${directory}/data/analysis_children.dta", clear
-		cap mat drop _all
-		keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 2
-
-		* Create false observations for representative sample checks (tested vs all)
-			expand 2 if indiv_measured == 1, gen(false)
-			replace indiv_measured = 0 if false == 1
-
-			local stats_to_tab ///
-				indiv_male indiv_age ///
-				hh_assets_pca_post indiv_edu_binary indiv_father_edu m_indiv_edu_binary m_indiv_age ///
-				indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
-
-			reftab `stats_to_tab'	 ///
-			using "${appendix}/A1d_measured_rep.xls" ///
-			, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
-				by(indiv_measured) refcat(0) se n replace ///
-				title("Table A1d. Measured Children Representative Sample") sheet("Table A1d") ///
-				lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
-}
+		reftab `stats_to_tab'	 ///
+		using "${appendix}/A1d_measured_rep.xls" ///
+		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
+			by(indiv_measured) refcat(0) se n replace ///
+			title("Table A1d. Measured Children Representative Sample") sheet("Table A1d") ///
+			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
 
 qui { // Aid Distribution Regressions
 
