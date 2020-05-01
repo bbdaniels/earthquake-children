@@ -161,7 +161,7 @@
 		`theVarlist_i' indiv_male_age2 indiv_female_age2 indiv_edu_primary_m2 indiv_edu_primary_f2 indiv_male_age3 indiv_female_age3 indiv_edu_primary_m3 indiv_edu_primary_f3 ///
 		`theVarlist_h' ///
 	  , replace ///
-    save("$directory/Outputs/Shock/raw/2a_exogeneity.xls")
+    save("$directory/outputs/T2a_exogeneity.xls") stats(N r2 mean)
 
 * Table 2b. Recovery
 
