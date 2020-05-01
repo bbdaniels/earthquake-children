@@ -237,7 +237,7 @@
 		keep(hh_faultdist `aid_controls') ///
 		c("Constant") stats(N r2 mean) title("Table. Aid to Households") sheet("Table")
 
-qui { // Regressions per each subject
+* Table A2c. Regressions per each subject
 use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_age < 16
 
@@ -254,14 +254,13 @@ use "${directory}/data/analysis_children.dta", clear
   		depvar(indiv_theta_pv_urd) rhs(hh_faultdist `fault_controls' `other_controls') cl(village_code)
 
 	xitab ///
-		using "${appendix}/A_subject.xls" ///
+		using "${directory}/outputs/TA2c_subject.xls" ///
 		, replace stats(mean)
-}
 
-qui { // Mortality Selection
+* Table A2d. Lee bounding
 
 	cap mat drop results
-	use "${directory}/constructed/analysis_children.dta" , clear
+	use "${directory}/data/analysis_children.dta" , clear
 
 	leebounds indiv_theta_mean hh_near_quake ///
 		if indiv_age >= 9 & indiv_age <= 15 & m_missing == 0
@@ -273,9 +272,7 @@ qui { // Mortality Selection
 
 	mat results_STARS = J(rowsof(results),colsof(results),0)
 	xml_tab results ///
-		using "${appendix}/A_bounds.xls" ///
-	, replace
-}
+	,	save ("${directory}/outputs/TA2d_bounds.xls")  replace
 
 
 qui { // Instrument, robustness, falsification

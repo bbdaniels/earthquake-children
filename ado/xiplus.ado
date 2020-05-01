@@ -169,8 +169,6 @@ syntax using/, /// Location to output all saved regressions
 		local theIvars : list uniq theIvars
 		local theNewInteractions = "`theInteractions'"
 
-    di as err "`theIvars'"
-
 			local x = 0
 			local y = 1
 			foreach var in `theIvars' {
@@ -202,7 +200,7 @@ syntax using/, /// Location to output all saved regressions
 			local theReg : word `i' of ${theCommands}
 			local theName : word `i' of ${theRegNames}
 
-			di in red "`theName': `theRawReg'"
+			di as err "`theName': `theRawReg'"
 			`noi' `theReg'
 			qui eststo `theName'
 
