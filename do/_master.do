@@ -14,10 +14,11 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
     iecodebook export ///
       "${data}/`dta'.dta" ///
     using "${directory}/data/`dta'.xlsx" ///
-    , replace reset copy hash text ///
+    , replace reset copy hash ///
       trim("${directory}/do/figures.do" ///
         "${directory}/do/tables.do" ///
-        "${directory}/do/appendix.do")
+        "${directory}/do/appendix-figures.do" ///
+        "${directory}/do/appendix-tables.do")
 
   }
 */

@@ -5,7 +5,7 @@
 	use "$directory/Data/GIS/studydbf.dta", clear
 
 	spmap using "$directory/Data/GIS/study.dta", id(id) $graph_opts fc(gs14) oc(black) ///
-		point( data("$directory/Data/GIS/households.dta") x(hh_gps_east) y(hh_gps_north) by(hh_stats_permhouse_post) ///
+		point( data("$directory/Data/GIS/households.dta") x(GPS-DATA) y(GPS-DATA) by(hh_stats_permhouse_post) ///
 			legenda(off) legc fcolor(black black black) shape(x x T) prop(size) size(small) osize(thin thin medthick) ) ///
 		line( data("$directory/Data/GIS/study_faults_clipped.dta") by(active) color(gray black) pattern(solid dash) size(thin thick))
 
