@@ -107,7 +107,7 @@
 
 	use "${directory}/data/analysis_children.dta", clear
 	cap mat drop _all
-	keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 2
+	keep if m_missing == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 2
 
 	* Create false observations for representative sample checks (tested vs all)
 		expand 2 if indiv_measured == 1, gen(false)
@@ -119,7 +119,7 @@
 			indiv_school_enrolled_pre_t indiv_school_enrolled_post_t indiv_school_pri_bi_pre_t indiv_school_pri_bi_post_t
 
 		reftab `stats_to_tab'	 ///
-		using "${appendix}/A1d_measured_rep.xls" ///
+		using "${directory}/outputs/TA1d_measured_rep.xls" ///
 		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
 			by(indiv_measured) refcat(0) se n replace ///
 			title("Table A1d. Measured Children Representative Sample") sheet("Table A1d") ///
