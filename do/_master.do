@@ -36,6 +36,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
   net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace
   net install st0364 , from(http://www.stata-journal.com/software/sj14-4) replace
   run "${directory}/ado/betterbar.ado"
+  run "${directory}/ado/xilab.ado"
   run "${directory}/ado/xiplus.ado"
   run "${directory}/ado/reftab.ado"
 

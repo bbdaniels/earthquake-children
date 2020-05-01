@@ -403,8 +403,158 @@ use "${directory}/data/analysis_children.dta", clear
 			c("Constant") keep(m_indiv_edu_binary) stats(N r2 mean) title("Table 5c+. Child Characteristics by Maternal Primary Education (IV)") sheet("Table 5c+") ///
 			note("Controlled for gender, age, household consumption per capita, and geographical characteristics.")
 
+* A3c. Regressions with birth village FE
 
-qui { // Mixed mitigation
+	use "${directory}/data/analysis_children.dta", clear
+	keep if m_missing == 0
+	cap drop m_age
+	clonevar m_age = m_indiv_age
+  gen agesq = m_indiv_age*m_indiv_age
+	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
+
+	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+	local other_controls "indiv_male hh_logconscap b9.indiv_age "
+	local mother_controls "i.bv m_birthvil_logpop b19.m_age"
+
+  egen bv = group(m_indiv_momedu_birthvil) if m_indiv_momedu_birthvil < .
+  clonevar id = i_instrument_faultdist
+
+  // No clustering
+    reg indiv_theta_mean hh_faultdist instrument  ///
+      `fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9
+
+      est sto rf1
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+    reg indiv_theta_mean hh_faultdist instrument id ///
+      `fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9
+
+      est sto rf2
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+  	ivregress 2sls indiv_theta_mean hh_faultdist  ///
+  		( m_indiv_edu_binary   = instrument  )  ///
+  		`fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9
+
+      est sto iv1
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+    ivregress 2sls indiv_theta_mean hh_faultdist  ///
+  		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
+  		`fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9
+
+      est sto iv2
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+    // Clustering
+    reg indiv_theta_mean hh_faultdist instrument  ///
+      `fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9 , cl(village_code)
+
+      est sto rf12
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+    reg indiv_theta_mean hh_faultdist instrument id ///
+      `fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9 , cl(village_code)
+
+      est sto rf22
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+  	ivregress 2sls indiv_theta_mean hh_faultdist  ///
+  		( m_indiv_edu_binary   = instrument  )  ///
+  		`fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9 , cl(village_code)
+
+      est sto iv12
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+    ivregress 2sls indiv_theta_mean hh_faultdist  ///
+  		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
+  		`fault_controls' `other_controls' `mother_controls' ///
+  		if indiv_age >= 9 , cl(village_code)
+
+      est sto iv22
+  		su `e(depvar)' if e(sample)
+  		estadd scalar m = `r(mean)'
+
+	gen m = 0
+		label var m "Dependent Variable Mean"
+
+	xml_tab ///
+		rf1 rf2 rf12 rf22 iv1 iv2 iv12 iv22 ///
+	, save("${directory}/outputs/TA3c_bvfe.xls") ///
+	  replace below stats(N f m ) ///
+		keep( hh_faultdist m_indiv_edu_binary m_edu_fault instrument id)
+
+* Table A3d. Mother's Education IV - no school choice
+
+	use "${directory}/data/analysis_children.dta", clear
+	keep if m_missing == 0 & vil_schooluse == 1
+	cap drop m_age
+	clonevar m_age = m_indiv_age
+	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
+
+	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+	local other_controls "i.indiv_male hh_logconscap i.indiv_age "
+	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
+
+	xi: reg indiv_theta_mean hh_faultdist ///
+		m_indiv_edu_binary  ///
+		`fault_controls' `other_controls'  ///
+		if indiv_age >= 9, cl(village_code)
+
+		est sto reg1
+    su `e(depvar)' if e(sample)
+		estadd scalar m = `r(mean)'
+
+	xi: reg indiv_theta_mean hh_faultdist ///
+		m_indiv_edu_binary m_edu_fault   ///
+		`fault_controls' `other_controls'  ///
+		if indiv_age >= 9, cl(village_code)
+
+		est sto reg2
+    su `e(depvar)' if e(sample)
+		estadd scalar m = `r(mean)'
+
+	xi: ivregress 2sls indiv_theta_mean hh_faultdist ///
+		( m_indiv_edu_binary = instrument )  ///
+		`fault_controls' `other_controls' `mother_controls' ///
+		if indiv_age >= 9,  cl(village_code)
+
+		est sto reg3
+		su `e(depvar)' if e(sample)
+		estadd scalar m = `r(mean)'
+
+	xi: ivregress 2sls indiv_theta_mean hh_faultdist ///
+		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
+		`fault_controls' `other_controls' `mother_controls' ///
+		if indiv_age >= 9,  cl(village_code)
+
+		est sto reg4
+		su `e(depvar)' if e(sample)
+		estadd scalar m = `r(mean)'
+
+	gen m = 0
+		label var m "Dependent Variable Mean"
+
+	xml_tab ///
+		reg1 reg2 reg3 reg4 ///
+		, save("${directory}/outputs/TA3d_schoolchoice.xls") replace below stats(N m ) ///
+			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
+
+* Table A3e. Alternative mitigation
 
 	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
@@ -418,8 +568,6 @@ qui { // Mixed mitigation
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 	local other_controls "indiv_male hh_logconscap i.indiv_age"
-
-	qui {
 
 		replace a = m_mentalhealth_binary
 
@@ -493,77 +641,17 @@ qui { // Mixed mitigation
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
 
-		}
-
 	xilab i.a*f  , three
 
 	xml_tab miti1 miti2 miti3 miti4  miti5 miti6 ///
-	using "${appendix}/A_mitigation.xls"  ///
-	, title("Table A. Mitigation") sheet("Table 5d") replace below stats(N r2 mean) ///
+	, save("${directory}/outputs/TA3e_mitigation.xls") ///
+    title("Table A. Mitigation") sheet("Table 5d") replace below stats(N r2 mean) ///
 		cnames("Maternal Mental Health" "Household Elevation" "Household Assets" "Maternal Mental Health" "Household Elevation" "Household Assets") ///
 		format((S2110) (SCCB0 N2303)) lines(COL_NAMES 3 LAST_ROW 3) showeq ceq(${numbering})  c("Constant") ///
 		keep(f _Ia_1 _Ia1Xf m_indiv_edu_binary indiv_male hh_logconscap  ) drop(o.*)  ///
 		note("Controlled for geographical characteristics. Includes age dummies.", "Standard errors clustered by village.")
-}
 
-qui { // Mother's Education IV - no school choice
 
-	use "${directory}/data/analysis_children.dta", clear
-	keep if m_missing == 0 & vil_schooluse == 1
-	cap drop m_age
-	clonevar m_age = m_indiv_age
-	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
-	gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
-
-	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age "
-	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
-
-	xi: reg indiv_theta_mean hh_faultdist ///
-		m_indiv_edu_binary  ///
-		`fault_controls' `other_controls'  ///
-		if indiv_age >= 9, first cl(village_code)
-
-		est sto reg1
-
-	xi: reg indiv_theta_mean hh_faultdist ///
-		m_indiv_edu_binary m_edu_fault   ///
-		`fault_controls' `other_controls'  ///
-		if indiv_age >= 9, first cl(village_code)
-
-		est sto reg2
-
-	xi: ivreg2 indiv_theta_mean hh_faultdist ///
-		( m_indiv_edu_binary = instrument )  ///
-		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age >= 9, first cl(village_code)
-
-		est sto reg3
-		estadd scalar f = `e(widstat)'
-		su `e(depvar)' if e(sample)
-		estadd scalar m = `r(mean)'
-
-	xi: ivreg2 indiv_theta_mean hh_faultdist ///
-		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
-		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age >= 9, first cl(village_code)
-
-		est sto reg4
-		estadd scalar f = `e(widstat)'
-		su `e(depvar)' if e(sample)
-		estadd scalar m = `r(mean)'
-
-	gen f = 0
-		label var f "First Stage F-stat"
-	gen m = 0
-		label var m "Dependent Variable Mean"
-
-	xml_tab ///
-		reg1 reg2 reg3 reg4 ///
-		using "${appendix}/A_schoolchoice.xls" ///
-		, replace below stats(N f m ) ///
-			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
-}
 
 } // end tables
 
