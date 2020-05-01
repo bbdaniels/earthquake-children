@@ -5,9 +5,10 @@ censusid      2456   2456  7.92e+07    1010114  9.40e+08  Census ID
 hh_gps_east   2456   2268  73.47454   72.82647  74.19075  
 hh_gps_north  2456   2232  34.25782   33.84433  34.75617  
 hh_assets_~t  2456   1738   .001832  -2.925161   3.80223  Asset Index (PCA) (Post-Quake)
-hh_assets_~e  2456   1646  .0018211  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
+hh_ass~a_pre  2456   1646  .0018211  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
 hh_con~_food  2456   1749  83207.84       2880    974220  Total Annual Food Expenditure
 hh_con~nfood  2456   1873  84207.02        840   1117032  Total Annual Nonfood Expenditure
+hh_death_e~e  2456      3  .1486156          0         2  Eligible for death compensation?
 hh_district   2456      5  2.607899          0         4  District Code
 hh_distric~1  2456      2  .2064332          0         1  District Abbottabad
 hh_distric~2  2456      2  .1750814          0         1  District Bagh
@@ -18,7 +19,10 @@ hh_familys~e  2456     21   6.12215          1        22  Family Size
 hh_fault_m~m  2456    805  3.235977          0     11.34  Closest Faultline (km)
 hh_faultdist  2456   2414  18.69172     .00536  74.66134  Distance to Faultline (km)
 hh_housing~t  2456     21  101984.1          0    700000  Amount received from housing compensation
+hh_housing~e  2456      3  .9254886          0         2  Eligible for housing compensation?
 hh_housing~1  2456      2  .6608306          0         1  Did any member receive 1st trench of 25,000 rupee grant immediately following EQ
+hh_injury_~e  2456      3  .1563518          0         2  Eligible for injury compensation?
+hh_lcgs_el~e  2456      3  .8864007          0         2  Eligible for lcgs compensation?
 hh_slope      2456     98  21.45784   4.856794  33.10296  Mean Slope of UC
 hh_stats_e~t  2456      2   .904316          0         1  Electricity
 hh_stats_e~e  2456      2  .8542345          0         1  Electricity
@@ -46,6 +50,30 @@ hh_perm_ho~t  2456      2  .6351792          0         1  Permanent House (Pre-Q
 hh_aid_total  2456     86  116182.4          0    900000  Total Reported Aid Compensation
 hh_dead       2456      6  .0875407          0         5  Number Dead in Earthquake
 hh_logcons~p  2456   2446  10.03792   7.206526  13.05279  (log) Consumption per Capita
+hh_as~_1_pre  2456      2  .9767915          0         1  Beds/Charpais
+hh_as~_2_pre  2456      2  .9491042          0         1  Tables
+hh_as~_3_pre  2456      2  .9026873          0         1  Chairs
+hh_as~_4_pre  2456      2  .5846906          0         1  Fans (Ceiling/Table/Pedestal/Exhaust)
+hh_as~_5_pre  2456      2  .4474756          0         1  Sewing machine
+hh_as~_6_pre  2456      2  .4556189          0         1  Books
+hh_as~_7_pre  2456      2   .146987          0         1  Refrigerator
+hh_as~_8_pre  2456      2  .4352606          0         1  Radio/Cassette recorder/CD Player
+hh_as~_9_pre  2456      2  .3864007          0         1  Television
+hh_as~10_pre  2456      2  .0855049          0         1  VCR/VCD
+hh_as~11_pre  2456      2   .776873          0         1  Watches
+hh_as~12_pre  2456      2  .2210912          0         1  Guns
+hh_as~13_pre  2456      2  .3688925          0         1  Plough
+hh_as~14_pre  2456      2  .0052932          0         1  Tractor
+hh_as~15_pre  2456      2  .0089577          0         1  Tube well/Hand pump
+hh_as~16_pre  2456      2  .1017915          0         1  Other Agricultural Machinery
+hh_as~17_pre  2456      2  .4816775          0         1  Other Agricultural Hand-Tools/Saw
+hh_as~18_pre  2456      2  .0179153          0         1  Motorcycle/Scooter
+hh_as~19_pre  2456      2    .02443          0         1  Car/Taxi/Vehicle
+hh_as~20_pre  2456      2  .0130293          0         1  Bicycle
+hh_as~21_pre  2456      2  .5627036          0         1  Cattle
+hh_as~22_pre  2456      2  .4763844          0         1  Goats
+hh_as~23_pre  2456      2  .6433225          0         1  Chicken
+hh_as~24_pre  2456      2  .1575733          0         1  Mobile Phone
 hh_water_i~e  2456      2  .4454397          0         1  Water In House (Pre-Quake)
 hh_water_i~t  2456      2  .4983713          0         1  Water In House (Post-Quake)
 hh_infra_i~t  2456      8  9.40e-09  -2.779431  1.007707  Household Infrastructure Index

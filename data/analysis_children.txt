@@ -5,12 +5,37 @@ censusid      5672   1899   8.22e+07    1010114  9.40e+08  Census ID
 memid         5672     21   5.946051          2        22  Member ID
 hh_aid_any_1  5672      2     .49189          0         1  Cash Aid
 hh_aid_total  5672     76   129769.7          0    900000  Total Reported Aid Compensation
+hh_as~10_pre  5672      2   .0863893          0         1  VCR/VCD
+hh_as~11_pre  5672      2   .7836742          0         1  Watches
+hh_as~12_pre  5672      2   .2187941          0         1  Guns
+hh_as~13_pre  5672      2   .4055007          0         1  Plough
+hh_as~14_pre  5672      2   .0061707          0         1  Tractor
+hh_as~15_pre  5672      2   .0112835          0         1  Tube well/Hand pump
+hh_as~16_pre  5672      2   .1154795          0         1  Other Agricultural Machinery
+hh_as~17_pre  5672      2   .4737306          0         1  Other Agricultural Hand-Tools/Saw
+hh_as~18_pre  5672      2   .0209803          0         1  Motorcycle/Scooter
+hh_as~19_pre  5672      2   .0259168          0         1  Car/Taxi/Vehicle
+hh_as~_1_pre  5672      2   .9841326          0         1  Beds/Charpais
+hh_as~20_pre  5672      2   .0146333          0         1  Bicycle
+hh_as~21_pre  5672      2   .5923836          0         1  Cattle
+hh_as~22_pre  5672      2   .4948872          0         1  Goats
+hh_as~23_pre  5672      2   .6810649          0         1  Chicken
+hh_as~24_pre  5672      2   .1694288          0         1  Mobile Phone
+hh_as~_2_pre  5672      2   .9603315          0         1  Tables
+hh_as~_3_pre  5672      2   .9072638          0         1  Chairs
+hh_as~_4_pre  5672      2   .5766925          0         1  Fans (Ceiling/Table/Pedestal/Exhaust)
+hh_as~_5_pre  5672      2   .4622708          0         1  Sewing machine
+hh_as~_6_pre  5672      2   .4994711          0         1  Books
+hh_as~_7_pre  5672      2   .1408674          0         1  Refrigerator
+hh_as~_8_pre  5672      2   .4250705          0         1  Radio/Cassette recorder/CD Player
+hh_as~_9_pre  5672      2   .3832863          0         1  Television
 hh_assets_~t  5672   1424    .012299  -2.924006   3.80223  Asset Index (PCA) (Post-Quake)
-hh_assets_~e  5672   1354    .033853  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
+hh_ass~a_pre  5672   1354    .033853  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
 hh_assets_~r  5672      2   .4910085          0         1  Above Median Assets
 hh_con~_food  5672   1447   92618.87       3000    974220  Total Annual Food Expenditure
 hh_con~nfood  5672   1529   91390.88       2340   1117032  Total Annual Nonfood Expenditure
 hh_dead       5672      6   .1160085          0         5  Number Dead in Earthquake
+hh_death_e~e  5672      2   .1188293          0         1  Eligible for death compensation?
 hh_distanc~1  5672   1876   2.983339   .0025436  15.37892  Distance to Water (km)
 hh_distanc~2  5672   1876   5.172072   .0099313  25.80575  Distance to Health Clinic (km)
 hh_distanc~4  5672   1876   1.244832          0  25.77821  Distance to Boys School (km)
@@ -30,8 +55,11 @@ hh_faultdist  5672   1875   18.08081     .00536  74.66134  Distance from Faultli
 hh_gps_east   5672   1814   73.48876   72.90853  74.19075  Household GPS coordinate, East, decimal, HH Survey
 hh_gps_north  5672   1795   34.27697   33.83517  34.75605  Household GPS coordinate, North, decimal, HH Survey
 hh_housing~t  5672     20   110212.4          0    700000  Amount received from housing compensation
+hh_housing~e  5672      2   .9003879          0         1  Eligible for housing compensation?
 hh_housing~1  5672      2   .7136812          0         1  Did any member receive 1st trench of 25,000 rupee grant immediately following EQ
 hh_infra_i~t  5672      8  -.0204393  -2.779431  1.007707  Household Infrastructure Index
+hh_injury_~e  5672      2   .1283498          0         1  Eligible for injury compensation?
+hh_lcgs_el~e  5672      2   .5433709          0         1  Eligible for lcgs compensation?
 hh_logcons    5672   1885   11.86822   8.815964  13.98643  Log Household Consumption Rs/yr
 hh_logcons~p  5672   1892   9.894069   7.206526  12.49415  (log) Consumption per Capita
 hh_near_qu~e  5672      2   .6687236          0         1  

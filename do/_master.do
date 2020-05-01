@@ -5,12 +5,11 @@
 global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
 * For data preparation: experimental version of |iecodebook|
-/* COMMENTED OUT WHEN DONE
 
   global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before final submit.
 	qui do "${directory}/ado/iecodebook.ado"
 
-  foreach dta in analysis_all analysis_hh analysis_children {
+  foreach dta in analysis_hh analysis_children analysis_all {
 
     iecodebook export ///
       "${data}/`dta'.dta" ///
@@ -21,7 +20,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
         "${directory}/do/appendix.do")
 
   }
-*/
+
 * Graph scheme: https://graykimbrough.github.io/uncluttered-stata-graphs/
 
   cd "${directory}/ado/"
@@ -32,6 +31,8 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
   sysdir set PLUS "${directory}/ado/"
 
   ssc install xml_tab , replace
+  net install grc1leg , from(http://www.stata.com/users/vwiggins) replace
+  run "${directory}/ado/betterbar.ado"
   run "${directory}/ado/xiplus.ado"
   run "${directory}/ado/reftab.ado"
 
@@ -51,6 +52,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 * Run all program files
 
   do "${directory}/do/figures.do"
+  -
   do "${directory}/do/tables.do"
   do "${directory}/do/appendix.do"
 

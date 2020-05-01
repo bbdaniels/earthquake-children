@@ -9,13 +9,38 @@ c_home_des     46905      2   .5749707          0         1  Home Destroyed
 hh_aid_any     15755      2   .6832752          0         1  Aid
 hh_aid_any_1   15755      2   .4769914          0         1  Cash Aid
 hh_aid_total    5672     76   129769.7          0    900000  Total Reported Aid Compensation
+hh_as~_1_pre   15571      2   .9803481          0         1  Beds/Charpais
+hh_as~_2_pre   15571      2   .9567786          0         1  Tables
+hh_as~_3_pre   15571      2    .911181          0         1  Chairs
+hh_as~_4_pre   15571      2   .5958513          0         1  Fans (Ceiling/Table/Pedestal/Exhaust)
+hh_as~_5_pre   15571      2   .4697836          0         1  Sewing machine
+hh_as~_6_pre   15571      2   .4883437          0         1  Books
+hh_as~_7_pre   15571      2     .15394          0         1  Refrigerator
+hh_as~_8_pre   15571      2   .4431957          0         1  Radio/Cassette recorder/CD Player
+hh_as~_9_pre   15571      2   .3976623          0         1  Television
+hh_as~10_pre   15571      2   .0915163          0         1  VCR/VCD
+hh_as~11_pre   15571      2   .7898016          0         1  Watches
+hh_as~12_pre   15571      2   .2258044          0         1  Guns
+hh_as~13_pre   15571      2   .3871299          0         1  Plough
+hh_as~14_pre   15571      2   .0050735          0         1  Tractor
+hh_as~15_pre   15571      2   .0112388          0         1  Tube well/Hand pump
+hh_as~16_pre   15571      2   .1107829          0         1  Other Agricultural Machinery
+hh_as~17_pre   15571      2   .4775544          0         1  Other Agricultural Hand-Tools/Saw
+hh_as~18_pre   15571      2   .0193308          0         1  Motorcycle/Scooter
+hh_as~19_pre   15571      2    .027487          0         1  Car/Taxi/Vehicle
+hh_as~20_pre   15571      2   .0148353          0         1  Bicycle
+hh_as~21_pre   15571      2    .586796          0         1  Cattle
+hh_as~22_pre   15571      2    .495087          0         1  Goats
+hh_as~23_pre   15571      2   .6691927          0         1  Chicken
+hh_as~24_pre   15571      2   .1694175          0         1  Mobile Phone
 hh_assets_~t   15571   1738   .0531854  -2.925161   3.80223  Asset Index (PCA) (Post-Quake)
-hh_assets_~e   15571   1646   .0591676  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
+hh_ass~a_pre   15571   1646   .0591676  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
 hh_assets_~r    5672      2   .4910085          0         1  Above Median Assets
 hh_con~_food   15571   1749   89939.46       2880    974220  Total Annual Food Expenditure
 hh_con~nfood   15571   1873   92365.93        840   1117032  Total Annual Nonfood Expenditure
 hh_dad_edu    156775      2   .4646277          0         1  Male 19-35 Completed Primary School
 hh_dead       156775      6   .1125945          0         5  Number Dead in Earthquake
+hh_death_e~e   13970      3   .1659986          0         2  Eligible for death compensation?
 hh_distanc~1   15571   2416    3.00319   .0025436  15.37892  Distance to Water (km)
 hh_distanc~2   15571   2416   5.284625   .0099313  32.93951  Distance to Health Clinic (km)
 hh_distanc~4   15571   2416   1.142185          0  25.77821  Distance to Boys School (km)
@@ -33,8 +58,11 @@ hh_far_fro~e  156775      2   .3384915          0         1  Far From Fault
 hh_fault_m~m  156775  24707   2.838814          0  11.34182  Closest Faultline (km)
 hh_faultdist  156775  25876   17.56347   .0003251  75.00751  Distance to Fault (km)
 hh_housing~t   13970     21   107834.2          0    700000  Amount received from housing compensation
+hh_housing~e   13970      3   .9336435          0         2  Eligible for housing compensation?
 hh_housing~1   13970      2   .6919112          0         1  Did any member receive 1st trench of 25,000 rupee grant immediately following EQ
 hh_infra_i~t    5672      8  -.0204393  -2.779431  1.007707  Household Infrastructure Index
+hh_injury_~e   13970      3   .1727989          0         2  Eligible for injury compensation?
+hh_lcgs_el~e   13970      3   .9143164          0         2  Eligible for lcgs compensation?
 hh_logcons      5672   1885   11.86822   8.815964  13.98643  Log Household Consumption Rs/yr
 hh_logcons~p   15571   2446   9.950832   7.206526  13.05279  (log) Consumption per Capita
 hh_mom_edu    156775      3   1.032499          0         2  Female 19-35 Completed Primary School

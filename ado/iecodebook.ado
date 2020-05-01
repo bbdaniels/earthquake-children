@@ -200,8 +200,12 @@ qui {
     else local TEMPLATE = 0
 
    // Store current data and apply if/in via [marksample]
-     tempfile allData
+     tempfile allData allData1
      save `allData' , emptyok replace
+     preserve
+     keep in 1
+     save `allData1' , emptyok replace
+     restore
 
      marksample touse
      keep if `touse'
@@ -248,7 +252,7 @@ qui {
     }
 
     // Clean up common characters
-    foreach character in , . < > / ? [ ] | & ! ^ + - : * = ( ) "{" "}" "`" "'" {
+    foreach character in , . < > / [ ] | & ! ^ + - : = ( ) "{" "}" "`" "'" {
       replace v1 = subinstr(v1,"`character'"," ",.)
     }
 
@@ -262,6 +266,14 @@ qui {
       drop i j v1
       drop if `v' == ""
       duplicates drop
+
+    // Make sure there are no hanging *
+      local length = substr("`: type `v''",4,.)
+      local stars = "*"
+      forv i = 1/`length' {
+        replace `v' = "" if `v' == "`stars'"
+        local stars "`stars'*"
+      }
 
     // Cheat to get all the variables in the dataset
     foreach item in `theVarlist' {
@@ -420,7 +432,7 @@ qui {
 
       // Fill temp dataset with value labels
       foreach var of varlist * {
-        use `var' using `allData' in 1 , clear
+        use `var' using `allData1' , clear
         local theLabel : value label `var'
         if "`theLabel'" != "" {
           cap label save `theLabel' using `theLabels' ,replace
