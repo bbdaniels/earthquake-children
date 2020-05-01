@@ -10,7 +10,7 @@
 	label var touse_shock "Selected for Detailed Survey"
 	label var indiv_school_enrolled_post "Enrolled During Survey (Age 1+ During Earthquake)"
 
-	merge m:1 censusid using "${directory}/constructed/analysis_hh.dta" , keepusing(hh_aid_total) update replace
+	merge m:1 censusid using "${directory}/data/analysis_hh.dta" , keepusing(hh_aid_total) update replace
 		label var hh_aid_total "Total Cash Aid"
 
 	label var instrument "Mother's School Access Instrument"
@@ -43,7 +43,7 @@
 				indiv_father_edu  indiv_father_age indiv_father_height ///
 			if indiv_dead == 0 & touse_shock == 1 & indiv_age > 2 & indiv_age < 16) ///
 		/// Print
-		using "$directory/Outputs/shock/raw/1_descriptives.xls" ///
+		using "$directory/outputs/T1_descriptives.xls" ///
 	,  	replace stats(mean sd p25 p50 p75 N)
 
 
