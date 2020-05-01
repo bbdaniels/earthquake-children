@@ -1,0 +1,146 @@
+{smcl}
+{* 02Nov2002}{...}
+{hline}
+help for {hi:overid}{right:(SJ5-4: st0030_2; SJ4-2: st0030_1; SJ3-1: st0030)}
+{hline}
+
+{title:Calculate tests of overidentifying restrictions after {cmd:ivreg} or {cmd:ivreg2}}
+
+{p 8 14 2}{cmd:overid}{bind: [, {cmd:chi2}} {cmd:dfr} {cmd:f} {cmd:all} ]
+
+{p 8 8 2}{cmd:overid} may be used after IV estimation with {cmd:aweight}s,
+{cmd:fweight}s, and {cmd:iweight}s; see {help weight}.
+
+
+{title:Description}
+
+{p 4 4 2}{cmd:overid} computes versions of Sargan's (1958) and Basmann's
+(1960) tests of overidentifying restrictions for a regression estimated via
+instrumental variables in which the number of instruments exceeds the number
+of regressors; that is, for an overidentified equation.  These are tests of
+the joint null hypothesis that the excluded instruments are valid instruments,
+i.e., uncorrelated with the error term and correctly excluded from the
+estimated equation.  A rejection casts doubt on the validity of the
+instruments.
+
+{p 4 4 2}Write the full set of instruments as Z and the residuals from the IV
+estimation as u, let P represent the "projection matrix" Z*inv(Z'Z)*Z', and
+let M=I-P, where I is the identity matrix.  N is the number of observations, L
+the number of instruments, K the number of regressors, and L-K the number of
+overidentifying restrictions.  Then
+
+{p 4 4 2}Sargan's (1958) statistic = u'Pu / (u'u/N)
+
+{p 4 4 2}Basmann's (1960) statistic = u'Pu / (u'Mu/(N-L))
+
+{p 4 4 2}The statistics share the same numerator.  The denominators can be
+interpreted as two different estimates of the error variance of the estimated
+equation, both of which are consistent (see Davidson and MacKinnon
+1993, 235-36).
+
+{p 4 4 2}Both statistics are distributed as chi-square with L-K degrees of
+freedom.  Both can be calculated via an artificial regression of the residuals
+of the IV estimation regressed on the full set of instruments; the Sargan
+statistic is N * the uncentered R-sq from this regression.  See, e.g.,
+Davidson and MacKinnon (1993, 236) and Wooldridge (2002, 123). 
+
+{p 4 4 2}If there are no overidentifying restrictions (i.e., in the case of
+exact identification, where the number of excluded instruments equals the
+number of right-hand endogenous variables), an error message is printed.
+
+{p 4 4 2}The version of this test that is robust to heteroskedasticity in the
+errors is Hansen's J statistic; under the assumption of conditional
+homoskedasticity, Sargan's statistic becomes Hansen's J (see Hayashi 2000,
+227-228), and hence the two statistics are sometimes referred to as the
+Hansen-Sargan statistic.  Robust overidentification statistics are available
+via {cmd:ivgmm0} or {cmd:ivreg2}; {cmd:overid} will not produce a result if
+either the {cmd:robust} or {cmd:cluster} options are employed in the preceding
+IV regression.  {cmd:ivreg2} also provides "diff-Sargan" or "C" tests for the
+endogeneity of a subset of instruments; see {helpb ivreg2} (if installed)
+for details.
+
+{p 4 4 2}The test will fail to run if N<L. For Z'Z to be of full rank, N>L.
+
+{p 4 4 2}A version of this test which may be employed after a fixed-effects
+instrumental variables estimator (i.e., {cmd:xtivreg, fe}) is available as
+{cmd:overidxt}.
+
+{p 4 4 2}The command displays the test statistics, degrees of freedom and
+p-value, and places values in the return array. {cmd:return list} for details.
+
+{p 4 4 2}A full discussion of these computations and related topics can be
+found in Baum, Schaffer, and Stillman (2002).
+
+
+{title:Options}
+
+{p 4 8 2}{cmd:chi2} requests Sargan's and Basmann's chi-squared statistics;
+this is the default.
+
+{p 4 8 2}{cmd:dfr} is equivalent to {cmd:chi2} except that the
+the Sargan statistic has a small-sample correction:
+u'Pu / (u'u/(N-K))
+
+{p 4 8 2}{cmd:f} requests the pseudo-F test versions of
+the Sargan and Basmann statistics.{p_end}
+{p 8 8 2}Sargan pseudo-F  = u'Pu/(L-K) / (u'u/(N-K)){p_end}
+{p 8 8 2}Basmann pseudo-F = u'Pu/(L-K) / (u'Mu/(N-L)){p_end}
+
+{p 4 8 2}{cmd:all} causes all five statistics to be reported.
+
+
+{title:Examples}
+
+{p 8 12 2}{cmd:. ivreg price mpg (weight turn=length displ gear_ratio trunk)}
+
+{p 8 12 2}{cmd:. overid}
+
+{p 8 12 2}{cmd:. overid, all}
+
+
+{title:References}
+
+{p 4 8 2} Basmann, R. L. 1960. On finite sample distributions of generalized
+classical linear identifiability test statistics.
+{it:Journal of the American Statisical Association} 55(292): 650-659.
+
+{p 4 8 2}Baum, C. F., M. E. Schaffer, and S. Stillman. 2002. 
+{it:Instrumental variables and GMM: Estimation and testing}.
+Unpublished working paper no. 545, Boston College, Department of Economics.
+http://fmwww.bc.edu/ec-p/WP545.pdf
+
+{p 4 8 2} Davidson, R. and J. G. MacKinnon. 1993.
+{it:Estimation and Inference in Econometrics}.
+New York: Oxford University Press.
+
+{p 4 8 2}Hayashi, F. 2000. {it:Econometrics}. Princeton: Princeton University
+Press.
+
+{p 4 8 2}Sargan, J.D. 1958.  The estimation of economic relationships using instrumental
+variables.  {it:Econometrica} 26: 393-415.
+
+{p 4 8 2}Wooldridge, J. M. 2002.
+{it:Econometric Analysis of Cross Section and Panel Data}.
+Cambridge, MA: MIT Press.
+
+
+{title:Authors}
+
+	Christopher F Baum, Boston College, USA
+	baum@bc.edu
+
+        Vince Wiggins, Stata Corporation, USA
+        vwiggins@stata.com
+
+	Steven Stillman, New Zealand Department of Labour
+	steven.stillman@lmpg.dol.govt.nz
+
+	Mark E Schaffer, Heriot-Watt University, UK
+	m.e.schaffer@hw.ac.uk
+
+
+{title:Also see}
+
+{psee}Manual:  {hi:[R] ivreg}{p_end}
+
+{psee}Online:  {helpb ivreg}; {helpb ivreg2} (if installed){p_end}
