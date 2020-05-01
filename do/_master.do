@@ -30,11 +30,12 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
   sysdir set PLUS "${directory}/ado/"
 
-  ssc install xml_tab , replace
-  net install grc1leg , from(http://www.stata.com/users/vwiggins) replace
+  ssc install xml_tab  , replace
+  net install grc1leg  , from(http://www.stata.com/users/vwiggins) replace
   net install st0085_2 , from(http://www.stata-journal.com/software/sj14-2) replace
   net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace
-  net install st0364 , from(http://www.stata-journal.com/software/sj14-4) replace
+  net install st0364   , from(http://www.stata-journal.com/software/sj14-4) replace
+  net install gr32_1   , from(http://www.stata-journal.com/software/sj4-3) replace
   run "${directory}/ado/betterbar.ado"
   run "${directory}/ado/xilab.ado"
   run "${directory}/ado/xiplus.ado"
