@@ -301,7 +301,7 @@
 		depvar(indiv_health_zanthro_height) rhs(hh_faultdist m_indiv_edu_binary m_edu_fault  `fault_controls' `other_controls') cl(village_code)
 
 	xitab ///
-		using "$directory/Outputs/shock/raw/4a_momedu_ols.xls" ///
+		using "$directory/outputs/T4a_momedu_ols.xls" ///
 		, replace stats(mean)
 
 * Table 4b. Mother's Education IV
