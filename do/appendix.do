@@ -275,7 +275,7 @@ use "${directory}/data/analysis_children.dta", clear
 	,	save ("${directory}/outputs/TA2d_bounds.xls")  replace
 
 
-qui { // Instrument, robustness, falsification
+* Table A3a. Instrument, robustness, falsification
 
 	use "${directory}/data/analysis_children.dta", clear
 
@@ -292,55 +292,55 @@ qui { // Instrument, robustness, falsification
 	reg m_indiv_education_level m_eligible_2 `mother_controls' hh_faultdist , cl(village_code)
 
 	// Regresssions
-		reg m_indiv_edu_binary m_eligible_2 `mother_controls' hh_faultdist , cl(village_code)
-			estimates store fal1
-			test m_eligible_2
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	reg m_indiv_edu_binary m_eligible_2 `mother_controls' hh_faultdist , cl(village_code)
+		estimates store fal1
+		test m_eligible_2
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		xi: reg m_indiv_edu_binary m_eligible_2 `mother_controls' hh_faultdist if m_indiv_momedu_false8!=0 , cl(village_code)
-			estimates store fal2
-			test m_eligible_2
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	xi: reg m_indiv_edu_binary m_eligible_2 `mother_controls' hh_faultdist if m_indiv_momedu_false8!=0 , cl(village_code)
+		estimates store fal2
+		test m_eligible_2
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		reg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist , cl(village_code)
-			estimates store fal3
-			test m_eligible_2
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	reg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist , cl(village_code)
+		estimates store fal3
+		test m_eligible_2
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		reg m_indiv_edu_binary m_indiv_sb8 `fault_controls' `mother_controls' hh_faultdist hh_logcons if m_eligible_2!=. , cl(village_code)
-			estimates store fal4
-			test m_indiv_sb8
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	reg m_indiv_edu_binary m_indiv_sb8 `fault_controls' `mother_controls' hh_faultdist hh_logcons if m_eligible_2!=. , cl(village_code)
+		estimates store fal4
+		test m_indiv_sb8
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		reg m_indiv_edu_binary m_eligible_2 m_eligible_3 m_eligible_4 `fault_controls' `mother_controls' hh_faultdist hh_logcons if instrument!=., cl(village_code)
-			estimates store fal5
-			test m_eligible_2
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	reg m_indiv_edu_binary m_eligible_2 m_eligible_3 m_eligible_4 `fault_controls' `mother_controls' hh_faultdist hh_logcons if instrument!=., cl(village_code)
+		estimates store fal5
+		test m_eligible_2
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		areg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist hh_logcons if instrument!=., cl(village_code) a(m_birthvil)
-			estimates store fal6
-			test m_eligible_2
-			local f = round(r(F),.01)
-			estadd scalar f = `f'
+	areg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist hh_logcons if instrument!=., cl(village_code) a(m_birthvil)
+		estimates store fal6
+		test m_eligible_2
+		local f = round(r(F),.01)
+		estadd scalar f = `f'
 
-		// xi: reg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist hh_logcons i.m_birthvil if instrument!=., cl(village_code)
+	// xi: reg m_indiv_edu_binary m_eligible_2 `fault_controls' `mother_controls' hh_faultdist hh_logcons i.m_birthvil if instrument!=., cl(village_code)
 
-		gen f = 0
-			label var f "F-statistic for Age 9 School Availability" // labelling for output
+	gen f = 0
+		label var f "F-statistic for Age 9 School Availability" // labelling for output
 
-			xml_tab fal1 fal2 fal3 fal4 fal5 fal6 ///
-			using "${appendix}/A_instrument.xls" ///
-			, title("Table A. Instrument Falsification Tests and First Stage F-tests (Dependent variable: Probability of completing primary school)") ///
-				replace below cnames("Instrument" "Recieved School Sometime" "Geographical Controls" "Boys' School" "Girls' School (Other Ages)") c("Constant") ///
-				showeq ceq($numbering) stats(N f) format((S2110) (SCCB0 N2303)) lines(COL_NAMES 3 LAST_ROW 3) ///
-				keep( hh_faultdist m_eligible_2 m_indiv_sb8 m_eligible_3 m_eligible_4  _cons) drop(o.*) ///
-				note("Controlled for individual and geographical characterics.", "Standard errors clustered by village.")
-}
+		xml_tab fal1 fal2 fal3 fal4 fal5 fal6 ///
+		, save ("${directory}/outputs/TA3a_instrument.xls") ///
+      title("Table A. Instrument Falsification Tests and First Stage F-tests (Dependent variable: Probability of completing primary school)") ///
+			replace below cnames("Instrument" "Recieved School Sometime" "Geographical Controls" "Boys' School" "Girls' School (Other Ages)" "Birth Village FE") c("Constant") ///
+			showeq ceq($numbering) stats(N f) format((S2110) (SCCB0 N2303)) lines(COL_NAMES 3 LAST_ROW 3) ///
+			keep( hh_faultdist m_eligible_2 m_indiv_sb8 m_eligible_3 m_eligible_4  _cons) drop(o.*) ///
+			note("Controlled for individual and geographical characterics.", "Standard errors clustered by village.")
+
 
 qui { // Mixed mitigation
 
