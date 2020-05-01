@@ -4,9 +4,9 @@
 
 global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
-* For data preparation: experimental version of |iecodebook|
+/* For data preparation: experimental version of |iecodebook|
 
-  global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before final submit.
+  global data "/Users/bbdaniels/Box/Earthquake/Constructed"
 	qui do "${directory}/ado/iecodebook.ado"
 
   foreach dta in analysis_hh analysis_children analysis_all {
@@ -20,6 +20,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
         "${directory}/do/appendix.do")
 
   }
+*/
 
 * Graph scheme: https://graykimbrough.github.io/uncluttered-stata-graphs/
 
@@ -57,7 +58,6 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 * Run all program files
 
   do "${directory}/do/figures.do"
-  -
   do "${directory}/do/tables.do"
   do "${directory}/do/appendix.do"
 
