@@ -2,7 +2,7 @@
 
 * Table 1.  Descriptive Statistics
 
-	use "$directory/constructed/analysis_all.dta"  , clear
+	use "${directory}/data/analysis_all.dta"  , clear
 
 	gen u15 = indiv_age < 16 & indiv_age > 2
 		label var u15 "In Utero - Age 11 During Earthquake"
@@ -49,7 +49,7 @@
 
 * Table 2a. Pre-quake Exogeneity (slow)
 
-	use "$directory/constructed/analysis_all.dta" , clear
+	use "${directory}/data/analysis_all.dta" , clear
 
 	* Fault LHS regression and F-stat for paper
 
@@ -207,7 +207,7 @@
 
 	* Household assets & public infrastructure
 
-		use "$directory/Constructed/analysis_hh.dta", clear
+		use "${directory}/data/analysis_hh.dta", clear
 
 		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 
@@ -243,7 +243,7 @@
 
 * Table 3. Weight and Height
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_age < 16
 
 	rename indiv_agecat agecat
@@ -272,7 +272,7 @@
 
 * Table 3+. Enrollment and test scores -- Heterogeneity
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_age < 16
 
 		rename indiv_agecat agecat
@@ -289,7 +289,7 @@
 			using "$directory/Outputs/shock/raw/3_scores_hetero1.xls" ///
 			, replace stats(mean)
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_age < 16
 
 		rename indiv_agecat agecat
@@ -308,7 +308,7 @@
 
 * Table 4a. Mother's Education OLS
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
 	cap drop m_age
 	clonevar m_age = m_indiv_age
@@ -334,7 +334,7 @@
 
 * Table 4b. Mother's Education IV
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
 	cap drop m_age
 	clonevar m_age = m_indiv_age

@@ -12,7 +12,7 @@ qui { // Completion and representativeness
 
 	* Table A1a. Testing coverage
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 
 		keep if indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
 
@@ -42,7 +42,7 @@ qui { // Completion and representativeness
 
 	* Table A1b. Measurement Coverage
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		cap mat drop _all
 		keep if indiv_dead == 0 & indiv_age < 16
 
@@ -95,7 +95,7 @@ qui { // Completion and representativeness
 
 	* Table A1c. Tested Representative Sample
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 
 		keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 6
 
@@ -117,7 +117,7 @@ qui { // Completion and representativeness
 
 	* Table A1d. Measured Sample
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		cap mat drop _all
 		keep if m_miss == 0 & indiv_dead == 0 & indiv_age < 16 & indiv_age > 2
 
@@ -140,7 +140,7 @@ qui { // Completion and representativeness
 
 qui { // Aid Distribution Regressions
 
-	use "$directory/Constructed/analysis_all.dta", clear
+	use "${directory}/data/analysis_all.dta", clear
 
 		bys censusid : egen check = min(hh_aid_total)
 			replace hh_aid_total = check
@@ -182,7 +182,7 @@ qui { // Aid Distribution Regressions
 }
 
 qui { // Regressions per each subject
-use "$directory/Constructed/analysis_children.dta", clear
+use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_age < 16
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
@@ -226,7 +226,7 @@ qui { // Migration
 		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 		local other_controls "indiv_male i.indiv_age hh_assets_pca_pre"
 
-    use "$directory/constructed/analysis_all.dta" if indiv_age >=3, clear
+    use "${directory}/data/analysis_all.dta" if indiv_age >=3, clear
     gen isdead = indiv_time_of_death == 1
     gen isdead2 = indiv_time_of_death == 2 | indiv_time_of_death == 3 if indiv_time_of_death != 1
     gen agesq = indiv_age*indiv_age
@@ -246,7 +246,7 @@ qui { // Migration
 
 	foreach var in `theVarlist'  {
 
-		use "$directory/constructed/analysis_all.dta", clear
+		use "${directory}/data/analysis_all.dta", clear
 
 			xi: reg `var' hh_faultdist `fault_controls' `other_controls'  ///
 				if indiv_age >= 16 ///
@@ -257,7 +257,7 @@ qui { // Migration
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
 
-		use "$directory/constructed/analysis_children.dta" if indiv_age < 16 & indiv_age >=3, clear
+		use "${directory}/data/analysis_children.dta" if indiv_age < 16 & indiv_age >=3, clear
 
 			gen indiv_moveout = indiv_in_hh_pre == 1 & indiv_in_hh_post == 0 if indiv_in_hh_pre != . & indiv_dead == 0
 				label var indiv_moveout "Migrated Out"
@@ -286,7 +286,7 @@ qui { // Migration
 
 qui { // Instrument, robustness, falsification
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 
 	keep if indiv_tested == 1 & indiv_age >= 9
 	egen tag_mother = tag(censusid indiv_mother_id)
@@ -353,7 +353,7 @@ qui { // Instrument, robustness, falsification
 
 qui { // Mixed mitigation
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
 
 	clonevar a = m_indiv_edu_binary
@@ -455,7 +455,7 @@ qui { // Mixed mitigation
 
 qui { // Channels: Maternal Education correlates
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_tested == 1
 	set matsize 2000
 
@@ -518,7 +518,7 @@ qui { // Channels: Maternal Education correlates
 
 qui { // Mother's Education IV - no school choice
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & vil_schooluse == 1
 	cap drop m_age
 	clonevar m_age = m_indiv_age
@@ -582,7 +582,7 @@ qui { // Mother's Education IV - no school choice
 qui { // IV Leverage
 
 	/*
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_tested == 1
 	cap drop m_age
 	clonevar m_age = m_indiv_age
@@ -685,7 +685,7 @@ qui { // IV Leverage
 qui { // IV Leverage -- including maternal birth village
 
 	/*
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_tested == 1
 
   tostring m_birthvil, format(%15.0g) gen(temp)
@@ -767,7 +767,7 @@ qui { // IV Leverage -- including maternal birth village
 
 qui { // Test questions
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep indiv_age censusid memid
 
 	merge 1:1 censusid memid using "$directory/Data/Primary/Survey/test_scores/score_sheet.dta", keep(3) nogen
@@ -798,7 +798,7 @@ qui { // Placebo faultline tests
 		tempfile distances
 			save `distances'
 
-		use "$directory/Constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_age < 16
 
 		// gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
@@ -855,7 +855,7 @@ qui { // Placebo faultline tests
 		tempfile distances
 			save `distances'
 
-		use "$directory/Constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_age < 16
 
 		// gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
@@ -991,7 +991,7 @@ qui { // Placebo faultline tests
 
 // Effect Size Illustration
 
-  import excel using "$directory/constructed/shock_magnitudes.xlsx" , clear
+  import excel using "${directory}/data/shock_magnitudes.xlsx" , clear
 
   gen E = -A
 
@@ -1003,7 +1003,7 @@ qui { // Placebo faultline tests
 
 qui { // Maternal education interactions
 
-	use "$directory/Constructed/analysis_children.dta"  if m_missing == 0, clear
+	use "${directory}/data/analysis_children.dta"  if m_missing == 0, clear
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 	local other_controls "indiv_male hh_logconscap i.indiv_age"
@@ -1053,7 +1053,7 @@ qui { // Maternal education interactions
 
 /* OLD Figure 8. Testing and maternal education and age cuts
 
-	use "$directory/Constructed/analysis_children.dta"  if m_missing == 0, clear
+	use "${directory}/data/analysis_children.dta"  if m_missing == 0, clear
 
 	keep if indiv_theta_mean != .
   recode m_indiv_edu_binary (1=1 "Yes")(0=0 "No") , gen(m)
@@ -1124,7 +1124,7 @@ qui { // Maternal education interactions
 
 * Table 4b CLONE. Mother's Education IV with BVFE
 
-	use "$directory/Constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
 	cap drop m_age
 	clonevar m_age = m_indiv_age

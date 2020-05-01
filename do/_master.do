@@ -3,10 +3,11 @@
 * Set directory: the location of the downloaded repository
 
 global directory "/Users/bbdaniels/GitHub/earthquake-children"
-global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before final submit.
 
 * For data preparation: experimental version of |iecodebook|
+/* COMMENTED OUT WHEN DONE
 
+  global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before final submit.
 	qui do "${directory}/ado/iecodebook.ado"
 
   foreach dta in analysis_all analysis_hh analysis_children {
@@ -20,7 +21,20 @@ global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before
         "${directory}/do/appendix.do")
 
   }
--
+*/
+* Graph scheme: https://graykimbrough.github.io/uncluttered-stata-graphs/
+
+  cd "${directory}/ado/"
+  set scheme uncluttered
+
+* Load adofiles only from here
+
+  sysdir set PLUS "${directory}/ado/"
+
+  ssc install xml_tab , replace
+  run "${directory}/ado/xiplus.ado"
+  run "${directory}/ado/reftab.ado"
+
 * Global options
 
 	global graph_opts ///
@@ -34,4 +48,10 @@ global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before
 	global xpct `" 0 "0%" .25 "25%" .5 "50%" .75 "75%" 1 "100%" "'
 	global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
 
-* OK!
+* Run all program files
+
+  do "${directory}/do/figures.do"
+  do "${directory}/do/tables.do"
+  do "${directory}/do/appendix.do"
+
+* End of master do-file

@@ -1,6 +1,6 @@
 * Final figure set for eathquake shock paper
 
-* Figure 1: Map
+/* Figure 1: Map – not reproducible without identifying GPS data
 
 	use "$directory/Data/GIS/studydbf.dta", clear
 
@@ -10,10 +10,11 @@
 		line( data("$directory/Data/GIS/study_faults_clipped.dta") by(active) color(gray black) pattern(solid dash) size(thin thick))
 
 		graph export "$directory/Outputs/shock/raw/F1_map.png", replace width(4000)
+*/
 
 * Figure 2: Household distance to activated Fault (km)
 
-	use "$directory/constructed/analysis_hh.dta", clear
+	use "${directory}/data/analysis_hh.dta", clear
 
 	qui sum hh_faultdist if hh_faultdist <= 60, d
 
@@ -38,7 +39,7 @@
 
 * Figure 3: Home Destruction from Long Census
 
-	use "$directory/constructed/analysis_all.dta", clear
+	use "${directory}/data/analysis_all.dta", clear
 
 	qui count if indiv_age > 3
 
@@ -99,7 +100,7 @@
 
 * Figure 4. Assets
 
-	use "${directory}/constructed/analysis_hh.dta", clear
+	use "${directory}/data/analysis_hh.dta", clear
 		drop *pca*
 		local opts lw(thin) lc(white) la(center) fi(100)
 		betterbar hh_assets_*_pre , over(hh_far_from_quake) ///
@@ -112,12 +113,12 @@
 
 * Figure 5. Aid
 
-	use "$directory/constructed/analysis_all.dta"  , clear
+	use "${directory}/data/analysis_all.dta"  , clear
 		keep if tag_hh
 			tempfile hh
 			save `hh' , replace
-	use "${directory}/constructed/analysis_hh.dta", clear
-		merge 1:1 censusid using `hh' , keep(3) nogen keepusing(c_home_des) 
+	use "${directory}/data/analysis_hh.dta", clear
+		merge 1:1 censusid using `hh' , keep(3) nogen keepusing(c_home_des)
 
 	gen hh_aid_immed = hh_aid_total - hh_housing_amount + 25000*hh_housing_mSec16_q1_trench1
 
@@ -157,7 +158,7 @@
 
 	* Weight by age
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw 	(histogram indiv_childage_pre if indiv_health_zanthro_weight!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
@@ -174,7 +175,7 @@
 
   * By distance
 
-    use "$directory/constructed/analysis_children.dta", clear
+    use "${directory}/data/analysis_children.dta", clear
       keep if m_missing == 0 & indiv_childage_pre <= 11 & hh_faultdist < 60
 
       recode indiv_agecat (0=3)
@@ -213,7 +214,7 @@
 
 	* Height by age
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
@@ -230,7 +231,7 @@
 
   * By distance
 
-    use "$directory/constructed/analysis_children.dta", clear
+    use "${directory}/data/analysis_children.dta", clear
       keep if m_missing == 0 & indiv_childage_pre <= 11 & hh_faultdist < 60
 
       recode indiv_agecat (0=3)
@@ -269,7 +270,7 @@
 
 	* Enrollment
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw 	(histogram indiv_childage_pre if indiv_school_enrolled_post!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
@@ -286,7 +287,7 @@
 
 	* Test Scores
 
-		use "$directory/constructed/analysis_children.dta", clear
+		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
@@ -314,7 +315,7 @@
 
 * Figure 7b. Distance and learning
 
-	use "$directory/constructed/analysis_children.dta" if indiv_age>=9, clear
+	use "${directory}/data/analysis_children.dta" if indiv_age>=9, clear
 
 	tw 	 ///
     (histogram hh_faultdist if indiv_theta_mean != .   ///
@@ -348,7 +349,7 @@
 
 * Figure 8a. Maternal Education and Test Scores
 
-	use "$directory/constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
@@ -366,7 +367,7 @@
 
 * Figure 8b. Maternal Education and Height
 
-	use "$directory/constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_childage_pre <= 2
 
 		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
@@ -385,7 +386,7 @@
 
 * Figure 9. Disruption
 
-	use "$directory/constructed/analysis_children.dta", clear
+	use "${directory}/data/analysis_children.dta", clear
 
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
