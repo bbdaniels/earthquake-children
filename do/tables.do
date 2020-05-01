@@ -319,20 +319,20 @@
 	xi: ivreg2 indiv_theta_mean hh_faultdist ///
 		( m_indiv_edu_binary = instrument )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age >= 9, first cl(village_code)
+		if indiv_age >= 9, ffirst cl(village_code)
 
 		est sto reg1
-		estadd scalar f = `e(widstat)'
+		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar m = `r(mean)'
 
 	xi: ivreg2 indiv_theta_mean hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age >= 9, first cl(village_code)
+		if indiv_age >= 9, ffirst cl(village_code)
 
 		est sto reg2
-		estadd scalar f = `e(widstat)'
+		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar m = `r(mean)'
 
@@ -340,30 +340,30 @@
 	xi: ivreg2 indiv_health_zanthro_height hh_faultdist ///
 		( m_indiv_edu_binary = instrument )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age <= 6 , first cl(village_code)
+		if indiv_age <= 6 , ffirst cl(village_code)
 		est sto reg3
-		estadd scalar f = `e(widstat)'
+		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar m = `r(mean)'
 
 	xi: ivreg2 indiv_health_zanthro_height hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
-		if indiv_age <= 6 , first cl(village_code)
+		if indiv_age <= 6 , ffirst cl(village_code)
 		est sto reg4
-		estadd scalar f = `e(widstat)'
+		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar m = `r(mean)'
 
 	gen f = 0
-		label var f "First Stage F-stat"
+		label var f "Cragg-Donald F-statistic"
 	gen m = 0
 		label var m "Dependent Variable Mean"
 
 	xml_tab ///
 		reg1 reg2 reg3 reg4 ///
-		using "$directory/Outputs/shock/raw/4b_momedu_iv.xls" ///
-		, replace below stats(N f m ) ///
+		, save("$directory/outputs/T4b_momedu_iv.xls") ///
+		  replace below stats(m N f  ) ///
 			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
 
 * Have a lovely day!

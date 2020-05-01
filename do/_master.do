@@ -33,6 +33,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
   ssc install xml_tab , replace
   net install grc1leg , from(http://www.stata.com/users/vwiggins) replace
   net install st0085_2 , from(http://www.stata-journal.com/software/sj14-2) replace
+  net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace
   run "${directory}/ado/betterbar.ado"
   run "${directory}/ado/xiplus.ado"
   run "${directory}/ado/reftab.ado"
