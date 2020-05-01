@@ -1,0 +1,53 @@
+
+Variable       Obs Unique      Mean        Min       Max  Label
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+censusid      2456   2456  7.92e+07    1010114  9.40e+08  Census ID
+hh_gps_east   2456   2268  73.47454   72.82647  74.19075  
+hh_gps_north  2456   2232  34.25782   33.84433  34.75617  
+hh_assets_~t  2456   1738   .001832  -2.925161   3.80223  Asset Index (PCA) (Post-Quake)
+hh_assets_~e  2456   1646  .0018211  -2.956399  4.483374  Asset Index (PCA) (Pre-Quake)
+hh_con~_food  2456   1749  83207.84       2880    974220  Total Annual Food Expenditure
+hh_con~nfood  2456   1873  84207.02        840   1117032  Total Annual Nonfood Expenditure
+hh_district   2456      5  2.607899          0         4  District Code
+hh_distric~1  2456      2  .2064332          0         1  District Abbottabad
+hh_distric~2  2456      2  .1750814          0         1  District Bagh
+hh_distric~3  2456      2  .2760586          0         1  District Mansehra
+hh_distric~4  2456      2  .3037459          0         1  District Muzaffarabad
+hh_epidist    2456   2416  38.06087    1.69875  83.06299  Distance to Epicenter (km)
+hh_familys~e  2456     21   6.12215          1        22  Family Size
+hh_fault_m~m  2456    805  3.235977          0     11.34  Closest Faultline (km)
+hh_faultdist  2456   2414  18.69172     .00536  74.66134  Distance to Faultline (km)
+hh_housing~t  2456     21  101984.1          0    700000  Amount received from housing compensation
+hh_housing~1  2456      2  .6608306          0         1  Did any member receive 1st trench of 25,000 rupee grant immediately following EQ
+hh_slope      2456     98  21.45784   4.856794  33.10296  Mean Slope of UC
+hh_stats_e~t  2456      2   .904316          0         1  Electricity
+hh_stats_e~e  2456      2  .8542345          0         1  Electricity
+hh_stats_g~e  2454     30  21.04686          0       240  Dist to Nearest Gov't School (min) (Pre-Quake)
+hh_s~ct_post  2449     62  4.833595          0  6.040255  Log Dist to Distr Office (min)
+h~gschool_~t  2454     31   2.78105          0  5.720312  Log Dist to Gov't School (min)
+hh_s~et_post  2452     46  3.624621          0  5.902633  Log Dist to Market (min)
+hh_s~al_post  2444     47  3.789101          0  5.703783  Log Dist to Medical (min)
+h~prischoo~t  2369     40  3.395919          0  5.480639  Log Dist to Private School (min)
+hh_st~et_pre  2452     41  54.67455          0       360  Dist to Nearest Market (min) (Pre-Quake)
+hh_st~al_pre  2444     46  57.86129          0       300  Dist to Nearest Medical Facility (min) (Pre-Quake)
+hh_stats_p~e  2372     43   44.5645          0       549  Dist to Nearest Private School (min) (Pre-Quake)
+hh_stats_w~e  2456      5  9.660016          0        30  Distance to Water (min) (Pre-Quake)
+village_code  2456    126  75.87459          1       150  Village Code
+hh_aid_any_1  2456      2  .4670195          0         1  Type of help (A) 1?: Any Financial
+hh_elevati~y  2456      2        .5          0         1  Above Median Elevation
+hh_distanc~1  2456   2416  3.056115   .0025436  15.37892  Distance to Water (km)
+hh_distanc~2  2456   2416  5.361261   .0099313  32.93951  Distance to Health Clinic (km)
+hh_distanc~4  2456   2416  1.130653          0  25.77821  Distance to Boys School (km)
+hh_distanc~5  2456   2415   1.29031          0   11.4582  Distance to Girls School (km)
+hh_distanc~6  2456   2416  3.354908   .0049404  26.06335  Distance to Private School (km)
+hh_far_fro~e  2456      2  .3566775          0         1  Far from Fault (>20km)
+hh_perm_ho~e  2456      2  .3802932          0         1  Permanent House (Pre-Quake)
+hh_perm_ho~t  2456      2  .6351792          0         1  Permanent House (Pre-Quake)
+hh_aid_total  2456     86  116182.4          0    900000  Total Reported Aid Compensation
+hh_dead       2456      6  .0875407          0         5  Number Dead in Earthquake
+hh_logcons~p  2456   2446  10.03792   7.206526  13.05279  (log) Consumption per Capita
+hh_water_i~e  2456      2  .4454397          0         1  Water In House (Pre-Quake)
+hh_water_i~t  2456      2  .4983713          0         1  Water In House (Post-Quake)
+hh_infra_i~t  2456      8  9.40e-09  -2.779431  1.007707  Household Infrastructure Index
+tag_uc        2456      2  .0399023          0         1  Union Council Tag
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------

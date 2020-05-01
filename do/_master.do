@@ -1,26 +1,26 @@
 ** Master do-file for earthquake analysis
 
-* Set directory: the location of the /Earthquake/2015/ shared folder in Dropbox.
+* Set directory: the location of the downloaded repository
 
-global directory "/Users/bbdaniels/Box/Earthquake"
-global appendix "$directory/outputs/shock/appendix/"
+global directory "/Users/bbdaniels/GitHub/earthquake-children"
+global data "/Users/bbdaniels/Box/Earthquake/Constructed" // TODO: Delete before final submit.
 
-* Adofiles: can be loaded this way (must be done each time Stata is reloaded) or installed to ado directory (must be done whenever files are updated).
+* For data preparation: experimental version of |iecodebook|
 
-	qui do "$directory/dofiles/adofiles/labelcollapse/labelcollapse.ado"
-	qui do "$directory/dofiles/adofiles/anycategory/anycat.ado"
-	qui do "$directory/dofiles/adofiles/xilabels/xilab.ado"
-	qui do "$directory/dofiles/adofiles/xilabels/xiplus.ado"
-	qui do "$directory/dofiles/adofiles/xilabels/xiplus_new.ado"
-	qui do "$directory/dofiles/adofiles/referencecomparisons/reftab.ado"
-	qui do "$directory/dofiles/adofiles/referencecomparisons/normdiff.ado"
-	qui do "$directory/dofiles/adofiles/regressioncells/regcell.ado"
-	qui do "$directory/dofiles/adofiles/tabgen/tabgen.ado"
-	qui do "$directory/dofiles/adofiles/flowchart/flowchart.ado"
-	// qui do "$directory/dofiles/adofiles/summarystatistics/sumstats.ado"
-	qui do "$directory/dofiles/adofiles/freereshape/freeshape.ado"
-	qui do "$directory/dofiles/adofiles/bootstrappoly/bstrappoly.ado"
+	qui do "${directory}/ado/iecodebook.ado"
 
+  foreach dta in analysis_all analysis_hh analysis_children {
+
+    iecodebook export ///
+      "${data}/`dta'.dta" ///
+    using "${directory}/data/`dta'.xlsx" ///
+    , replace reset copy hash text ///
+      trim("${directory}/do/figures.do" ///
+        "${directory}/do/tables.do" ///
+        "${directory}/do/appendix.do")
+
+  }
+-
 * Global options
 
 	global graph_opts ///
