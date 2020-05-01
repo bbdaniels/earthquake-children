@@ -8,6 +8,11 @@ c_home_dam     45658      2   .9080774          0         1  Home Damaged or Des
 c_home_des     46905      2   .5749707          0         1  Home Destroyed
 hh_aid_any     15755      2   .6832752          0         1  Aid
 hh_aid_any_1   15755      2   .4769914          0         1  Cash Aid
+hh_aid_any_2   15755      2   .1780387          0         1  Medical Aid
+hh_aid_any_3   15755      2   .3720089          0         1  Shelter Aid
+hh_aid_any_4   15755      2   .4443034          0         1  Food Aid
+hh_aid_any_5   15755      2   .3386227          0         1  Supplies Aid
+hh_aid_any_6   15755      2   .0744526          0         1  Organizational Aid
 hh_aid_total    5672     76   129769.7          0    900000  Total Reported Aid Compensation
 hh_as~_1_pre   15571      2   .9803481          0         1  Beds/Charpais
 hh_as~_2_pre   15571      2   .9567786          0         1  Tables

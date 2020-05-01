@@ -38,6 +38,11 @@ hh_stats_p~e  2372     43   44.5645          0       549  Dist to Nearest Privat
 hh_stats_w~e  2456      5  9.660016          0        30  Distance to Water (min) (Pre-Quake)
 village_code  2456    126  75.87459          1       150  Village Code
 hh_aid_any_1  2456      2  .4670195          0         1  Type of help (A) 1?: Any Financial
+hh_aid_any_2  2456      2  .1783388          0         1  Type of help (A) 1?: Any Health and Medical
+hh_aid_any_3  2456      2  .3599349          0         1  Type of help (A) 1?: Any Shelter
+hh_aid_any_4  2456      2  .4336319          0         1  Type of help (A) 1?: Any Food
+hh_aid_any_5  2456      2  .3224756          0         1  Type of help (A) 1?: Any Supplies
+hh_aid_any_6  2456      2  .0777687          0         1  Type of help (A) 1?: Any Liaison with other organizations
 hh_elevati~y  2456      2        .5          0         1  Above Median Elevation
 hh_distanc~1  2456   2416  3.056115   .0025436  15.37892  Distance to Water (km)
 hh_distanc~2  2456   2416  5.361261   .0099313  32.93951  Distance to Health Clinic (km)

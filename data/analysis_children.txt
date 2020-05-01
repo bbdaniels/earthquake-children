@@ -4,6 +4,11 @@ Variable       Obs Unique       Mean        Min       Max  Label
 censusid      5672   1899   8.22e+07    1010114  9.40e+08  Census ID
 memid         5672     21   5.946051          2        22  Member ID
 hh_aid_any_1  5672      2     .49189          0         1  Cash Aid
+hh_aid_any_2  5672      2   .1831805          0         1  Medical Aid
+hh_aid_any_3  5672      2   .3852257          0         1  Shelter Aid
+hh_aid_any_4  5672      2    .462976          0         1  Food Aid
+hh_aid_any_5  5672      2   .3526093          0         1  Supplies Aid
+hh_aid_any_6  5672      2   .0706982          0         1  Organizational Aid
 hh_aid_total  5672     76   129769.7          0    900000  Total Reported Aid Compensation
 hh_as~10_pre  5672      2   .0863893          0         1  VCR/VCD
 hh_as~11_pre  5672      2   .7836742          0         1  Watches

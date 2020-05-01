@@ -125,7 +125,76 @@
 			title("Table A1d. Measured Children Representative Sample") sheet("Table A1d") ///
 			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
 
-qui { // Aid Distribution Regressions
+* Table A2a. Migration and mortality selection
+
+  use "${directory}/data/analysis_all.dta" if indiv_age >=3, clear
+
+		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+		local other_controls "indiv_male i.indiv_age hh_assets_pca_pre"
+
+
+    gen isdead = indiv_time_of_death == 1
+    gen isdead2 = indiv_time_of_death == 2 | indiv_time_of_death == 3 if indiv_time_of_death != 1
+    gen agesq = indiv_age*indiv_age
+      lab var agesq "Age Squared"
+    gen interaction = hh_assets_pca_pre * hh_faultdist
+
+    reg isdead hh_faultdist indiv_male hh_assets_pca_pre interaction indiv_age agesq `fault_controls' , cl(village_code)
+
+      est sto dead
+      su isdead if e(sample)
+      local mean = `r(mean)'
+      estadd scalar mean = `mean'
+
+    reg isdead2 hh_faultdist indiv_male hh_assets_pca_pre interaction indiv_age agesq `fault_controls' , cl(village_code)
+
+      est sto dead2
+      su isdead2 if e(sample)
+      local mean = `r(mean)'
+      estadd scalar mean = `mean'
+
+	local theVarlist ///
+		 indiv_movein indiv_moveout
+
+	foreach var in `theVarlist'  {
+
+		use "${directory}/data/analysis_all.dta", clear
+
+			xi: reg `var' hh_faultdist `fault_controls' `other_controls'  ///
+				if indiv_age >= 16 ///
+				, cl(village_code)
+				est sto `var'_ad
+
+				qui sum `var' if indiv_age >= 16
+				local mean = `r(mean)'
+				estadd scalar mean = `mean'
+
+		use "${directory}/data/analysis_children.dta" if indiv_age < 16 & indiv_age >=3, clear
+
+			gen indiv_moveout = indiv_in_hh_pre == 1 & indiv_in_hh_post == 0 if indiv_in_hh_pre != . & indiv_dead == 0
+				label var indiv_moveout "Migrated Out"
+			gen indiv_movein = indiv_in_hh_pre == 0 & indiv_in_hh_post == 1 if indiv_in_hh_pre != . & indiv_dead == 0
+				replace indiv_movein = 0 if indiv_age < 4 & indiv_in_hh_pre != . & indiv_dead == 0
+				label var indiv_movein "Migrated In"
+
+			xi: reg `var' hh_faultdist `fault_controls' `other_controls'  ///
+				, cl(village_code)
+				est sto `var'_ch
+
+				qui sum `var'
+				local mean = `r(mean)'
+				estadd scalar mean = `mean'
+
+				local theLabel : var label `var'
+		}
+
+	xml_tab dead dead2 indiv_moveout_ad indiv_movein_ad indiv_moveout_ch indiv_movein_ch ///
+		, save("${directory}/outputs/TA2a_selection.xls") replace below pvalue ///
+		lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR3))  ///
+		cnames("Earthquake Mortality" "Later Mortality" "Adult Out Migration" "Adult In Migration" "Child Out Migration" "Child In Migration" ) showeq ceq(${numbering}) ///
+		c("Constant") stats(N r2 mean) title("Table A2. Migration after the Earthquake") sheet("Table A2") drop(o.* _Iindiv_age_* _Ihh_distri_* hh_fault_minimum)
+
+* Table A2b. Aid Distribution Regressions
 
 	use "${directory}/data/analysis_all.dta", clear
 
@@ -139,34 +208,34 @@ qui { // Aid Distribution Regressions
 	 local other_controls "hh_logconscap indiv_male i.indiv_age "
 	 local aid_controls "hh_head_female hh_mom_edu hh_dad_edu hh_familysize hh_assets_pca_pre hh_stats_destroyed hh_*_eligible hh_n_children_u6"
 
-	 local theList ""
-	qui {
-		su hh_aid_any if tag_hh
+	local theList ""
+
+	su hh_aid_any if tag_hh
+		local theMean = `r(mean)'
+	reg hh_aid_any hh_faultdist `fault_controls' `aid_controls' if tag_hh, cluster(village_code)
+		est sto hh_aid_any
+			estadd scalar mean = `theMean'
+
+  qui su hh_aid_any_?
+
+	forvalues i= 1/7 {
+		su hh_aid_any_`i' if tag_hh
 			local theMean = `r(mean)'
-		reg hh_aid_any hh_faultdist `fault_controls' `aid_controls' if tag_hh, cluster(village_code)
-			est sto hh_aid_any
-				estadd scalar mean = `theMean'
+		reg hh_aid_any_`i' hh_faultdist `fault_controls' `aid_controls' if tag_hh, cluster(village_code)
+			est sto hh_aid_any_`i'
+			estadd scalar mean = `theMean'
 
-		forvalues i= 1/7 {
-			su hh_aid_any_`i' if tag_hh
-				local theMean = `r(mean)'
-			reg hh_aid_any_`i' hh_faultdist `fault_controls' `aid_controls' if tag_hh, cluster(village_code)
-				est sto hh_aid_any_`i'
-				estadd scalar mean = `theMean'
+		local theList = "`theList' hh_aid_any_`i'"
 
-			local theList = "`theList' hh_aid_any_`i'"
-
-			local theLabel : var label hh_aid_any_`i'
-				local theLabels `"`theLabels' "`theLabel'""'
-			}
-
-		xml_tab hh_aid_any `theList' ///
-			using "${appendix}/A_aid.xls", replace below ///
-			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) cnames("Any Aid" `theLabels') showeq ceq(${numbering}) ///
-			keep(hh_faultdist `aid_controls') ///
-			c("Constant") stats(N r2 mean) title("Table. Aid to Households") sheet("Table")
+		local theLabel : var label hh_aid_any_`i'
+			local theLabels `"`theLabels' "`theLabel'""'
 		}
-}
+
+	xml_tab hh_aid_any `theList' ///
+		, save("${directory}/outputs/TA2b_aid.xls") replace below ///
+		lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) cnames("Any Aid" `theLabels') showeq ceq(${numbering}) ///
+		keep(hh_faultdist `aid_controls') ///
+		c("Constant") stats(N r2 mean) title("Table. Aid to Households") sheet("Table")
 
 qui { // Regressions per each subject
 use "${directory}/data/analysis_children.dta", clear
@@ -208,68 +277,6 @@ qui { // Mortality Selection
 	, replace
 }
 
-qui { // Migration
-
-		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-		local other_controls "indiv_male i.indiv_age hh_assets_pca_pre"
-
-    use "${directory}/data/analysis_all.dta" if indiv_age >=3, clear
-    gen isdead = indiv_time_of_death == 1
-    gen isdead2 = indiv_time_of_death == 2 | indiv_time_of_death == 3 if indiv_time_of_death != 1
-    gen agesq = indiv_age*indiv_age
-      lab var agesq "Age Squared"
-    gen interaction = hh_assets_pca_pre * hh_faultdist
-
-    reg isdead hh_faultdist indiv_male hh_assets_pca_pre interaction indiv_age agesq `fault_controls' , cl(village_code)
-
-      est sto dead
-
-    reg isdead2 hh_faultdist indiv_male hh_assets_pca_pre interaction indiv_age agesq `fault_controls' , cl(village_code)
-
-      est sto dead2
-
-	local theVarlist ///
-		 indiv_movein indiv_moveout
-
-	foreach var in `theVarlist'  {
-
-		use "${directory}/data/analysis_all.dta", clear
-
-			xi: reg `var' hh_faultdist `fault_controls' `other_controls'  ///
-				if indiv_age >= 16 ///
-				, cl(village_code)
-				est sto `var'_ad
-
-				qui sum `var' if indiv_age >= 16
-				local mean = `r(mean)'
-				estadd scalar mean = `mean'
-
-		use "${directory}/data/analysis_children.dta" if indiv_age < 16 & indiv_age >=3, clear
-
-			gen indiv_moveout = indiv_in_hh_pre == 1 & indiv_in_hh_post == 0 if indiv_in_hh_pre != . & indiv_dead == 0
-				label var indiv_moveout "Migrated Out"
-			gen indiv_movein = indiv_in_hh_pre == 0 & indiv_in_hh_post == 1 if indiv_in_hh_pre != . & indiv_dead == 0
-				replace indiv_movein = 0 if indiv_age < 4 & indiv_in_hh_pre != . & indiv_dead == 0
-				label var indiv_movein "Migrated In"
-
-			xi: reg `var' hh_faultdist `fault_controls' `other_controls'  ///
-				, cl(village_code)
-				est sto `var'_ch
-
-				qui sum `var'
-				local mean = `r(mean)'
-				estadd scalar mean = `mean'
-
-				local theLabel : var label `var'
-
-		}
-
-	xml_tab dead dead2 indiv_moveout_ad indiv_movein_ad indiv_moveout_ch indiv_movein_ch ///
-		, save("${appendix}/A_migration.xls") replace below pvalue ///
-		lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR3))  ///
-		cnames("Earthquake Mortality" "Later Mortality" "Adult Out Migration" "Adult In Migration" "Child Out Migration" "Child In Migration" ) showeq ceq(${numbering}) ///
-		c("Constant") stats(N r2 mean) title("Table A2. Migration after the Earthquake") sheet("Table A2") drop(o.* _Iindiv_age_* _Ihh_distri_* hh_fault_minimum)
-}
 
 qui { // Instrument, robustness, falsification
 
