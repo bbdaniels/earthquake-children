@@ -341,6 +341,68 @@ use "${directory}/data/analysis_children.dta", clear
 			keep( hh_faultdist m_eligible_2 m_indiv_sb8 m_eligible_3 m_eligible_4  _cons) drop(o.*) ///
 			note("Controlled for individual and geographical characterics.", "Standard errors clustered by village.")
 
+// A3b. Maternal Education correlates
+
+	use "${directory}/data/analysis_children.dta", clear
+	keep if m_missing == 0 & indiv_tested == 1
+	set matsize 2000
+
+	* Setup
+
+		clonevar i_d = i_instrument_faultdist
+
+		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+		local other_controls "hh_logconscap indiv_male i.indiv_age "
+		local mother_controls "m_indiv_momedu_birthvil_logpop i.m_indiv_momedu_birthteh i.m_indiv_age"
+
+
+		local stats_to_tab ///
+				indiv_age indiv_health_height indiv_health_weight indiv_edu_binary indiv_father_edu ///
+				indiv_school_enrolled_pre indiv_school_enrolled_post indiv_school_pri_bi_pre indiv_school_pri_bi_post ///
+				hh_logconscap hh_assets_pca_post ///
+				hh_stats_loggschool_post hh_stats_logmarket_post hh_stats_logdistrict_post hh_stats_logmedical_post hh_stats_logprischool_post
+
+	* OLS
+
+		reftab `stats_to_tab'	 ///
+			 using "${directory}/outputs/TA3b_correlates_1.xls" ///
+			if indiv_childage < 16 & indiv_age >= 9 ///
+			, 	by(m_indiv_edu_binary) controls(hh_faultdist `fault_controls' `other_controls') refcat(0) se n replace ///
+				title("Table 5c. Child Characteristics by Maternal Primary Education") sheet("Table rc") ///
+				lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2)
+
+	* IV
+
+		qui ivregress 2sls indiv_theta_mean hh_faultdist ///
+		 	( m_indiv_edu_binary m_edu_fault  = instrument i_d ) ///
+			`fault_controls' `other_controls' `mother_controls' ///
+			if indiv_age >= 9, cl(village_code)
+
+			keep if e(sample) == 1
+
+		local theCols ""
+		qui foreach var of varlist  `stats_to_tab' {
+
+				local theLabel : var label `var'
+				local theCols `"`theCols' "`theLabel'" "`theLabel'""'
+
+				local temp_controls = regexr("`other_controls'","`var'","")
+				local temp_controls = regexr("`temp_controls'","i. ","")
+				xi: ivregress 2sls `var' hh_faultdist ///
+					( m_indiv_edu_binary m_edu_fault  = instrument i_d ) ///
+					`fault_controls' `temp_controls' `mother_controls', cl(village_code)
+
+
+				est sto `var'
+
+				}
+
+		xml_tab `stats_to_tab' ///
+      , save("${directory}/outputs/TA3b_correlates_2.xls") replace ///
+			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) cnames(`theCols') showeq ceq(${numbering}) ///
+			c("Constant") keep(m_indiv_edu_binary) stats(N r2 mean) title("Table 5c+. Child Characteristics by Maternal Primary Education (IV)") sheet("Table 5c+") ///
+			note("Controlled for gender, age, household consumption per capita, and geographical characteristics.")
+
 
 qui { // Mixed mitigation
 
@@ -442,69 +504,6 @@ qui { // Mixed mitigation
 		format((S2110) (SCCB0 N2303)) lines(COL_NAMES 3 LAST_ROW 3) showeq ceq(${numbering})  c("Constant") ///
 		keep(f _Ia_1 _Ia1Xf m_indiv_edu_binary indiv_male hh_logconscap  ) drop(o.*)  ///
 		note("Controlled for geographical characteristics. Includes age dummies.", "Standard errors clustered by village.")
-}
-
-qui { // Channels: Maternal Education correlates
-
-	use "${directory}/data/analysis_children.dta", clear
-	keep if m_missing == 0 & indiv_tested == 1
-	set matsize 2000
-
-	* Setup
-
-		gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
-		clonevar i_d = i_instrument_faultdist
-
-		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-		local other_controls "hh_logconscap indiv_male i.indiv_age "
-		local mother_controls "m_indiv_momedu_birthvil_logpop i.m_indiv_momedu_birthteh i.m_indiv_age"
-
-
-		local stats_to_tab ///
-				indiv_age indiv_health_height indiv_health_weight indiv_edu_binary indiv_father_edu ///
-				indiv_school_enrolled_pre indiv_school_enrolled_post indiv_school_pri_bi_pre indiv_school_pri_bi_post ///
-				hh_logconscap hh_assets_pca_post ///
-				hh_stats_loggschool_post hh_stats_logmarket_post hh_stats_logdistrict_post hh_stats_logmedical_post hh_stats_logprischool_post
-
-	* OLS
-
-		reftab `stats_to_tab'	 ///
-			 using "${appendix}/A_correlates_1.xls" ///
-			if indiv_childage < 16 & indiv_age >= 9 ///
-			, 	by(m_indiv_edu_binary) controls(hh_faultdist `fault_controls' `other_controls') refcat(0) se n replace ///
-				title("Table 5c. Child Characteristics by Maternal Primary Education") sheet("Table rc") ///
-				lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2)
-
-	* IV
-
-		qui ivregress 2sls indiv_theta_mean hh_faultdist ///
-		 	( m_indiv_edu_binary m_edu_fault  = instrument i_d ) ///
-			`fault_controls' `other_controls' `mother_controls' ///
-			if indiv_age >= 9, cl(village_code)
-
-			keep if e(sample) == 1
-
-		local theCols ""
-		qui foreach var of varlist  `stats_to_tab' {
-
-				local theLabel : var label `var'
-				local theCols `"`theCols' "`theLabel'" "`theLabel'""'
-
-				local temp_controls = regexr("`other_controls'","`var'","")
-				local temp_controls = regexr("`temp_controls'","i. ","")
-				xi: ivregress 2sls `var' hh_faultdist ///
-					( m_indiv_edu_binary m_edu_fault  = instrument i_d ) ///
-					`fault_controls' `temp_controls' `mother_controls', cl(village_code)
-
-
-				est sto `var'
-
-				}
-
-		xml_tab `stats_to_tab' using "${appendix}/A_correlates_2.xls", replace ///
-			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) cnames(`theCols') showeq ceq(${numbering}) ///
-			c("Constant") keep(m_indiv_edu_binary) stats(N r2 mean) title("Table 5c+. Child Characteristics by Maternal Primary Education (IV)") sheet("Table 5c+") ///
-			note("Controlled for gender, age, household consumption per capita, and geographical characteristics.")
 }
 
 qui { // Mother's Education IV - no school choice
