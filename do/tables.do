@@ -249,6 +249,9 @@
 	rename indiv_agecat agecat
 	recode indiv_education_level (55=0)(20=.) , gen(indiv_edu)
   clonevar disr = indiv_school_disruption
+  clonevar false_male = indiv_male
+  clonevar false_age = indiv_age
+  char false_age[omit] 9
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 	local other_controls "i.indiv_male hh_logconscap i.indiv_age"
@@ -266,45 +269,14 @@
   xisto disruption if indiv_age >= 9	 	, 		 command(regress) ///
 		depvar(indiv_theta_mean) rhs(hh_faultdist disr `fault_controls' `other_controls') cl(village_code)
 
-	xitab ///
-		using "$directory/Outputs/shock/raw/3_anthro.xls" ///
+  xisto gender if indiv_age >= 9	 	,		 command(regress) ///
+		depvar(indiv_theta_mean) rhs(hh_faultdist i.false_male*hh_faultdist `fault_controls' `other_controls') cl(village_code)
+  xisto age if indiv_age >= 9	 	, 		 command(regress) ///
+		depvar(indiv_theta_mean) rhs(hh_faultdist i.false_age*hh_faultdist `fault_controls' `other_controls') cl(village_code)
+
+  xitab ///
+		using "$directory/outputs/T3_impacts.xls" ///
 		, replace stats(mean)
-
-* Table 3+. Enrollment and test scores -- Heterogeneity
-
-	use "${directory}/data/analysis_children.dta", clear
-		keep if m_missing == 0 & indiv_age < 16
-
-		rename indiv_agecat agecat
-
-		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-		local other_controls "i.indiv_male hh_logconscap i.indiv_age"
-
-		char indiv_age[omit] 9
-
-		xisto enroll if indiv_tested == 1 & indiv_age >= 9		, clear  command(regress) depvar(indiv_school_enrolled_post) rhs(hh_faultdist hh_faultdist*i.indiv_age `fault_controls' `other_controls') cl(village_code)
-		xisto score_IRT if indiv_age >= 9		, 		 command(regress) depvar(indiv_theta_mean) rhs(hh_faultdist hh_faultdist*i.indiv_age `fault_controls' `other_controls') cl(village_code)
-
-		xitab ///
-			using "$directory/Outputs/shock/raw/3_scores_hetero1.xls" ///
-			, replace stats(mean)
-
-	use "${directory}/data/analysis_children.dta", clear
-		keep if m_missing == 0 & indiv_age < 16
-
-		rename indiv_agecat agecat
-
-		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-		local other_controls "i.indiv_male hh_logconscap i.indiv_age"
-
-		* char indiv_male[omit] 1
-
-		xisto enroll2 if indiv_tested == 1 & indiv_age >= 9		,  clear command(regress) depvar(indiv_school_enrolled_post) rhs(hh_faultdist hh_faultdist*i.indiv_male `fault_controls' `other_controls') cl(village_code)
-		xisto score_IRT2 if indiv_age >= 9		, 		 command(regress) depvar(indiv_theta_mean) rhs(hh_faultdist hh_faultdist*i.indiv_male `fault_controls' `other_controls') cl(village_code)
-
-		xitab ///
-			using "$directory/Outputs/shock/raw/3_scores_hetero2.xls" ///
-			, replace stats(mean)
 
 * Table 4a. Mother's Education OLS
 
