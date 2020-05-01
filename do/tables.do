@@ -165,7 +165,7 @@
 
 * Table 2b. Recovery
 
-	use "${directory}/Constructed/analysis_all.dta", clear
+	use "${directory}/data/analysis_all.dta", clear
 
 	* Adult stats
 		clonevar indiv_health_weight24 = indiv_health_weight if indiv_age < 25
@@ -235,7 +235,7 @@
 		xml_tab `theVarlist' ///
 			indiv_health_height indiv_health_weight indiv_health_height24 indiv_health_weight24 ///
 	  , replace ///
-      save("$directory/Outputs/shock/raw/2b_recovery.xls") ///
+      save("$directory/outputs/T2b_recovery.xls") ///
 			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) ///
 			cnames(`theCols' "Adult Height" "Adult Height" "Adult Weight" "Adult Weight" ) ///
 			showeq ceq(${numbering}) c("Constant") stats(N r2 mean) ///
