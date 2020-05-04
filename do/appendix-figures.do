@@ -181,53 +181,7 @@
 
     graph export "${directory}/appendix/FA4_effect.png" , width(4000) replace
 
-* Figure A5. Regression visualization
-use "${directory}/data/analysis_children.dta"  if m_missing == 0, clear
-
-  local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-  local other_controls "indiv_male hh_logconscap i.indiv_age"
-
-  cd "${directory}/appendix/"
-
-  reg indiv_health_zanthro_height hh_faultdist m_indiv_edu_binary##indiv_agecat##c.hh_faultdist ///
-    `fault_controls' `other_controls' , cluster(village_code)
-
-  qui margins m_indiv_edu_binary if indiv_agecat == 1, at(hh_faultdist=(0(1)50))
-  marginsplot, recast(line) recastci(rarea)  $graph_opts title("Height (In Utero)" , pos(12))  ///
-    xtit("Distance to Activated Fault (km) {&rarr}")  ///
-    plot1opts(lc(black) lp(dash) lw(medthick)) plot2opts(lc(black) lp(solid) lw(medthick)) ciopts(lw(thin) lc(gs14) fc(gs14) fi(100)) ///
-    legend(on order(4 "Mother Completed Primary School" 3 "No Educated Mother") ring(0) pos(7) c(1))
-
-    graph save a.gph , replace
-
-  qui margins m_indiv_edu_binary if indiv_agecat == 2, at(hh_faultdist=(0(1)50))
-  marginsplot, recast(line) recastci(rarea)  $graph_opts title("Height (Age 0-2)" , pos(12))  ///
-    xtit("Distance to Activated Fault (km) {&rarr}")  ///
-    plot1opts(lc(black) lp(dash) lw(medthick)) plot2opts(lc(black) lp(solid) lw(medthick)) ciopts(lw(thin) lc(gs14) fc(gs14) fi(100)) ///
-    legend(on order(4 "Mother Completed Primary School" 3 "No Educated Mother") ring(0) pos(7) c(1))
-
-    graph save b.gph , replace
-
-    reg indiv_theta_mean hh_faultdist m_indiv_edu_binary##c.hh_faultdist ///
-      `fault_controls' `other_controls' if indiv_age >= 9 , cluster(village_code)
-
-  qui margins m_indiv_edu_binary , at(hh_faultdist=(0(1)50))
-  marginsplot, recast(line) recastci(rarea)  $graph_opts title("Test Scores" , pos(12))  ///
-    xtit("Distance to Activated Fault (km) {&rarr}")  ///
-    plot1opts(lc(black) lp(dash) lw(medthick)) plot2opts(lc(black) lp(solid) lw(medthick)) ciopts(lw(thin) lc(gs14) fc(gs14) fi(100)) ///
-    legend(on order(4 "Mother Completed Primary School" 3 "No Educated Mother") ring(0) pos(7) c(1))
-
-    graph save c.gph , replace
-
-    grc1leg c.gph a.gph b.gph , r(1) ycom
-    graph save mitigation.gph , replace
-    graph combine mitigation.gph  ///
-      , graphregion(color(white)) xsize(7)
-
-  graph export "${directory}/appendix/FA5_momedu.png" ///
-    , replace width(4000)
-
-* Figure A6. IV Leverage
+* Figure A5. IV Leverage
 
 	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_tested == 1
@@ -313,6 +267,6 @@ use "${directory}/data/analysis_children.dta"  if m_missing == 0, clear
   , yline(0) xscale(off) yscale(noline) xsize(7) ///
     ylab(-0.2 -0.1  `beta' "Main {&beta}" 0 "Zero")
 
-	graph export "${directory}/appendix/FA6_leverage.png" , replace width(4000)
+	graph export "${directory}/appendix/FA5_leverage.png" , replace width(4000)
 
 // End of figures
