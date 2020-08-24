@@ -58,9 +58,9 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
 * Run all program files
 
-  do "${directory}/do/figures.do"
-  do "${directory}/do/tables.do"
-  do "${directory}/do/appendix-figures.do"
-  do "${directory}/do/appendix-tables.do"
+  do "${directory}/do/1-figures.do"
+  do "${directory}/do/2-tables.do"
+  do "${directory}/do/3-appendix-figures.do"
+  do "${directory}/do/4-appendix-tables.do"
 
 * End of master do-file
