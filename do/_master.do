@@ -60,6 +60,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
   do "${directory}/do/figures.do"
   do "${directory}/do/tables.do"
-  do "${directory}/do/appendix.do"
+  do "${directory}/do/appendix-figures.do"
+  do "${directory}/do/appendix-tables.do"
 
 * End of master do-file
