@@ -15,12 +15,17 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
       "${data}/`dta'.dta" ///
     using "${directory}/data/`dta'.xlsx" ///
     , replace reset copy hash ///
-      trim("${directory}/do/figures.do" ///
-        "${directory}/do/tables.do" ///
-        "${directory}/do/appendix-figures.do" ///
-        "${directory}/do/appendix-tables.do")
+      trim("${directory}/do/1-figures.do" ///
+        "${directory}/do/2-tables.do" ///
+        "${directory}/do/3-appendix-figures.do" ///
+        "${directory}/do/4-appendix-tables.do")
 
   }
+
+  use "${directory}/data/analysis_children.dta" , clear
+  gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
+    lab var m_edu_fault "Fault-Edu Interaction"
+  save "${directory}/data/analysis_children.dta" , replace
 */
 
 * Graph scheme: https://graykimbrough.github.io/uncluttered-stata-graphs/
@@ -57,10 +62,10 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 	global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
 
 * Run all program files
-
+qui {
   do "${directory}/do/1-figures.do"
   do "${directory}/do/2-tables.do"
   do "${directory}/do/3-appendix-figures.do"
   do "${directory}/do/4-appendix-tables.do"
-
+}
 * End of master do-file

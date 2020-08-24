@@ -38,7 +38,7 @@
     // gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
 
     local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-    local other_controls "indiv_male hh_logconscap i.indiv_age"
+    local other_controls "indiv_male i.indiv_age"
 
     merge m:1 censusid using `distances' , keep(3)
 
@@ -95,7 +95,7 @@
     // gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
 
     local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-    local other_controls "indiv_male hh_logconscap i.indiv_age"
+    local other_controls "indiv_male i.indiv_age"
 
     merge m:1 censusid using `distances' , keep(3)
 
@@ -190,7 +190,7 @@
 	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age"
+	local other_controls "i.indiv_male i.indiv_age"
 	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
 
 	clonevar i_d = i_instrument_faultdist
@@ -235,7 +235,7 @@
   egen vtag=tag(village_code)
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age"
+	local other_controls "i.indiv_male i.indiv_age"
 	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
 
 	sort b_alt

@@ -1,3 +1,4 @@
+
 * Final tables set for eathquake shock paper
 
 * Table 1.  Descriptive Statistics
@@ -213,7 +214,7 @@
 
 		local theVarlist ///
 			hh_assets_pca_post hh_infra_index_post hh_perm_house_post hh_stats_electricity_post hh_water_inhouse_post ///
-			hh_logconscap hh_stats_loggschool_post ///
+			hh_stats_loggschool_post ///
 			hh_stats_logmarket_post hh_stats_logdistrict_post hh_stats_logmedical_post hh_stats_logprischool_post
 
 		local theCols ""
@@ -254,7 +255,7 @@
   char false_age[omit] 9
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age"
+	local other_controls "i.indiv_male i.indiv_age"
 
 	xisto weight_INT 	, clear		 command(regress) ///
 		depvar(indiv_health_zanthro_weight) rhs(hh_faultdist i.agecat*hh_faultdist `fault_controls' `other_controls') cl(village_code)
@@ -287,7 +288,7 @@
 	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age "
+	local other_controls "i.indiv_male i.indiv_age "
 	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
 
 	xisto scores1 if indiv_age >= 9	, clear	 command(regress) ///
@@ -313,7 +314,7 @@
 	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age "
+	local other_controls "i.indiv_male i.indiv_age "
 	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
 
 	xi: ivreg2 indiv_theta_mean hh_faultdist ///
@@ -364,6 +365,6 @@
 		reg1 reg2 reg3 reg4 ///
 		, save("${directory}/outputs/T4b_momedu_iv.xls") ///
 		  replace below stats(m N f  ) ///
-			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
+			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1)
 
 * Have a lovely day!

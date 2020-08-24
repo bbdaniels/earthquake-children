@@ -24,7 +24,7 @@
 	mat test_completion = test_completion'
 
 	xml_tab test_completion ///
-	, save("${directory}/appendix/TA1a_tested.xls") ///
+	, save("${directory}/appendix/TA1a_tested.xls") replace ///
 		title("Table A1. Test Completion by Age") sheet("Table A1") ///
 		lines(COL_NAMES 3 9 2 LAST_ROW 3)  format( (SCLB0)  (SCCB0 NCRR0))
 
@@ -98,7 +98,7 @@
 
 		reftab `stats_to_tab'	 ///
 		using "${directory}/appendix/TA1c_tested_rep.xls" ///
-		, controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
+		, controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male i.indiv_age) ///
 			by(indiv_tested) refcat(0) se n replace ///
 			title("Table 4A1c. Tested Children Representative Sample") sheet("Table A1c") ///
 			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
@@ -120,7 +120,7 @@
 
 		reftab `stats_to_tab'	 ///
 		using "${directory}/appendix/TA1d_measured_rep.xls" ///
-		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male hh_logconscap i.indiv_age) ///
+		, 	controls(hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 i.indiv_male i.indiv_age) ///
 			by(indiv_measured) refcat(0) se n replace ///
 			title("Table A1d. Measured Children Representative Sample") sheet("Table A1d") ///
 			lines(COL_NAMES 3 LAST_ROW 3)  dec(2 2 2 2 2 2 2 2 2 2 2 2 2 )
@@ -205,7 +205,7 @@
 
 	 local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 	 local mother_controls "m_height m_heightmiss "
-	 local other_controls "hh_logconscap indiv_male i.indiv_age "
+	 local other_controls "indiv_male i.indiv_age "
 	 local aid_controls "hh_head_female hh_mom_edu hh_dad_edu hh_familysize hh_assets_pca_pre hh_stats_destroyed hh_*_eligible hh_n_children_u6"
 
 	local theList ""
@@ -242,7 +242,7 @@ use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_age < 16
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age"
+	local other_controls "i.indiv_male i.indiv_age"
 
   	xisto Base if indiv_age >= 9	 	, clear		 command(regress) ///
   		depvar(indiv_theta_mean) rhs(hh_faultdist `fault_controls' `other_controls') cl(village_code)
@@ -285,7 +285,7 @@ use "${directory}/data/analysis_children.dta", clear
 	keep if tag_mother == 1 // Keep mothers of tested children
 
 	local fault_controls "hh_epidist hh_slope hh_district_1 hh_district_2 hh_district_3 hh_district_4"
-	local other_controls "indiv_male hh_logconscap i.indiv_age"
+	local other_controls "indiv_male i.indiv_age"
 	local mother_controls "m_indiv_momedu_birthvil_logpop i.m_indiv_momedu_birthteh i.m_indiv_age"
 
 	replace m_indiv_education_level = 0 if m_indiv_education_level == 55
@@ -352,14 +352,14 @@ use "${directory}/data/analysis_children.dta", clear
 		clonevar i_d = i_instrument_faultdist
 
 		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-		local other_controls "hh_logconscap indiv_male i.indiv_age "
+		local other_controls "indiv_male i.indiv_age "
 		local mother_controls "m_indiv_momedu_birthvil_logpop i.m_indiv_momedu_birthteh i.m_indiv_age"
 
 
 		local stats_to_tab ///
 				indiv_age indiv_health_height indiv_health_weight indiv_edu_binary indiv_father_edu ///
 				indiv_school_enrolled_pre indiv_school_enrolled_post indiv_school_pri_bi_pre indiv_school_pri_bi_post ///
-				hh_logconscap hh_assets_pca_post ///
+				hh_assets_pca_post ///
 				hh_stats_loggschool_post hh_stats_logmarket_post hh_stats_logdistrict_post hh_stats_logmedical_post hh_stats_logprischool_post
 
 	* OLS
@@ -413,7 +413,7 @@ use "${directory}/data/analysis_children.dta", clear
 	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "indiv_male hh_logconscap b9.indiv_age "
+	local other_controls "indiv_male b9.indiv_age "
 	local mother_controls "i.bv m_birthvil_logpop b19.m_age"
 
   egen bv = group(m_indiv_momedu_birthvil) if m_indiv_momedu_birthvil < .
@@ -507,7 +507,7 @@ use "${directory}/data/analysis_children.dta", clear
 	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male hh_logconscap i.indiv_age "
+	local other_controls "i.indiv_male i.indiv_age "
 	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
 
 	xi: reg indiv_theta_mean hh_faultdist ///
@@ -552,7 +552,7 @@ use "${directory}/data/analysis_children.dta", clear
 	xml_tab ///
 		reg1 reg2 reg3 reg4 ///
 		, save("${directory}/appendix/TA3d_schoolchoice.xls") replace below stats(N m ) ///
-			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1 hh_logconscap)
+			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1)
 
 * Table A3e. Alternative mitigation
 
@@ -567,7 +567,7 @@ use "${directory}/data/analysis_children.dta", clear
 	rename hh_faultdist f
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "indiv_male hh_logconscap i.indiv_age"
+	local other_controls "indiv_male i.indiv_age"
 
 		replace a = m_mentalhealth_binary
 
@@ -648,7 +648,7 @@ use "${directory}/data/analysis_children.dta", clear
     title("Table A. Mitigation") sheet("Table 5d") replace below stats(N r2 mean) ///
 		cnames("Maternal Mental Health" "Household Elevation" "Household Assets" "Maternal Mental Health" "Household Elevation" "Household Assets") ///
 		format((S2110) (SCCB0 N2303)) lines(COL_NAMES 3 LAST_ROW 3) showeq ceq(${numbering})  c("Constant") ///
-		keep(f _Ia_1 _Ia1Xf m_indiv_edu_binary indiv_male hh_logconscap  ) drop(o.*)  ///
+		keep(f _Ia_1 _Ia1Xf m_indiv_edu_binary indiv_male) drop(o.*)  ///
 		note("Controlled for geographical characteristics. Includes age dummies.", "Standard errors clustered by village.")
 
 // End tables
