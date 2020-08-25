@@ -23,6 +23,9 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 
   }
 
+  // Food Prices Data
+  copy "${data}/food-prices.dta" "${directory}/data/prices.dta"
+
   // Analytical Cleaning
   use "${directory}/data/analysis_children.dta" , clear
     merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
@@ -48,6 +51,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
   sysdir set PLUS "${directory}/ado/"
 
   ssc install xml_tab  , replace
+  net install forest   , from(https://github.com/bbdaniels/stata/raw/master/) replace
   net install grc1leg  , from(http://www.stata.com/users/vwiggins) replace
   net install st0085_2 , from(http://www.stata-journal.com/software/sj14-2) replace
   net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace

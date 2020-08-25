@@ -1,4 +1,4 @@
-* 00000012
+* 00000013
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -269,4 +269,23 @@ f i/ivreg2_p.ado
 f i/ivreg2_cue.ado
 f o/overid.ado
 f o/overid.hlp
+e
+S http://www.stata-journal.com/software/sj4-3
+N gr32_1.pkg
+D 24 Aug 2020
+U 13
+d SJ4-3 gr32_1.  Graphing confidence ellipses: An update ...
+d Graphing confidence ellipses: An update of ellip for Stata 8
+d by Anders Alexandersson, Mississippi State University
+d Support:  aa1@@msstate.edu
+d After installation, type help ^ellip^
+f e/ellip.ado
+f e/ellip.hlp
+f e/ellip_dlg.hlp
+f e/ellip_coefs.dlg
+f e/ellip_connected.idlg
+f e/ellip_dlopts.idlg
+f e/ellip_means.dlg
+f e/ellip_pcopts.idlg
+f e/ellip_plopts.idlg
 e

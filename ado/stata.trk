@@ -1,4 +1,4 @@
-* 00000013
+* 00000014
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -288,4 +288,12 @@ f e/ellip_dlopts.idlg
 f e/ellip_means.dlg
 f e/ellip_pcopts.idlg
 f e/ellip_plopts.idlg
+e
+S https://github.com/bbdaniels/stata/raw/master
+N forest.pkg
+D 25 Aug 2020
+U 14
+d Benjamin Daniels
+f f/forest.ado
+f f/forest.sthlp
 e
