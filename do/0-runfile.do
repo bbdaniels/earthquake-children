@@ -67,7 +67,7 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
 		yscale(noline) xscale(noline) legend(region(lc(none) fc(none)))
 
 	global comb_opts graphregion(color(white) lc(white) lw(med) la(center))
-	global hist_opts ylab(, angle(0) axis(2)) yscale(noline alt axis(2)) ytit(, axis(2)) ytit(, axis(1)) yscale(off axis(2)) yscale(alt)
+	global hist_opts ylab(, format(%9.0f) angle(0) axis(2)) yscale(noline alt axis(2)) ytit("Frequency (Histogram)", axis(2)) ytit(, axis(1)) yscale(alt)
 	global xpct `" 0 "0%" .25 "25%" .5 "50%" .75 "75%" 1 "100%" "'
 	global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
 

@@ -43,7 +43,7 @@
 
 	qui count if indiv_age > 3
 
-	tw  (histogram hh_faultdist, yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
+	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
 		(lpoly indiv_dead_quake hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3 ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") xtit("") ytit("") ///
@@ -54,7 +54,7 @@
 
 	qui su c_home_des if tag_hh == 1
 
-	tw  (histogram hh_faultdist, yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
+	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
 		(lpoly c_home_des hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & tag_hh == 1 ///
 	,	$graph_opts $hist_opts ylab($xpct) xtit("") ytit("") ///
@@ -66,7 +66,7 @@
 	qui count if indiv_age > 3
 		cap gen isdead = indiv_time_of_death == 2 | indiv_time_of_death == 3
 
-	tw  (histogram hh_faultdist, yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
+	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
 		(lpoly isdead hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3   ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") ///
@@ -77,7 +77,7 @@
 
 	qui su vil_facil_destroyed if tag_village == 1
 
-	tw  (histogram vil_uc_dfl_mean, yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
+	tw  (histogram vil_uc_dfl_mean, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
 		(lpoly vil_facil_destroyed hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if tag_village == 1 & vil_uc_dfl_mean < 60 ///
 	,	$graph_opts $hist_opts ylab(${xpct}) xtit("")  ytit("") ///
@@ -134,7 +134,7 @@
 		local total_150  = round(`total'*1.5,10000)
 
 	twoway 	///
-			(histogram hh_faultdist, start(0) w(2) yaxis(2) bstyle(outline) bc(gs14) frac gap(10)) ///
+			(histogram hh_faultdist, freq start(0) w(2) yaxis(2) bstyle(outline) bc(gs14) gap(10)) ///
 			(lpoly hh_aid_total hh_faultdist , lw(thick) lp(solid) lc(black)  ) ///
 			(lpoly hh_aid_immed hh_faultdist , lw(thick) lp(dash) lc(black) ) ///
 			(lpoly hh_aid_immed hh_faultdist if hh_dead  , lw(thick) lp(#-_) lc(black)  ) ///
@@ -161,7 +161,7 @@
 		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw 	(histogram indiv_childage_pre if indiv_health_zanthro_weight!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+		tw 	(histogram indiv_childage_pre if indiv_health_zanthro_weight!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
@@ -217,7 +217,7 @@
 		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
@@ -273,7 +273,7 @@
 		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw 	(histogram indiv_childage_pre if indiv_school_enrolled_post!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+		tw 	(histogram indiv_childage_pre if indiv_school_enrolled_post!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
@@ -290,7 +290,7 @@
 		use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
@@ -319,7 +319,7 @@
 
 	tw 	 ///
     (histogram hh_faultdist if indiv_theta_mean != .   ///
-      , s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+      , freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 0 ///
@@ -330,7 +330,7 @@
 
   tw 	 ///
     (histogram hh_faultdist if indiv_theta_mean != .   ///
-      , s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+      , freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 1 ///
@@ -352,7 +352,7 @@
 	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
+		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_theta_mean hh_faultdist ///
           if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean hh_faultdist ///
@@ -370,7 +370,7 @@
 	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0 & indiv_childage_pre <= 2
 
-		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
+		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_height hh_faultdist ///
           if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height hh_faultdist ///
@@ -390,7 +390,7 @@
 
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
-		tw  (histogram hh_faultdist if indiv_school_disruption !=. & indiv_theta_mean != ., s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+		tw  (histogram hh_faultdist if indiv_school_disruption !=. & indiv_theta_mean != ., freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpoly indiv_school_disruption hh_faultdist if theta_high != ., degree(1) lp(solid) lc(gs8) lw(medthick)  ) ///
 			(lpoly indiv_school_disruption hh_faultdist if theta_high == 1, degree(1) lp(-.. ) lc(black) lw(medthick)  ) ///
 			(lpoly indiv_school_disruption hh_faultdist if theta_high == 0, degree(1) lp(_ ) lc(black) lw(medthick)  ) ///
