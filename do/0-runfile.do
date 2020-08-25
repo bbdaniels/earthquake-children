@@ -15,16 +15,26 @@ global directory "/Users/bbdaniels/GitHub/earthquake-children"
       "${data}/`dta'.dta" ///
     using "${directory}/data/`dta'.xlsx" ///
     , replace reset copy hash ///
-      trim("${directory}/do/1-figures.do" ///
+      trim("${directory}/do/0-runfile.do" ///
+        "${directory}/do/1-figures.do" ///
         "${directory}/do/2-tables.do" ///
         "${directory}/do/3-appendix-figures.do" ///
         "${directory}/do/4-appendix-tables.do")
 
   }
 
+  // Analytical Cleaning
   use "${directory}/data/analysis_children.dta" , clear
-  gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
-    lab var m_edu_fault "Fault-Edu Interaction"
+    merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
+
+    gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
+      lab var m_edu_fault "Fault-Edu Interaction"
+    clonevar agecat = indiv_agecat
+    recode indiv_education_level (55=0)(20=.) , gen(indiv_edu)
+      lab var indiv_edu "Highest Completed Education"
+    clonevar disr = indiv_school_disruption
+    gen hh_aid = hh_aid_total / 10000
+      lab var hh_aid "Total Reported Aid (Rs. 10,000s)"
   save "${directory}/data/analysis_children.dta" , replace
 */
 

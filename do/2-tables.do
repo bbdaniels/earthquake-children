@@ -1,9 +1,7 @@
-
-* Final tables set for eathquake shock paper
+// Revision of tables for eathquake shock paper
 
 * Table 1.  Descriptive Statistics
-
-	use "${directory}/data/analysis_all.dta"  , clear
+use "${directory}/data/analysis_all.dta"  , clear
 
 	gen u15 = indiv_age < 16 & indiv_age > 2
 		label var u15 "In Utero - Age 11 During Earthquake"
@@ -245,39 +243,88 @@
 * Table 3. Weight and Height
 
 	use "${directory}/data/analysis_children.dta", clear
-		keep if m_missing == 0 & indiv_age < 16
+    keep if m_missing == 0 & indiv_age < 16
 
-	rename indiv_agecat agecat
-	recode indiv_education_level (55=0)(20=.) , gen(indiv_edu)
-  clonevar disr = indiv_school_disruption
-  clonevar false_male = indiv_male
-  clonevar false_age = indiv_age
-  char false_age[omit] 9
+    char indiv_age[omit] 9
 
-	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male i.indiv_age"
+  local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+  local other_controls "i.indiv_male i.indiv_age"
 
-	xisto weight_INT 	, clear		 command(regress) ///
-		depvar(indiv_health_zanthro_weight) rhs(hh_faultdist i.agecat*hh_faultdist `fault_controls' `other_controls') cl(village_code)
-	xisto height_INT 	, 		 command(regress) ///
-		depvar(indiv_health_zanthro_height) rhs(hh_faultdist i.agecat*hh_faultdist `fault_controls' `other_controls') cl(village_code)
-	xisto enroll if indiv_tested == 1 & indiv_age >= 9	,   command(regress) ///
-		depvar(indiv_school_enrolled_post) rhs(hh_faultdist `fault_controls' `other_controls') cl(village_code)
-	xisto level if indiv_tested == 1 & indiv_age >= 9	,   command(regress) ///
-		depvar(indiv_edu) rhs(hh_faultdist `fault_controls' `other_controls') cl(village_code)
-	xisto score_IRT if indiv_age >= 9	 	, 		 command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist `fault_controls' `other_controls') cl(village_code)
-  xisto disruption if indiv_age >= 9	 	, 		 command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist disr `fault_controls' `other_controls') cl(village_code)
+  xi: reg indiv_health_zanthro_weight hh_faultdist ///
+    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+  , cl(village_code)
 
-  xisto gender if indiv_age >= 9	 	,		 command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist i.false_male*hh_faultdist `fault_controls' `other_controls') cl(village_code)
-  xisto age if indiv_age >= 9	 	, 		 command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist i.false_age*hh_faultdist `fault_controls' `other_controls') cl(village_code)
+    estimates store reg1
+    su `e(depvar)' if e(sample) == 1
+    estadd scalar mean = `r(mean)'
 
-  xitab ///
-		using "${directory}/outputs/T3_impacts.xls" ///
-		, replace stats(mean)
+  xi: reg indiv_health_zanthro_height hh_faultdist ///
+    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+  , cl(village_code)
+
+    estimates store reg2
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_school_enrolled_post hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_tested == 1 & indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg3
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_edu hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_tested == 1 & indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg4
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg5
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    disr `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg6
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    i.indiv_male*hh_faultdist `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg7
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    i.indiv_age*hh_faultdist `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg8
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xml_tab reg1 reg2 reg3 reg4 reg5 reg6 reg7 reg8 ///
+  , save("${directory}/outputs/T3_impacts.xls") ///
+    replace below c("Constant") stats(mean r2 N) ///
+    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
+    keep(hh_faultdist disr _IageXhh_fa_1 _IageXhh_fa_2 _Iindiv_mal_1 _IindXhh_fa_1 _IindX*)
 
 * Table 4a. Mother's Education OLS
 
