@@ -1,4 +1,4 @@
-// Revision of tables for eathquake shock paper
+* Revision of tables for eathquake shock paper
 
 * Table 1.  Descriptive Statistics
 use "${directory}/data/analysis_all.dta"  , clear
@@ -330,27 +330,51 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 	use "${directory}/data/analysis_children.dta", clear
 	keep if m_missing == 0
-	cap drop m_age
-	clonevar m_age = m_indiv_age
-	clonevar m_birthvil_logpop = m_indiv_momedu_birthvil_logpop
 
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-	local other_controls "i.indiv_male i.indiv_age "
-	local mother_controls "m_birthvil_logpop i.m_indiv_momedu_birthteh i.m_age"
+	local other_controls "indiv_male"
 
-	xisto scores1 if indiv_age >= 9	, clear	 command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist m_indiv_edu_binary `fault_controls' `other_controls') cl(village_code)
-	xisto scores2 if indiv_age >= 9 , 		 	command(regress) ///
-		depvar(indiv_theta_mean) rhs(hh_faultdist m_indiv_edu_binary m_edu_fault  `fault_controls' `other_controls') cl(village_code)
+  areg indiv_theta_mean hh_faultdist m_indiv_edu_binary ///
+    `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code) a(indiv_age)
 
-	xisto height1 if indiv_age <= 6 , 		 	command(regress) ///
-		depvar(indiv_health_zanthro_height) rhs(hh_faultdist m_indiv_edu_binary `fault_controls' `other_controls') cl(village_code)
-	xisto height2 if indiv_age <= 6	, 		 	command(regress) ///
-		depvar(indiv_health_zanthro_height) rhs(hh_faultdist m_indiv_edu_binary m_edu_fault  `fault_controls' `other_controls') cl(village_code)
+    estimates store reg1
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
 
-	xitab ///
-		using "${directory}/outputs/T4a_momedu_ols.xls" ///
-		, replace stats(mean)
+  areg indiv_theta_mean hh_faultdist m_indiv_edu_binary m_edu_fault ///
+    `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code) a(indiv_age)
+
+    estimates store reg2
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  areg indiv_health_zanthro_height hh_faultdist m_indiv_edu_binary ///
+    `fault_controls' `other_controls' ///
+  if indiv_age <= 6 ///
+  , cl(village_code) a(indiv_age)
+
+    estimates store reg3
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  areg indiv_health_zanthro_height hh_faultdist m_indiv_edu_binary m_edu_fault ///
+    `fault_controls' `other_controls' ///
+  if indiv_age <= 6 ///
+  , cl(village_code) a(indiv_age)
+
+    estimates store reg4
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xml_tab reg1 reg2 reg3 reg4  ///
+  , save("${directory}/outputs/T4a_momedu_ols.xls") ///
+    replace below c("Constant") stats(mean r2 N) ///
+    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3))  ///
+    keep(hh_faultdist m_indiv_edu_binary m_edu_fault indiv_male)
 
 * Table 4b. Mother's Education IV
 
