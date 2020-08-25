@@ -283,7 +283,7 @@
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(${xpct})
 
-			graph save 	"${directory}/outputs/F6d_enroll.gph", replace
+			graph save 	"${directory}/outputs/F7a_enroll.gph", replace
 
 	* Test Scores
 
@@ -300,18 +300,18 @@
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
-			graph save 	"${directory}/outputs/F6d_scores.gph", replace
+			graph save 	"${directory}/outputs/F7a_scores.gph", replace
 
 	* Combine
 
     grc1leg ///
-			"${directory}/outputs/F6d_enroll.gph" ///
-			"${directory}/outputs/F6d_scores.gph" ///
+			"${directory}/outputs/F7a_enroll.gph" ///
+			"${directory}/outputs/F7a_scores.gph" ///
 			, c(1) ${comb_opts}
 
-    graph save "${directory}/outputs/F6d_education.gph" , replace
-    graph combine "${directory}/outputs/F6d_education.gph" , ysize(6)
-		graph export "${directory}/outputs/F6d_education.png", replace width(4000)
+    graph save "${directory}/outputs/F7a_education.gph" , replace
+    graph combine "${directory}/outputs/F7a_education.gph" , ysize(6)
+		graph export "${directory}/outputs/F7a_education.png", replace width(4000)
 
 * Figure 7b. Distance and learning
 
@@ -326,7 +326,7 @@
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Girls") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
-    graph save "${directory}/outputs/F7_girls.gph", replace
+    graph save "${directory}/outputs/F7b_girls.gph", replace
 
   tw 	 ///
     (histogram hh_faultdist if indiv_theta_mean != .   ///
@@ -337,14 +337,14 @@
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Boys") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
-    graph save "${directory}/outputs/F7_boys.gph", replace
+    graph save "${directory}/outputs/F7b_boys.gph", replace
 
     graph combine ///
-      "${directory}/outputs/F7_girls.gph" ///
-      "${directory}/outputs/F7_boys.gph" ///
+      "${directory}/outputs/F7b_girls.gph" ///
+      "${directory}/outputs/F7b_boys.gph" ///
       , r(1) ycom xsize(7)
 
-			graph export "${directory}/outputs/F7_scores.png", replace width(4000)
+			graph export "${directory}/outputs/F7b_scores.png", replace width(4000)
 
 
 * Figure 8a. Maternal Education and Test Scores
