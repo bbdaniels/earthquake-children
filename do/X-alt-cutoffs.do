@@ -19,7 +19,7 @@ qui forv i = 10(5)30 {
   			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
   			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
 
-			graph save "${directory}/appendix/FAX_height-`counter'.gph", replace
+			graph save "${directory}/appendix/FA7_height-`counter'.gph", replace
 
   	use "${directory}/data/analysis_children.dta", clear
 		keep if m_missing == 0 & indiv_childage_pre <= 11
@@ -35,29 +35,29 @@ qui forv i = 10(5)30 {
   			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
   			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
-  			graph save 	"${directory}/appendix/FAX_scores-`counter'.gph", replace
+  			graph save 	"${directory}/appendix/FA7_scores-`counter'.gph", replace
 
 }
-=
+
   	* Combine
 
       grc1leg ///
-  			"${directory}/appendix/FAX_height-1.gph" ///
-        "${directory}/appendix/FAX_scores-1.gph" ///
-  			"${directory}/appendix/FAX_height-2.gph" ///
-  			"${directory}/appendix/FAX_scores-2.gph" ///
-    		"${directory}/appendix/FAX_height-3.gph" ///
-  			"${directory}/appendix/FAX_scores-3.gph" ///
-  			"${directory}/appendix/FAX_height-4.gph" ///
-  			"${directory}/appendix/FAX_scores-4.gph" ///
-  			"${directory}/appendix/FAX_height-5.gph" ///
-   			"${directory}/appendix/FAX_scores-5.gph" ///
+  			"${directory}/appendix/FA7_height-1.gph" ///
+        "${directory}/appendix/FA7_scores-1.gph" ///
+  			"${directory}/appendix/FA7_height-2.gph" ///
+  			"${directory}/appendix/FA7_scores-2.gph" ///
+    		"${directory}/appendix/FA7_height-3.gph" ///
+  			"${directory}/appendix/FA7_scores-3.gph" ///
+  			"${directory}/appendix/FA7_height-4.gph" ///
+  			"${directory}/appendix/FA7_scores-4.gph" ///
+  			"${directory}/appendix/FA7_height-5.gph" ///
+   			"${directory}/appendix/FA7_scores-5.gph" ///
   			, c(2) ${comb_opts} xcom altshrink
 
-      graph save 	"${directory}/appendix/FAX_cutoffs.gph", replace
-      graph combine 	"${directory}/appendix/FAX_cutoffs.gph", ysize(6)
+      graph save 	"${directory}/appendix/FA7_cutoffs.gph", replace
+      graph combine 	"${directory}/appendix/FA7_cutoffs.gph", ysize(6)
 
-  		graph export "${directory}/appendix/FAX_cutoffs.png", replace width(4000)
+  		graph export "${directory}/appendix/FA7_cutoffs.png", replace width(4000)
 
 
 * End

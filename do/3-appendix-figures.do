@@ -267,4 +267,109 @@
 
 	graph export "${directory}/appendix/FA5_leverage.png" , replace width(4000)
 
+* Figure A6. Food prices data
+
+use "${directory}/data/analysis_all.dta" , clear
+  keep village_code vil_uc_dfl_mean
+  duplicates drop
+  count
+  tempfile dist
+    save `dist'
+
+use "${directory}/data/prices.dta", clear
+merge m:1 censusid using "${directory}/data/analysis_hh.dta" , keepusing(village_code) keep(3) nogen
+merge m:1 village_code using `dist' , keepusing(vil_uc_dfl_mean) keep(3) nogen
+keep censusid food_item mSec30_q2_units mSec30_q2_code mSec30_q3 village_code vil_uc_dfl_mean
+bys food_item : egen mcom = mode(mSec30_q2_code)
+  keep if mSec30_q2_code == mcom // Only use comparable prices (drop 3% of data)
+  drop mcom mSec30_q2_code
+  keep if !missing(mSec30_q2_units)
+
+  encode food_item , gen(code)
+    drop food_item
+
+  collapse (mean) price = mSec30_q3  ///
+    (firstnm) distance = vil_uc_dfl_mean ///
+    [fweight = mSec30_q2_units] ///
+    , by(code village_code)
+
+  qui levelsof code , local(codes)
+    foreach i in `codes' {
+      local l`i' : label (code) `i'
+    }
+
+  reshape wide price , i(village_code) j(code)
+
+  foreach i in `codes' {
+    lab var price`i' "`l`i''"
+  }
+
+  lab var distance "Distance (km)"
+
+  forest reg (price*) , t(distance) b bh sort(global) graphopts(ysize(7)) d
+
+  graph export "${directory}/appendix/FA6_prices.png", replace width(4000)
+
+* Figure A7. Alternate cutoffs
+
+local counter 0
+qui forv i = 10(5)30 {
+  local ++counter
+
+	* Height by age
+
+		use "${directory}/data/analysis_children.dta", clear
+		keep if m_missing == 0 & indiv_childage_pre <= 11
+    replace indiv_near_quake = hh_faultdist <= `i'
+
+  		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
+            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
+            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+  		, $graph_opts $hist_opts title("Height-for-Age (`i'km)") ///
+  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
+  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
+  			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
+
+			graph save "${directory}/appendix/FA7_height-`counter'.gph", replace
+
+  	use "${directory}/data/analysis_children.dta", clear
+		keep if m_missing == 0 & indiv_childage_pre <= 11
+    replace indiv_near_quake = hh_faultdist <= `i'
+
+  		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+  			(lpolyci indiv_theta_mean indiv_childage_pre ///
+            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+  			(lpolyci indiv_theta_mean indiv_childage_pre ///
+            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+  		, $graph_opts $hist_opts title("Test Scores (`i'km)") ///
+  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
+  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
+  			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
+
+  			graph save 	"${directory}/appendix/FA7_scores-`counter'.gph", replace
+
+}
+
+	* Combine
+
+    grc1leg ///
+			"${directory}/appendix/FA7_height-1.gph" ///
+      "${directory}/appendix/FA7_scores-1.gph" ///
+			"${directory}/appendix/FA7_height-2.gph" ///
+			"${directory}/appendix/FA7_scores-2.gph" ///
+  		"${directory}/appendix/FA7_height-3.gph" ///
+			"${directory}/appendix/FA7_scores-3.gph" ///
+			"${directory}/appendix/FA7_height-4.gph" ///
+			"${directory}/appendix/FA7_scores-4.gph" ///
+			"${directory}/appendix/FA7_height-5.gph" ///
+ 			"${directory}/appendix/FA7_scores-5.gph" ///
+			, c(2) ${comb_opts} xcom altshrink
+
+    graph save 	"${directory}/appendix/FA7_cutoffs.gph", replace
+    graph combine 	"${directory}/appendix/FA7_cutoffs.gph", ysize(6)
+
+		graph export "${directory}/appendix/FA7_cutoffs.png", replace width(4000)
+
 // End of figures
