@@ -44,7 +44,7 @@
 	qui count if indiv_age > 3
 
 	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
-		(lpoly indiv_dead_quake hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
+		(lpoly indiv_dead_quake hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3 ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") xtit("") ytit("") ///
 		xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -55,7 +55,7 @@
 	qui su c_home_des if tag_hh == 1
 
 	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
-		(lpoly c_home_des hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
+		(lpoly c_home_des hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & tag_hh == 1 ///
 	,	$graph_opts $hist_opts ylab($xpct) xtit("") ytit("") ///
 		xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -67,7 +67,7 @@
 		cap gen isdead = indiv_time_of_death == 2 | indiv_time_of_death == 3
 
 	tw  (histogram hh_faultdist, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
-		(lpoly isdead hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
+		(lpoly isdead hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3   ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") ///
 		ytit("") xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -78,7 +78,7 @@
 	qui su vil_facil_destroyed if tag_village == 1
 
 	tw  (histogram vil_uc_dfl_mean, freq yaxis(2) color(gs14) start(0) w(2) gap(10)) ///
-		(lpoly vil_facil_destroyed hh_faultdist, lc(black) lw(medthick) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
+		(lpoly vil_facil_destroyed hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if tag_village == 1 & vil_uc_dfl_mean < 60 ///
 	,	$graph_opts $hist_opts ylab(${xpct}) xtit("")  ytit("") ///
 		xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -163,9 +163,9 @@
 
 		tw 	(histogram indiv_childage_pre if indiv_health_zanthro_weight!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
-          if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
-          if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Weight-for-Age") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
@@ -189,11 +189,11 @@
 
     tw ///
       (lpolyci weight_ex hh_faultdist if indiv_agecat == 1 ///
-        , lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(dash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci weight_ex hh_faultdist if indiv_agecat == 2 ///
-        , lc(black) lp(longdash) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(longdash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci weight_ex hh_faultdist if indiv_agecat == 3 ///
-        , lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(none) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
         xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -219,9 +219,9 @@
 
 		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
-          if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
-          if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Height-for-Age") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
@@ -245,11 +245,11 @@
 
     tw ///
       (lpolyci height_ex hh_faultdist if indiv_agecat == 1 ///
-        , lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(dash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci height_ex hh_faultdist if indiv_agecat == 2 ///
-        , lc(black) lp(longdash) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(longdash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci height_ex hh_faultdist if indiv_agecat == 3 ///
-        , lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%30) alc(%0)) ///
+        , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(white) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
         xtitle("Distance to Activated Fault (km) {&rarr}") ///
@@ -275,9 +275,9 @@
 
 		tw 	(histogram indiv_childage_pre if indiv_school_enrolled_post!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
-          if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
-          if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Enrollment") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
@@ -292,9 +292,9 @@
 
 		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
-          if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
-          if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Test Scores") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
@@ -321,7 +321,7 @@
     (histogram hh_faultdist if indiv_theta_mean != .   ///
       , freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 		(lpolyci indiv_theta_mean hh_faultdist ///
-      , degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+      , degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 0 ///
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Girls") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
@@ -332,7 +332,7 @@
     (histogram hh_faultdist if indiv_theta_mean != .   ///
       , freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
 		(lpolyci indiv_theta_mean hh_faultdist ///
-      , degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+      , degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 1 ///
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Boys") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
@@ -354,9 +354,9 @@
 
 		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_theta_mean hh_faultdist ///
-          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean hh_faultdist ///
-          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
       if hh_faultdist <= 50 ///
 		, $graph_opts $hist_opts  ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
@@ -372,9 +372,9 @@
 
 		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
 			(lpolyci indiv_health_zanthro_height hh_faultdist ///
-          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height hh_faultdist ///
-          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
       if hh_faultdist <= 50 ///
 		, $graph_opts $hist_opts ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
@@ -391,9 +391,9 @@
 		keep if m_missing == 0 & indiv_childage_pre <= 11
 
 		tw  (histogram hh_faultdist if indiv_school_disruption !=. & indiv_theta_mean != ., freq s(0) w(2) gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
-			(lpoly indiv_school_disruption hh_faultdist if theta_high != ., degree(1) lp(solid) lc(gs8) lw(medthick)  ) ///
-			(lpoly indiv_school_disruption hh_faultdist if theta_high == 1, degree(1) lp(-.. ) lc(black) lw(medthick)  ) ///
-			(lpoly indiv_school_disruption hh_faultdist if theta_high == 0, degree(1) lp(_ ) lc(black) lw(medthick)  ) ///
+			(lpoly indiv_school_disruption hh_faultdist if theta_high != ., degree(1) lp(solid) lc(gs8)  ) ///
+			(lpoly indiv_school_disruption hh_faultdist if theta_high == 1, degree(1) lp(-.. ) lc(black)  ) ///
+			(lpoly indiv_school_disruption hh_faultdist if theta_high == 0, degree(1) lp(_ ) lc(black)  ) ///
 		if hh_faultdist < 60 ///
 		, ylab( 0 4 8 12 16 `" " " "16" "Weeks" "' , angle(0) ) ytitle("") $graph_opts $hist_opts ///
 			legend(on order(4 "Bottom 50% of test scores"  3 "Top 50% of test scores" 2 "Pooled") cols(1) pos(2) ring(0) region( lc(white) ) ) ///

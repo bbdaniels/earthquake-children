@@ -35,8 +35,6 @@
     use "${directory}/data/analysis_children.dta", clear
     keep if m_missing == 0 & indiv_age < 16
 
-    // gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
-
     local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
     local other_controls "indiv_male i.indiv_age"
 
