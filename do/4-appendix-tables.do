@@ -663,6 +663,9 @@ use "${directory}/data/analysis_children.dta", clear
 use "${directory}/data/analysis_children.dta", clear
   keep if m_missing == 0 & indiv_age < 16
 
+  replace hh_aid_total = hh_aid_total/100000
+    lab var hh_aid_total "Total Cash Aid Reported (PKR 100,000s)"
+
   char indiv_age[omit] 9
 
   local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
