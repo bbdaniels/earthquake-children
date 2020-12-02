@@ -44,6 +44,22 @@ use "${directory}/data/analysis_all.dta"  , clear
 		/// Print
 		using "$directory/outputs/T1_descriptives.xls" ///
 	,  	replace stats(mean sd p25 p50 p75 N)
+	
+* Program for Table 2ab: MDE Calculator
+
+  cap prog drop mdereg
+	prog def mdereg
+		  
+		cap mat drop a
+		mat a = r(table)
+		local se = a[2,1]
+		local df = a[7,1]
+		local crit = a[8,1]
+		local mde = `se' * (`crit' + abs(invt(`df',.2)))
+		
+		estadd scalar mde = `mde'
+		
+  end
 
 
 * Table 2a. Pre-quake Exogeneity
@@ -60,14 +76,16 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist vil_uc_dist_epi vil_uc_slope_mean i.hh_district if tag_village == 1 ///
 			, cl(village_code)
-			est sto `var'
+			mdereg
 
 			local theLabel : var label `var'
 			local theCols `"`theCols' "`theLabel'" "`theLabel'""'
 
-			qui sum `var'
+			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
+			
+			est sto `var'
 
 			}
 
@@ -79,14 +97,17 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if indiv_dead == 0 & indiv_age > 17 ///
 			, cl(village_code)
-			est sto `var'
+
+			mdereg
 
 			local theLabel : var label `var'
 			local theCols `"`theCols' "`theLabel'" "`theLabel' (Living)""'
 
-			qui sum `var' if indiv_dead == 0 & indiv_age > 17
+			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
+			
+			est sto `var'
 
 			}
 
@@ -94,14 +115,17 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if indiv_dead == 1 & indiv_age > 17 ///
 			, cl(village_code)
-			est sto `var'2
+
+			mdereg
 
 			local theLabel : var label `var'
 			local theCols `"`theCols' "`theLabel'" "`theLabel' (Deceased)""'
 
-			qui sum `var' if indiv_dead == 1 & indiv_age > 17
+			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
+			
+			est sto `var'2
 
 			}
 
@@ -109,14 +133,17 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if indiv_age > 17 ///
 			, cl(village_code)
-			est sto `var'3
+			
+			mdereg
 
 			local theLabel : var label `var'
 			local theCols `"`theCols' "`theLabel'" "`theLabel' (All)""'
 
-			qui sum `var' if indiv_dead == 1 & indiv_age > 17
+			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
+			
+			est sto `var'3
 
 			}
 
@@ -129,14 +156,17 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if tag_hh == 1 & touse_shock == 1 ///
 			, cl(village_code)
-			est sto `var'
+			
+			mdereg
 
 			local theLabel : var label `var'
 			local theCols `"`theCols' "`theLabel'" "`theLabel'""'
 
-			qui sum `var'
+			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
+			
+			est sto `var'
 
 			}
 
@@ -144,7 +174,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 		`theVarlist_i' indiv_male_age2 indiv_female_age2 indiv_edu_primary_m2 indiv_edu_primary_f2 indiv_male_age3 indiv_female_age3 indiv_edu_primary_m3 indiv_edu_primary_f3 ///
 		`theVarlist_h' ///
 	  , replace ///
-    save("$directory/outputs/T2a_exogeneity.xls") stats(N r2 mean) keep(hh_faultdist) cnames(`theCols')
+    save("$directory/outputs/T2a_exogeneity.xls") stats(N r2 mean mde) keep(hh_faultdist) cnames(`theCols')
 
 * Table 2b. Recovery
 
@@ -158,35 +188,48 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg indiv_health_weight hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				est sto indiv_health_weight
+			
+				mdereg
 
 				qui sum indiv_health_weight
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
+				
+				est sto indiv_health_weight
 
 		xi: reg indiv_health_height hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				est sto indiv_health_height
+
+				mdereg
 
 				qui sum indiv_health_height
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
+				
+			  est sto indiv_health_height
+
 
 		xi: reg indiv_health_weight24 hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				est sto indiv_health_weight24
+				
+				mdereg
 
 				qui sum indiv_health_weight24
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
+				
+				est sto indiv_health_weight24
 
 		xi: reg indiv_health_height24 hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				est sto indiv_health_height24
+				
+				mdereg
 
 				qui sum indiv_health_height24
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
+				
+				est sto indiv_health_height24
 
 	* Household assets & public infrastructure
 
@@ -195,16 +238,18 @@ use "${directory}/data/analysis_all.dta"  , clear
 		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 
 		local theVarlist ///
-			hh_assets_pca_post hh_infra_index_post hh_perm_house_post hh_stats_electricity_post hh_water_inhouse_post ///
-			hh_stats_loggschool_post ///
-			hh_stats_logmarket_post hh_stats_logdistrict_post hh_stats_logmedical_post hh_stats_logprischool_post
+			hh_assets_pca_post hh_infra_index_post hh_perm_house_post ///
+			hh_stats_electricity_post hh_water_inhouse_post hh_logconscap ///
+			hh_stats_loggschool_post hh_stats_logmarket_post hh_stats_logdistrict_post ///
+			hh_stats_logmedical_post hh_stats_logprischool_post
 
 		local theCols ""
 		qui foreach var of varlist `theVarlist' {
 
 			xi: reg `var' hh_faultdist `fault_controls' ///
 				, cl(village_code)
-				est sto `var'
+				
+				mdereg
 
 				local theLabel : var label `var'
 				local theCols `"`theCols' "`theLabel'" "`theLabel'""'
@@ -212,6 +257,8 @@ use "${directory}/data/analysis_all.dta"  , clear
 				qui sum `var'
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
+				
+				est sto `var'
 
 				}
 
@@ -219,9 +266,9 @@ use "${directory}/data/analysis_all.dta"  , clear
 			indiv_health_height indiv_health_weight indiv_health_height24 indiv_health_weight24 ///
 	  , replace ///
       save("${directory}/outputs/T2b_recovery.xls") keep(hh_faultdist) ///
-			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR2)) ///
+			lines(COL_NAMES 3 LAST_ROW 3) format((SCLB0) (SCCB0 NCRR3)) ///
 			cnames(`theCols' "Adult Height" "Adult Height" "Adult Weight" "Adult Weight" ) ///
-			showeq ceq(${numbering}) c("Constant") stats(N r2 mean) ///
+			showeq ceq(${numbering}) c("Constant") stats(N r2 mean mde) ///
 			title("Table 2b. Post-Earthquake Recovery") sheet("Table 2b")
 
 * Table 3. Weight and Height
