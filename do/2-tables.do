@@ -55,7 +55,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 		local se = a[2,1]
 		local df = a[7,1]
 		local crit = a[8,1]
-		local mde = `se' * (`crit' + abs(invt(`df',.2)))
+		local mde = `se' * (`crit' + -(invt(`df',.2)))
 		
 		estadd scalar mde = `mde'
 		
@@ -184,7 +184,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 		clonevar indiv_health_weight24 = indiv_health_weight if indiv_age < 25
 		clonevar indiv_health_height24 = indiv_health_height if indiv_age < 25
 
-		local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+		local fault_controls "i.indiv_age i.indiv_male hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 
 		xi: reg indiv_health_weight hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
