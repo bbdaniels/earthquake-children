@@ -1,5 +1,4 @@
-# earthquake-children
-Reproducibility package for "Human Capital Accumulation and Disasters: Evidence from the Pakistan Earthquake of 2005"
+# Reproducibility package for "Human Capital Accumulation and Disasters: Evidence from the Pakistan Earthquake of 2005"
 
 Archival versions of data and code are available at:
 
