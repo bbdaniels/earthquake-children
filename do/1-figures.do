@@ -399,6 +399,37 @@
 			legend(on order(4 "Bottom 50% of test scores"  3 "Top 50% of test scores" 2 "Pooled") cols(1) pos(2) ring(0) region( lc(white) ) ) ///
 			xtitle("Distance to Activated Fault (km) {&rarr}") xlab(0(10)60) xsize(7)
 
-			graph export "${directory}/outputs/F9_disruption.png", replace width(4000)
+			graph save "${directory}/outputs/F9a_disruption.gph", replace 
+			
+	use "${directory}/data/analysis_children.dta", clear
+
+		keep if m_missing == 0 & indiv_childage_pre <= 11 & hh_faultdist < 20
+		qui sum disr, d
+
+	gen f= -50
+		gen pmin=r(p5)
+		gen p25=r(p25)
+		gen p50=r(p50)
+		gen p75=r(p75)
+		gen pmax=r(p95)
+		gen pmean=r(mean)
+
+	tw ///
+		(histogram disr , la(center) freq w(4) start(0) $graph_opts gap(10) fc(gs14) lp(solid) lc(black) ) ///
+		(rcap pmin p25 f in 1, msize(2) hor bcolor(black) lw(thin) )                 ///
+		(rcap p75 pmax f in 1, msize(2) hor bcolor(black) lw(thin) )                 ///
+		(rbar p25 p75 f in 1, la(center) barwidth(25) hor fc(none) lp(solid) lw(thin) lc(black) la(center))                   ///
+		(rcap p50 p50 f in 1, msize(2) hor bcolor(black) lw(thin) )                    ///
+		, xlab(0(5)100, notick) xtit("Time Out of School (Weeks) {&rarr}", align(left) placement(left)) ///
+		ylab(0(100)500) ytit("Number of Children", align(center) placement(center)) legend(off) xsize(7)
+
+		graph save "${directory}/outputs/F9b_disruption.gph", replace 
+		
+		graph combine ///
+		  "${directory}/outputs/F9a_disruption.gph" ///
+		  "${directory}/outputs/F9b_disruption.gph" ///
+	  , c(1) ysize(5)
+		
+		graph export "${directory}/outputs/F9_disruption.png", replace width(4000)
 
 * Have a lovely day!

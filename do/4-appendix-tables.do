@@ -1064,5 +1064,90 @@ use "${directory}/data/analysis_children.dta", clear
     replace below c("Constant") stats(mean r2 N) ///
     lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
     keep(hh_faultdist disr _IageXhh_fa_1 _IageXhh_fa_2 _Iindiv_mal_1 _IindXhh_fa_1 _IindX*)
-		
+
+// Appendix table A4d. Alternative specifications of Table 3: Birth cohort selection
+use "${directory}/data/analysis_children.dta", clear
+  keep if m_missing == 0 & indiv_age < 16
+
+  char indiv_age[omit] 9
+
+  local fault_controls "density hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+  local other_controls "i.indiv_male i.indiv_age"
+
+  xi: reg indiv_health_zanthro_weight hh_faultdist ///
+    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+  , cl(village_code)
+
+    estimates store reg1
+    su `e(depvar)' if e(sample) == 1
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_health_zanthro_height hh_faultdist ///
+    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+  , cl(village_code)
+
+    estimates store reg2
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_school_enrolled_post hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_tested == 1 & indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg3
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_edu hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_tested == 1 & indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg4
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg5
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    disr `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg6
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    i.indiv_male*hh_faultdist `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg7
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xi: reg indiv_theta_mean hh_faultdist ///
+    i.indiv_age*hh_faultdist `fault_controls' `other_controls' ///
+  if indiv_age >= 9 ///
+  , cl(village_code)
+
+    estimates store reg8
+    su `e(depvar)' if e(sample)
+    estadd scalar mean = `r(mean)'
+
+  xml_tab reg1 reg2 reg3 reg4 reg5 reg6 reg7 reg8 ///
+  , save("${directory}/appendix/TA4e_density.xls") ///
+    replace below c("Constant") stats(mean r2 N) ///
+    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
+    keep(hh_faultdist density disr _IageXhh_fa_1 _IageXhh_fa_2 _Iindiv_mal_1 _IindXhh_fa_1 _IindX*)
+				
 // End tables

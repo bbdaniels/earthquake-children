@@ -57,6 +57,7 @@
 
     // Food Prices Data
     copy "${data}/food-prices.dta" "${directory}/data/prices.dta" , replace
+    copy "${data}/mercalli.dta" "${directory}/data/mercalli.dta" , replace
     copy "${data}/school-density.dta" "${directory}/data/schools.dta" , replace
 
     // Analytical Cleaning
@@ -70,7 +71,9 @@
 			save `occupation' 
 		
     use "${directory}/data/analysis_children.dta" , clear
-      merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
+      merge m:1 censusid using "${directory}/data/mercalli.dta" , nogen keep(3)
+      merge m:1 village_code using "${directory}/data/schools.dta" , nogen keep(3)
+			
       merge m:1 censusid using "`occupation'" , nogen keep(1 3)
 			  recode hh_occupation ///
 				  (7 8 = 1 "Laborer") (1 2 6 = 2 "Farmer or Trader") ///
