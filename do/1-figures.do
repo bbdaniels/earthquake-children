@@ -100,12 +100,21 @@
 
 * Figure 4. Assets
 
-	use "${directory}/data/analysis_hh.dta", clear
-		drop *pca*
-		local opts lw(thin) lc(white) la(center) fi(100)
-		betterbar hh_assets_*_pre , over(hh_far_from_quake) ///
-			${graph_opts} xlab(${xpct}) xscale(alt) barlook(1 `opts' fc(gray) 2 `opts' fc(black)) ///
-			descending(hh_far_from_quake==1) xoverhang xsize(6) xtit("Share of Households Owning {&rarr}") ///
+  use "${directory}/data/analysis_hh.dta", clear
+	preserve
+	  collapse (mean) hh_assets_*_pre
+		ren hh_assets_*_pre hh_assets_*
+		gen i = 1
+		reshape long hh_assets_ , i(i) j(j)
+		  gsort - hh_assets_
+			qui forvalues i = 1/`c(N)' {
+				local vars "`vars' hh_assets_`=j[`i']'_pre"
+			}
+	restore
+
+		betterbar `vars' , over(hh_far_from_quake) ///
+			${graph_opts} xlab(${xpct}) xscale(alt) barcolor(gray black) ///
+			xoverhang xsize(6) xtit("Share of Households Owning {&rarr}") ///
 			legend(on c(2) pos(12) ring(1) symysize(small) symxsize(small) size(small) ///
 				textfirst order(1 "Near Fault (<20km)" 2 "Far from Fault (20km+)")) ylab(,labsize(small))
 

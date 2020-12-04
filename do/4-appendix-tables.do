@@ -244,20 +244,20 @@ use "${directory}/data/analysis_children.dta", clear
 	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
 	local other_controls "indiv_male i.indiv_age"
 
-  foreach type in mean pv_eng pv_mth pv_urd {
+  foreach type in indiv_theta_mean indiv_theta_pv_eng indiv_theta_pv_mth indiv_theta_pv_urd {
 
-    reg indiv_theta_`type' hh_faultdist ///
+    reg `type' hh_faultdist ///
       `fault_controls' `other_controls' ///
     if indiv_age >= 9 ///
     , cl(village_code)
 
     est sto `type'
-      qui sum indiv_theta_`type'
+      qui sum `type'
       local mean = `r(mean)'
       estadd scalar mean = `mean'
   }
 
-  	xml_tab mean pv_eng pv_mth pv_urd ///
+  	xml_tab mean indiv_theta_mean indiv_theta_pv_eng indiv_theta_pv_mth indiv_theta_pv_urd ///
 	  , save("${directory}/appendix/TA2c_subject.xls") ///
 			replace below c("Constant") stats(mean r2 N) ///
       lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///

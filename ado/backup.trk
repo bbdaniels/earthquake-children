@@ -1,4 +1,4 @@
-* 00000021
+* 00000023
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -429,4 +429,20 @@ f e/ellip_dlopts.idlg
 f e/ellip_means.dlg
 f e/ellip_pcopts.idlg
 f e/ellip_plopts.idlg
+e
+S https://github.com/bbdaniels/stata/raw/master
+N sumstats.pkg
+D 26 Aug 2020
+U 22
+d Benjamin Daniels
+f s/sumstats.ado
+f s/sumstats.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/master
+N sumstats.pkg
+D  4 Dec 2020
+U 23
+d Benjamin Daniels
+f s/sumstats.ado
+f s/sumstats.sthlp
 e

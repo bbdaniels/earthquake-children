@@ -27,14 +27,15 @@
 	global numbering `""(1)" "(2)" "(3)" "(4)" "(5)" "(6)" "(7)" "(8)" "(9)" "(10)""'
 
 // Install Packages
-  ssc install xml_tab  , replace
-  net install forest   , from(https://github.com/bbdaniels/stata/raw/master/) replace
-  net install sumstats , from(https://github.com/bbdaniels/stata/raw/master/) replace
-  net install grc1leg  , from(http://www.stata.com/users/vwiggins) replace
-  net install st0085_2 , from(http://www.stata-journal.com/software/sj14-2) replace
-  net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace
-  net install st0364   , from(http://www.stata-journal.com/software/sj14-4) replace
-  net install gr32_1   , from(http://www.stata-journal.com/software/sj4-3) replace
+  ssc install xml_tab   , replace
+  net install forest    , from(https://github.com/bbdaniels/stata/raw/master/) replace
+  net install sumstats  , from(https://github.com/bbdaniels/stata/raw/master/) replace
+  net install betterbar , from(https://github.com/bbdaniels/stata/raw/master/) replace
+  net install grc1leg   , from(http://www.stata.com/users/vwiggins) replace
+  net install st0085_2  , from(http://www.stata-journal.com/software/sj14-2) replace
+  net install st0030_2  , from(http://www.stata-journal.com/software/sj5-4) replace
+  net install st0364    , from(http://www.stata-journal.com/software/sj14-4) replace
+  net install gr32_1    , from(http://www.stata-journal.com/software/sj4-3) replace
 
 /* Get all required data from Box and install packages // TODO: DELETE WHEN FINALIZED
 global data "/Users/bbdaniels/Box/Earthquake/Constructed"
