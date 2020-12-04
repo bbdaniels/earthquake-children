@@ -57,7 +57,7 @@
   }
 
     // Food Prices Data
-    copy "${data}/food-prices.dta" "${directory}/data/prices.dta"
+    copy "${data}/food-prices.dta" "${directory}/data/prices.dta" , replace
 
     // Analytical Cleaning
     use "${directory}/data/analysis_children.dta" , clear

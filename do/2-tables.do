@@ -282,7 +282,7 @@ use "${directory}/data/analysis_all.dta"  , clear
   local other_controls "i.indiv_male i.indiv_age"
 
   xi: reg indiv_health_zanthro_weight hh_faultdist ///
-    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+    i.agecat*hh_faultdist `fault_controls' `other_controls' /// 
   , cl(village_code)
 
     estimates store reg1
@@ -425,39 +425,45 @@ use "${directory}/data/analysis_all.dta"  , clear
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age >= 9, ffirst cl(village_code)
 
-		est sto reg1
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
+		
+		est sto reg1
 
 	xi: ivreg2 indiv_theta_mean hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age >= 9, ffirst cl(village_code)
-
-		est sto reg2
+	
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
+		
+		est sto reg2
 
 
 	xi: ivreg2 indiv_health_zanthro_height hh_faultdist ///
 		( m_indiv_edu_binary = instrument )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age <= 6 , ffirst cl(village_code)
-		est sto reg3
+		
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
+		
+		est sto reg3
 
 	xi: ivreg2 indiv_health_zanthro_height hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age <= 6 , ffirst cl(village_code)
-		est sto reg4
+		
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
+		
+		est sto reg4
 
 	gen f = 0
 		label var f "Cragg-Donald F-statistic"
@@ -467,7 +473,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 	xml_tab ///
 		reg1 reg2 reg3 reg4 ///
 		, save("${directory}/outputs/T4b_momedu_iv.xls") ///
-		  replace below stats(mean N f  ) /// I have no idea why "mean" isn't printing
+		  replace below stats(mean N f  ) /// 
 			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1)
 
 * Have a lovely day!
