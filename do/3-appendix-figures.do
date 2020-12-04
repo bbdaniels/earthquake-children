@@ -312,45 +312,45 @@ bys food_item : egen mcom = mode(mSec30_q2_code)
 
 * Figure A7. Alternate cutoffs
 
-local counter 0
-qui forv i = 10(5)30 {
-  local ++counter
+	local counter 0
+	qui forv i = 10(5)30 {
+	  local ++counter
 
-	* Height by age
+		* Height by age
 
-		use "${directory}/data/analysis_children.dta", clear
-		keep if m_missing == 0 & indiv_childage_pre <= 11
-    replace indiv_near_quake = hh_faultdist <= `i'
+			use "${directory}/data/analysis_children.dta", clear
+			keep if m_missing == 0 & indiv_childage_pre <= 11
+	    replace indiv_near_quake = hh_faultdist <= `i'
 
-  		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
-  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
-            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
-  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
-            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
-  		, $graph_opts $hist_opts title("Height-for-Age (`i'km)") ///
-  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
-  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
-  			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
+	  		tw (histogram indiv_childage_pre if indiv_health_zanthro_height!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+	  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
+	            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+	  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
+	            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+	  		, $graph_opts $hist_opts title("Height-for-Age (`i'km)") ///
+	  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
+	  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
+	  			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
 
-			graph save "${directory}/appendix/FA7_height-`counter'.gph", replace
+				graph save "${directory}/appendix/FA7_height-`counter'.gph", replace
 
-  	use "${directory}/data/analysis_children.dta", clear
-		keep if m_missing == 0 & indiv_childage_pre <= 11
-    replace indiv_near_quake = hh_faultdist <= `i'
+	  	use "${directory}/data/analysis_children.dta", clear
+			keep if m_missing == 0 & indiv_childage_pre <= 11
+	    replace indiv_near_quake = hh_faultdist <= `i'
 
-  		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
-  			(lpolyci indiv_theta_mean indiv_childage_pre ///
-            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
-  			(lpolyci indiv_theta_mean indiv_childage_pre ///
-            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
-  		, $graph_opts $hist_opts title("Test Scores (`i'km)") ///
-  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
-  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
-  			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
+	  		tw 	(histogram indiv_childage_pre if indiv_theta_mean!=. , freq disc gap(10) yaxis(2) bstyle(outline) bc(gs14) ) ///
+	  			(lpolyci indiv_theta_mean indiv_childage_pre ///
+	            if indiv_near_quake==0, degree(1) lc(black) lp(solid) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+	  			(lpolyci indiv_theta_mean indiv_childage_pre ///
+	            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
+	  		, $graph_opts $hist_opts title("Test Scores (`i'km)") ///
+	  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
+	  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
+	  			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
-  			graph save 	"${directory}/appendix/FA7_scores-`counter'.gph", replace
+	  			graph save 	"${directory}/appendix/FA7_scores-`counter'.gph", replace
 
-}
+	}
 
 	* Combine
 
@@ -371,5 +371,49 @@ qui forv i = 10(5)30 {
     graph combine 	"${directory}/appendix/FA7_cutoffs.gph", ysize(6)
 
 		graph export "${directory}/appendix/FA7_cutoffs.png", replace width(4000)
+		
+* Figure A8. Birth cohort selection
+use "${directory}/data/analysis_children.dta", clear
+
+  lab var indiv_father_age "Father's Age"
+  lab var indiv_father_edu "Father Completed Primary School"
+
+  tab hh_occ_code, gen(occ)
+    foreach var of varlist occ* {
+      local theLabel : var lab `var'
+      lab var `var' "Household Head is `=substr("`theLabel'",strpos("`theLabel'","==")+2,.)'"
+    }
+
+  foreach var in ///
+     indiv_father_age indiv_father_edu indiv_father_height ///
+     m_age m_indiv_edu_binary m_indiv_health_height ///
+     occ1 occ2 occ3 ///
+     {
+
+    local lab : var label `var'
+    
+    preserve
+    keep if hh_near_quake == 1
+    collapse (mean) mean = `var' (sem) sem = `var' (count) n = `var' , by(indiv_age)
+      gen ul = mean + (1.96 * sem)
+      gen ll = mean - (1.96 * sem)
+      
+      gen cohort = inlist(indiv_age,3,4,5,6)
+      
+      tw ///
+        (lfitci mean indiv_age [aweight = n] if !cohort , lw(none) fc(gs12)) ///
+        (lfit mean indiv_age [aweight = n] if !cohort , lp(dash) lw(thin) lc(black)) ///
+        (rspike ll ul indiv_age if cohort  , lc(red)) ///
+        (rspike ll ul indiv_age if !cohort , lc(black)) ///
+        (scatter mean indiv_age , mc (black)) ///
+      , title("`lab'") xtit("Survey Age Cohort") xlab(0(1)18) ///
+        saving("${directory}/appendix/`var'.gph", replace) nodraw
+    restore
+    
+    local graphs `"`graphs' "${directory}/appendix/`var'.gph""'
+  }
+
+graph combine `graphs' , c(3) ysize(6) altshrink
+graph export "${directory}/appendix/FA8_cohort.png" , width(4000) replace
 
 // End of figures
