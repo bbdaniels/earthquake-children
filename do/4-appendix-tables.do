@@ -657,9 +657,7 @@ use "${directory}/data/analysis_children.dta", clear
 		keep(f _Ia_1 _Ia1Xf m_indiv_edu_binary indiv_male) drop(o.*)  ///
 		note("Controlled for geographical characteristics. Includes age dummies.", "Standard errors clustered by village.")
 
-// Appendix table 4. Alternative specifications of Table 3
-
-// Version 1. Aid as control.
+// Appendix table A4a. Alternative specifications of Table 3: Aid as control.
 use "${directory}/data/analysis_children.dta", clear
   keep if m_missing == 0 & indiv_age < 16
 
@@ -748,13 +746,34 @@ use "${directory}/data/analysis_children.dta", clear
     keep(hh_faultdist disr _IageXhh_fa_1 _IageXhh_fa_2 hh_aid_total _Iindiv_mal_1 _IindXhh_fa_1 _IindX*)
 
 
-// Version 2. Control sensitivity
+// Appendix table A4b. Alternative specifications of Table 3: Control sensitivity
 use "${directory}/data/analysis_children.dta", clear
   keep if m_missing == 0 & indiv_age < 16
 
   // Reference
   local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
   local other_controls "i.indiv_male i.indiv_age"
+
+    xi: reg indiv_health_zanthro_height hh_faultdist ///
+      i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+    , cl(village_code)
+
+      estimates store reg1
+      su `e(depvar)' if e(sample)
+      estadd scalar mean = `r(mean)'
+
+    xi: reg indiv_theta_mean hh_faultdist ///
+      `fault_controls' `other_controls' ///
+    if indiv_age >= 9 ///
+    , cl(village_code)
+
+      estimates store reg2
+      su `e(depvar)' if e(sample)
+      estadd scalar mean = `r(mean)'
+			
+  // Remove gender
+  local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+  local other_controls "i.indiv_age"
 
     xi: reg indiv_health_zanthro_height hh_faultdist ///
       i.agecat*hh_faultdist `fault_controls' `other_controls' ///
@@ -769,102 +788,112 @@ use "${directory}/data/analysis_children.dta", clear
     if indiv_age >= 9 ///
     , cl(village_code)
 
-      estimates store reg1b
+      estimates store reg2a
+      su `e(depvar)' if e(sample)
+      estadd scalar mean = `r(mean)'
+			
+	// Remove Age
+	local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
+	local other_controls ""
+
+		xi: reg indiv_health_zanthro_height hh_faultdist ///
+			i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+		, cl(village_code)
+
+			estimates store reg1b
+			su `e(depvar)' if e(sample)
+			estadd scalar mean = `r(mean)'
+
+		xi: reg indiv_theta_mean hh_faultdist ///
+			`fault_controls' `other_controls' ///
+		if indiv_age >= 9 ///
+		, cl(village_code)
+
+			estimates store reg2b
+			su `e(depvar)' if e(sample)
+			estadd scalar mean = `r(mean)'
+			
+	// Remove District FE
+  local fault_controls "hh_epidist hh_slope hh_fault_minimum"
+  local other_controls ""
+
+    xi: reg indiv_health_zanthro_height hh_faultdist ///
+      i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+    , cl(village_code)
+
+      estimates store reg1c
       su `e(depvar)' if e(sample)
       estadd scalar mean = `r(mean)'
 
-  // No controls
+    xi: reg indiv_theta_mean hh_faultdist ///
+      `fault_controls' `other_controls' ///
+    if indiv_age >= 9 ///
+    , cl(village_code)
+
+      estimates store reg2c
+      su `e(depvar)' if e(sample)
+      estadd scalar mean = `r(mean)'
+
+  // Remove Geography
   local fault_controls ""
   local other_controls ""
 
-  xi: reg indiv_health_zanthro_height hh_faultdist ///
-    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-  , cl(village_code)
+	  xi: reg indiv_health_zanthro_height hh_faultdist ///
+	    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+	  , cl(village_code)
 
-    estimates store reg2a
-    su `e(depvar)' if e(sample)
-    estadd scalar mean = `r(mean)'
+	    estimates store reg1d
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
 
-  xi: reg indiv_theta_mean hh_faultdist ///
-    `fault_controls' `other_controls' ///
-  if indiv_age >= 9 ///
-  , cl(village_code)
+	  xi: reg indiv_theta_mean hh_faultdist ///
+	    `fault_controls' `other_controls' ///
+	  if indiv_age >= 9 ///
+	  , cl(village_code)
 
-    estimates store reg2b
-    su `e(depvar)' if e(sample)
-    estadd scalar mean = `r(mean)'
+	    estimates store reg2d
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
 
-  // District
-  local fault_controls "hh_district_1 hh_district_2 hh_district_3"
+  // Remove Outlier
+  local fault_controls ""
   local other_controls ""
 
-    xi: reg indiv_health_zanthro_height hh_faultdist ///
-      i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-    , cl(village_code)
+	  xi: reg indiv_health_zanthro_height hh_faultdist ///
+	    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+	  if hh_faultdist < 60 ///
+	  , cl(village_code)
 
-      estimates store reg3a
-      su `e(depvar)' if e(sample)
-      estadd scalar mean = `r(mean)'
+	    estimates store reg1e
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
 
-    xi: reg indiv_theta_mean hh_faultdist ///
-      `fault_controls' `other_controls' ///
-    if indiv_age >= 9 ///
-    , cl(village_code)
+	  xi: reg indiv_theta_mean hh_faultdist ///
+	    `fault_controls' `other_controls' ///
+	  if indiv_age >= 9 & hh_faultdist < 60 ///
+	  , cl(village_code)
 
-      estimates store reg3b
-      su `e(depvar)' if e(sample)
-      estadd scalar mean = `r(mean)'
+	    estimates store reg2e
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
+		
+  // Output results
 
-   // Geo
-   local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-   local other_controls ""
+	  xml_tab ///
+		  reg2 reg2a reg2b reg2c reg2d reg2e  ///
+	  , save("${directory}/appendix/TA4b_controls1.xls") ///
+	    replace below c("Constant") stats(mean r2 N) ///
+	    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
+	    keep(hh_faultdist )
+			
+	  xml_tab ///
+		  reg1 reg1a reg1b reg1c reg1d reg1e  ///
+	  , save("${directory}/appendix/TA4b_controls2.xls") ///
+	    replace below c("Constant") stats(mean r2 N) ///
+	    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
+	    keep(hh_faultdist _IageXhh_fa_1 _IageXhh_fa_2)
 
-     xi: reg indiv_health_zanthro_height hh_faultdist ///
-       i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-     , cl(village_code)
-
-       estimates store reg4a
-       su `e(depvar)' if e(sample)
-       estadd scalar mean = `r(mean)'
-
-     xi: reg indiv_theta_mean hh_faultdist ///
-       `fault_controls' `other_controls' ///
-     if indiv_age >= 9 ///
-     , cl(village_code)
-
-       estimates store reg4b
-       su `e(depvar)' if e(sample)
-       estadd scalar mean = `r(mean)'
-
-  // Age
-  local fault_controls "hh_epidist hh_slope hh_fault_minimum hh_district_1 hh_district_2 hh_district_3"
-  local other_controls "i.indiv_age"
-
-    xi: reg indiv_health_zanthro_height hh_faultdist ///
-      i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-    , cl(village_code)
-
-      estimates store reg5a
-      su `e(depvar)' if e(sample)
-      estadd scalar mean = `r(mean)'
-
-    xi: reg indiv_theta_mean hh_faultdist ///
-      `fault_controls' `other_controls' ///
-    if indiv_age >= 9 ///
-    , cl(village_code)
-
-      estimates store reg5b
-      su `e(depvar)' if e(sample)
-      estadd scalar mean = `r(mean)'
-
-
-  xml_tab reg1a reg1b reg2a reg2b reg3a reg3b reg4a reg4b reg5a reg5b ///
-  , save("${directory}/appendix/TA4b_controls.xls") ///
-    replace below c("Constant") stats(mean r2 N) ///
-    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
-    keep(hh_faultdist _IageXhh_fa_1 _IageXhh_fa_2)
-
-// Version 3. Intensity replacing distance.
+// Appendix table A4c. Alternative specifications of Table 3: Intensity replacing distance.
 use "${directory}/data/analysis_children.dta", clear
   keep if m_missing == 0 & indiv_age < 16
 
