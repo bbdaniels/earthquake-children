@@ -71,7 +71,7 @@
 		
     use "${directory}/data/analysis_children.dta" , clear
       merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
-      merge m:1 censusid using "`occupation'" , nogen 
+      merge m:1 censusid using "`occupation'" , nogen keep(1 3)
 
       gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
         lab var m_edu_fault "Fault-Edu Interaction"
