@@ -63,7 +63,7 @@ qui do "${directory}/ado/iecodebook.ado"
 	  iecodebook export ///
       "${directory}/data/`dta'.dta" ///
     using "${directory}/data/`dta'.xlsx" ///
-    , replace reset hash 
+    , replace reset copy hash 
 	}
 */
 
