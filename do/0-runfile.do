@@ -31,7 +31,7 @@
   // Packages
     ssc install xml_tab  , replace
     net install forest   , from(https://github.com/bbdaniels/stata/raw/master/) replace
-    net install sumstats   , from(https://github.com/bbdaniels/stata/raw/master/) replace
+    net install sumstats , from(https://github.com/bbdaniels/stata/raw/master/) replace
     net install grc1leg  , from(http://www.stata.com/users/vwiggins) replace
     net install st0085_2 , from(http://www.stata-journal.com/software/sj14-2) replace
     net install st0030_2 , from(http://www.stata-journal.com/software/sj5-4) replace
@@ -72,6 +72,11 @@
     use "${directory}/data/analysis_children.dta" , clear
       merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
       merge m:1 censusid using "`occupation'" , nogen keep(1 3)
+			  recode hh_occupation ///
+				  (7 8 = 1 "Laborer") (1 2 6 = 2 "Farmer or Trader") ///
+				  (3 13 14 = 3 "Employed") (* = 4 "Other/Unemployed") ///
+			  , gen(hh_occ_code)
+				  lab var hh_occ_code "Household Head Occupation"
 
       gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
         lab var m_edu_fault "Fault-Edu Interaction"
