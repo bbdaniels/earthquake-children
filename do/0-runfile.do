@@ -42,26 +42,36 @@
   global data "/Users/bbdaniels/Box/Earthquake/Constructed"
 	qui do "${directory}/ado/iecodebook.ado"
 
-  foreach dta in analysis_hh analysis_children analysis_all {
+	  foreach dta in analysis_hh analysis_children analysis_all {
 
-    iecodebook export ///
-      "${data}/`dta'.dta" ///
-    using "${directory}/data/`dta'.xlsx" ///
-    , replace reset copy hash ///
-      trim("${directory}/do/0-runfile.do" ///
-        "${directory}/do/1-figures.do" ///
-        "${directory}/do/2-tables.do" ///
-        "${directory}/do/3-appendix-figures.do" ///
-        "${directory}/do/4-appendix-tables.do")
-
-  }
+	    iecodebook export ///
+	      "${data}/`dta'.dta" ///
+	    using "${directory}/data/`dta'.xlsx" ///
+	    , replace reset copy hash ///
+	      trim("${directory}/do/0-runfile.do" ///
+	        "${directory}/do/1-figures.do" ///
+	        "${directory}/do/2-tables.do" ///
+	        "${directory}/do/3-appendix-figures.do" ///
+	        "${directory}/do/4-appendix-tables.do")
+	  }
 
     // Food Prices Data
     copy "${data}/food-prices.dta" "${directory}/data/prices.dta" , replace
+    copy "${data}/school-density.dta" "${directory}/data/schools.dta" , replace
 
     // Analytical Cleaning
+		use "${directory}/data/analysis_all.dta" , clear
+		  keep if indiv_head_relation == 1 & indiv_occupation != .
+			keep censusid indiv_occupation
+			ren indiv_occupation hh_occupation
+			  lab var hh_occupation "Head of Household Occupation"
+				
+		  tempfile occupation
+			save `occupation' 
+		
     use "${directory}/data/analysis_children.dta" , clear
       merge m:1 censusid using "${data}/mercalli.dta" , nogen keep(3)
+      merge m:1 censusid using "`occupation'" , nogen 
 
       gen m_edu_fault = m_indiv_edu_binary * hh_faultdist
         lab var m_edu_fault "Fault-Edu Interaction"
