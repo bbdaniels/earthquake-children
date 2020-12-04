@@ -58,6 +58,13 @@ qui do "${directory}/ado/iecodebook.ado"
   copy "${data}/school-density.dta" "${directory}/data/schools.dta" , replace
   copy "${directory}/data/analysis_children.dta" "${directory}/data/analysis_children_raw.dta", replace
 	!rm "${directory}/data/analysis_children.dta"
+	
+	foreach dta in mercalli prices schools score_sheet {
+	  iecodebook export ///
+      "${directory}/data/`dta'.dta" ///
+    using "${directory}/data/`dta'.xlsx" ///
+    , replace reset hash 
+	}
 */
 
 // Analytical Cleaning
