@@ -812,16 +812,37 @@ use "${directory}/data/analysis_children.dta", clear
 			estimates store reg2b
 			su `e(depvar)' if e(sample)
 			estadd scalar mean = `r(mean)'
+
+  // Remove Geography
+  local fault_controls "hh_district_1 hh_district_2 hh_district_3"
+  local other_controls ""
+
+	  xi: reg indiv_health_zanthro_height hh_faultdist ///
+	    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
+	  , cl(village_code)
+
+	    estimates store reg1c
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
+
+	  xi: reg indiv_theta_mean hh_faultdist ///
+	     hh_epidist `fault_controls' `other_controls' ///
+	  if indiv_age >= 9 ///
+	  , cl(village_code)
+
+	    estimates store reg2c
+	    su `e(depvar)' if e(sample)
+	    estadd scalar mean = `r(mean)'
 			
 	// Remove District FE
-  local fault_controls "hh_epidist hh_slope hh_fault_minimum"
+  local fault_controls ""
   local other_controls ""
 
     xi: reg indiv_health_zanthro_height hh_faultdist ///
       i.agecat*hh_faultdist `fault_controls' `other_controls' ///
     , cl(village_code)
 
-      estimates store reg1c
+      estimates store reg1d
       su `e(depvar)' if e(sample)
       estadd scalar mean = `r(mean)'
 
@@ -830,64 +851,21 @@ use "${directory}/data/analysis_children.dta", clear
     if indiv_age >= 9 ///
     , cl(village_code)
 
-      estimates store reg2c
+      estimates store reg2d
       su `e(depvar)' if e(sample)
       estadd scalar mean = `r(mean)'
-
-  // Remove Geography
-  local fault_controls ""
-  local other_controls ""
-
-	  xi: reg indiv_health_zanthro_height hh_faultdist ///
-	    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-	  , cl(village_code)
-
-	    estimates store reg1d
-	    su `e(depvar)' if e(sample)
-	    estadd scalar mean = `r(mean)'
-
-	  xi: reg indiv_theta_mean hh_faultdist ///
-	    `fault_controls' `other_controls' ///
-	  if indiv_age >= 9 ///
-	  , cl(village_code)
-
-	    estimates store reg2d
-	    su `e(depvar)' if e(sample)
-	    estadd scalar mean = `r(mean)'
-
-  // Remove Outlier
-  local fault_controls ""
-  local other_controls ""
-
-	  xi: reg indiv_health_zanthro_height hh_faultdist ///
-	    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
-	  if hh_faultdist < 60 ///
-	  , cl(village_code)
-
-	    estimates store reg1e
-	    su `e(depvar)' if e(sample)
-	    estadd scalar mean = `r(mean)'
-
-	  xi: reg indiv_theta_mean hh_faultdist ///
-	    `fault_controls' `other_controls' ///
-	  if indiv_age >= 9 & hh_faultdist < 60 ///
-	  , cl(village_code)
-
-	    estimates store reg2e
-	    su `e(depvar)' if e(sample)
-	    estadd scalar mean = `r(mean)'
 		
   // Output results
 
 	  xml_tab ///
-		  reg2 reg2a reg2b reg2c reg2d reg2e  ///
+		  reg2 reg2a reg2b reg2c reg2d   ///
 	  , save("${directory}/appendix/TA4b_controls1.xls") ///
 	    replace below c("Constant") stats(mean r2 N) ///
 	    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
 	    keep(hh_faultdist )
 			
 	  xml_tab ///
-		  reg1 reg1a reg1b reg1c reg1d reg1e  ///
+		  reg1 reg1a reg1b reg1c reg1d   ///
 	  , save("${directory}/appendix/TA4b_controls2.xls") ///
 	    replace below c("Constant") stats(mean r2 N) ///
 	    lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///
