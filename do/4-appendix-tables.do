@@ -257,7 +257,7 @@ use "${directory}/data/analysis_children.dta", clear
       estadd scalar mean = `mean'
   }
 
-  	xml_tab mean indiv_theta_mean indiv_theta_pv_eng indiv_theta_pv_mth indiv_theta_pv_urd ///
+  	xml_tab indiv_theta_mean indiv_theta_pv_eng indiv_theta_pv_mth indiv_theta_pv_urd ///
 	  , save("${directory}/appendix/TA2c_subject.xls") ///
 			replace below c("Constant") stats(mean r2 N) ///
       lines(COL_NAMES 3 LAST_ROW 3 _cons 2) format((SCLB0) (SCCB0 NCRR3 NCRI3)) drop(o.*) ///

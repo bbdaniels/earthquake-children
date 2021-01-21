@@ -100,7 +100,7 @@ use "${directory}/data/analysis_all.dta" , clear
 save "${directory}/data/analysis_children.dta" , replace
 
 // Run all program files by setting flag to (1)
-if (1) qui {
+if (0) qui {
   do "${directory}/do/1-figures.do"
   do "${directory}/do/2-tables.do"
   do "${directory}/do/3-appendix-figures.do"
