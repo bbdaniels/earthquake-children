@@ -1,4 +1,4 @@
-* 00000008
+* 00000024
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -176,4 +176,283 @@ f e/ellip_dlopts.idlg
 f e/ellip_means.dlg
 f e/ellip_pcopts.idlg
 f e/ellip_plopts.idlg
+e
+S http://fmwww.bc.edu/repec/bocode/x
+N xml_tab.pkg
+D 24 Aug 2020
+U 9
+d 'XML_TAB': module to save results in Excel XML format
+d 
+d xml_tab saves Stata output directly into XML file that could be
+d opened with Microsoft Excel or OpenOffice Calc. The program is
+d relatively flexible and produces print-ready tables in Excel or
+d Calc. xml_tab allows users to apply different formats to the
+d elements of the output table and essentially do everything MS
+d Excel or OO Calc can do in terms of formatting from within Stata. d
+d KW: XML
+d KW: results
+d KW: output
+d KW: Excel
+d 
+d Requires: Stata version 8 and MS Excel (EN) 2002 for Windows, MS Excel 2004 for Mac, or OpenOffice Calc
+d 
+d Distribution-Date: 20080625
+d 
+d Author: Michael Lokshin, World Bank
+d Support: email Mlokshin@@worldbank.org
+d 
+d Author: Zurab Sajaia, World Bank
+d Support: email
+d 
+f x/xml_tab.ado
+f x/xml_tab.hlp
+e
+S http://www.stata.com/users/vwiggins
+N grc1leg.pkg
+D 24 Aug 2020
+U 10
+d grc1leg.  Combine graphs into one graph with a common legend.
+d Program by Vince Wiggins, StataCorp <vwiggins@@stata.com>.
+d Statalist distribution, 16 June 2003.
+d 
+d Exactly like -graph combine- but shows a single common legend for all
+d combined graphs.
+d 
+d Distribution-Date: 02jun2010
+f g/grc1leg.ado
+f g/grc1leg.hlp
+e
+S http://www.stata-journal.com/software/sj14-2
+N st0085_2.pkg
+D 24 Aug 2020
+U 11
+d SJ14-2 st0085_2. Update: Making regression...
+d Update: Making regression tables from stored
+d   estimates
+d by Ben Jann, University of Bern
+d Support:  jann@@soz.unibe.ch
+d After installation, type help ^estout^,
+d   ^esttab^, ^eststo^, ^estadd^, and ^estpost^
+f _/_eststo.ado
+f _/_eststo.hlp
+f e/esttab.ado
+f e/esttab.hlp
+f e/estadd.ado
+f e/estadd.hlp
+f e/eststo.ado
+f e/eststo.hlp
+f e/estout.ado
+f e/estout.hlp
+f e/estpost.ado
+f e/estpost.hlp
+e
+S http://www.stata-journal.com/software/sj5-4
+N st0030_2.pkg
+D 24 Aug 2020
+U 12
+d SJ5-4 st0030_2.  Update:  Instrumental variables and GMM:...
+d Update:  Instrumental variables and GMM:  Estimation and testing
+d by Christopher F. Baum, Boston College
+d    Mark E. Schaffer, Heriot-Watt University
+d    Steven Stillman, New Zealand Department of Labour
+d Support:  baum@@bc.edu, m.e.schaffer@@hw.ac.uk,
+d           steven.stillman@@lmpg.dol.govt.nz
+d After installation, type help ^ivendog^, ^ivhettest^, ^ivreg2^,
+d                          and ^overid^
+f i/ivendog.ado
+f i/ivendog.hlp
+f i/ivhettest.ado
+f i/ivhettest.hlp
+f i/ivreg2.ado
+f i/ivreg2.hlp
+f i/ivreg2_p.ado
+f i/ivreg2_cue.ado
+f o/overid.ado
+f o/overid.hlp
+e
+S http://www.stata-journal.com/software/sj4-3
+N gr32_1.pkg
+D 24 Aug 2020
+U 13
+d SJ4-3 gr32_1.  Graphing confidence ellipses: An update ...
+d Graphing confidence ellipses: An update of ellip for Stata 8
+d by Anders Alexandersson, Mississippi State University
+d Support:  aa1@@msstate.edu
+d After installation, type help ^ellip^
+f e/ellip.ado
+f e/ellip.hlp
+f e/ellip_dlg.hlp
+f e/ellip_coefs.dlg
+f e/ellip_connected.idlg
+f e/ellip_dlopts.idlg
+f e/ellip_means.dlg
+f e/ellip_pcopts.idlg
+f e/ellip_plopts.idlg
+e
+S https://github.com/bbdaniels/stata/raw/master
+N forest.pkg
+D 25 Aug 2020
+U 14
+d Benjamin Daniels
+f f/forest.ado
+f f/forest.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/x
+N xml_tab.pkg
+D 26 Aug 2020
+U 15
+d 'XML_TAB': module to save results in Excel XML format
+d 
+d xml_tab saves Stata output directly into XML file that could be
+d opened with Microsoft Excel or OpenOffice Calc. The program is
+d relatively flexible and produces print-ready tables in Excel or
+d Calc. xml_tab allows users to apply different formats to the
+d elements of the output table and essentially do everything MS
+d Excel or OO Calc can do in terms of formatting from within Stata. d
+d KW: XML
+d KW: results
+d KW: output
+d KW: Excel
+d 
+d Requires: Stata version 8 and MS Excel (EN) 2002 for Windows, MS Excel 2004 for Mac, or OpenOffice Calc
+d 
+d Distribution-Date: 20080625
+d 
+d Author: Michael Lokshin, World Bank
+d Support: email Mlokshin@@worldbank.org
+d 
+d Author: Zurab Sajaia, World Bank
+d Support: email
+d 
+f x/xml_tab.ado
+f x/xml_tab.hlp
+e
+S https://github.com/bbdaniels/stata/raw/master
+N forest.pkg
+D 26 Aug 2020
+U 16
+d Benjamin Daniels
+f f/forest.ado
+f f/forest.sthlp
+e
+S http://www.stata.com/users/vwiggins
+N grc1leg.pkg
+D 26 Aug 2020
+U 17
+d grc1leg.  Combine graphs into one graph with a common legend.
+d Program by Vince Wiggins, StataCorp <vwiggins@@stata.com>.
+d Statalist distribution, 16 June 2003.
+d 
+d Exactly like -graph combine- but shows a single common legend for all
+d combined graphs.
+d 
+d Distribution-Date: 02jun2010
+f g/grc1leg.ado
+f g/grc1leg.hlp
+e
+S http://www.stata-journal.com/software/sj14-2
+N st0085_2.pkg
+D 26 Aug 2020
+U 18
+d SJ14-2 st0085_2. Update: Making regression...
+d Update: Making regression tables from stored
+d   estimates
+d by Ben Jann, University of Bern
+d Support:  jann@@soz.unibe.ch
+d After installation, type help ^estout^,
+d   ^esttab^, ^eststo^, ^estadd^, and ^estpost^
+f _/_eststo.ado
+f _/_eststo.hlp
+f e/esttab.ado
+f e/esttab.hlp
+f e/estadd.ado
+f e/estadd.hlp
+f e/eststo.ado
+f e/eststo.hlp
+f e/estout.ado
+f e/estout.hlp
+f e/estpost.ado
+f e/estpost.hlp
+e
+S http://www.stata-journal.com/software/sj5-4
+N st0030_2.pkg
+D 26 Aug 2020
+U 19
+d SJ5-4 st0030_2.  Update:  Instrumental variables and GMM:...
+d Update:  Instrumental variables and GMM:  Estimation and testing
+d by Christopher F. Baum, Boston College
+d    Mark E. Schaffer, Heriot-Watt University
+d    Steven Stillman, New Zealand Department of Labour
+d Support:  baum@@bc.edu, m.e.schaffer@@hw.ac.uk,
+d           steven.stillman@@lmpg.dol.govt.nz
+d After installation, type help ^ivendog^, ^ivhettest^, ^ivreg2^,
+d                          and ^overid^
+f i/ivendog.ado
+f i/ivendog.hlp
+f i/ivhettest.ado
+f i/ivhettest.hlp
+f i/ivreg2.ado
+f i/ivreg2.hlp
+f i/ivreg2_p.ado
+f i/ivreg2_cue.ado
+f o/overid.ado
+f o/overid.hlp
+e
+S http://www.stata-journal.com/software/sj14-4
+N st0364.pkg
+D 26 Aug 2020
+U 20
+d SJ14-4 st0364. Lee (2009) treatment effect...
+d Lee (2009) treatment effect bounds
+d by Harald Tauchmann, University of Erlangen-
+d      Nuremberg (FAU)
+d Support:  harald.tauchmann@@wiso.uni-erlangen.de
+d After installation, type help ^leebounds^
+f l/leebounds.ado
+f l/leebounds.sthlp
+e
+S http://www.stata-journal.com/software/sj4-3
+N gr32_1.pkg
+D 26 Aug 2020
+U 21
+d SJ4-3 gr32_1.  Graphing confidence ellipses: An update ...
+d Graphing confidence ellipses: An update of ellip for Stata 8
+d by Anders Alexandersson, Mississippi State University
+d Support:  aa1@@msstate.edu
+d After installation, type help ^ellip^
+f e/ellip.ado
+f e/ellip.hlp
+f e/ellip_dlg.hlp
+f e/ellip_coefs.dlg
+f e/ellip_connected.idlg
+f e/ellip_dlopts.idlg
+f e/ellip_means.dlg
+f e/ellip_pcopts.idlg
+f e/ellip_plopts.idlg
+e
+S https://github.com/bbdaniels/stata/raw/master
+N sumstats.pkg
+D 26 Aug 2020
+U 22
+d Benjamin Daniels
+f s/sumstats.ado
+f s/sumstats.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/master
+N sumstats.pkg
+D  4 Dec 2020
+U 23
+d Benjamin Daniels
+f s/sumstats.ado
+f s/sumstats.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/master
+N betterbar.pkg
+D  4 Dec 2020
+U 24
+d Benjamin Daniels
+f b/betterbar.ado
+f b/betterbarci.ado
+f b/betterbarci.sthlp
+f b/betterbar.sthlp
 e
