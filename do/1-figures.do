@@ -2,14 +2,17 @@
 
 /* Figure 1: Map – not reproducible without identifying GPS data
 
-	use "$directory/Data/GIS/studydbf.dta", clear
 
-	spmap using "$directory/Data/GIS/study.dta", id(id) $graph_opts fc(gs14) oc(black) ///
-		point( data("$directory/Data/GIS/households.dta") x(GPS-DATA) y(GPS-DATA) by(hh_stats_permhouse_post) ///
+  global gis "/Users/bbdaniels/Box/Earthquake"
+	use "${gis}/Data/GIS/studydbf.dta", clear
+
+	spmap using "${gis}/Data/GIS/study.dta", id(id) $graph_opts fc(gs14) oc(black) ///
+		point( data("${gis}/Data/GIS/households.dta") x(_____) y(_____) by(hh_stats_permhouse_post) ///
 			legenda(off) legc fcolor(black black black) shape(x x T) prop(size) size(small) osize(thin thin medthick) ) ///
-		line( data("$directory/Data/GIS/study_faults_clipped.dta") by(active) color(gray black) pattern(solid dash) size(thin thick))
+		line( data("${gis}/Data/GIS/study_faults_clipped.dta") by(active) color(gray black) pattern(solid dash) size(thin thick))
 
 		graph export "${directory}/outputs/F1_map.png", replace width(4000)
+		graph export "${directory}/outputs/F1_map.eps", replace 
 */
 
 * Figure 2: Household distance to activated Fault (km)
@@ -36,6 +39,7 @@
 		ylab(0(100)500) ytit("Number of Households", align(center) placement(center)) legend(off) xsize(7)
 
 		graph export "${directory}/outputs/F2_distance.png", replace width(2000)
+		graph export "${directory}/outputs/F2_distance.eps", replace 
 
 * Figure 3: Home Destruction from Long Census
 
@@ -97,6 +101,7 @@
 		, $comb_opts xsize(7)
 
 		graph export "${directory}/outputs/F3_damage.png", replace width(2000)
+		graph export "${directory}/outputs/F3_damage.eps", replace 
 
 * Figure 4. Assets
 
@@ -119,6 +124,7 @@
 				textfirst order(1 "Near Fault (<20km)" 2 "Far from Fault (20km+)")) ylab(,labsize(small))
 
 	graph export "${directory}/outputs/F4_assets.png", replace width(4000)
+	graph export "${directory}/outputs/F4_assets.eps", replace 
 
 * Figure 5. Aid
 
@@ -162,6 +168,7 @@
 				, angle(0) labsize(small)) xsize(7)
 
 		graph export "${directory}/outputs/F5_aid.png", replace width(4000)
+		graph export "${directory}/outputs/F5_aid.eps", replace 
 
 * Figure 6a. Weight
 
@@ -218,6 +225,7 @@
       , ysize(6) c(1)
 
 		graph export "${directory}/outputs/F6a_weight.png", replace width(4000)
+		graph export "${directory}/outputs/F6a_weight.eps", replace 
 
 * Figure 6b. Height
 
@@ -274,6 +282,7 @@
       , ysize(6) c(1)
 
     graph export "${directory}/outputs/F6b_height.png", replace width(4000)
+    graph export "${directory}/outputs/F6b_height.eps", replace 
 
 * Figure 7a. Education
 
@@ -321,6 +330,7 @@
     graph save "${directory}/outputs/F7a_education.gph" , replace
     graph combine "${directory}/outputs/F7a_education.gph" , ysize(6)
 		graph export "${directory}/outputs/F7a_education.png", replace width(4000)
+		graph export "${directory}/outputs/F7a_education.eps", replace 
 
 * Figure 7b. Distance and learning
 
@@ -354,6 +364,7 @@
       , r(1) ycom xsize(7)
 
 			graph export "${directory}/outputs/F7b_scores.png", replace width(4000)
+			graph export "${directory}/outputs/F7b_scores.eps", replace 
 
 
 * Figure 8a. Maternal Education and Test Scores
@@ -373,6 +384,7 @@
 			ytitle(" ") ylabel(-.2 `""-0.2" "SD""' 0 `" " " "Mean" " " "' .2 `""+0.2" "SD""' ) xsize(7)
 
       graph export "${directory}/outputs/F8a_edu_scores.png", replace width(4000)
+      graph export "${directory}/outputs/F8a_edu_scores.eps", replace 
 
 * Figure 8b. Maternal Education and Height
 
@@ -391,6 +403,7 @@
 			ytitle(" ") ylabel(-2 "-2SD" 0 "Reference" -1 "-1 SD" )
 
       graph export "${directory}/outputs/F8b_edu_height.png", replace width(4000)
+      graph export "${directory}/outputs/F8b_edu_height.eps", replace
 
 
 * Figure 9. Disruption
@@ -440,5 +453,6 @@
 	  , c(1) ysize(5)
 		
 		graph export "${directory}/outputs/F9_disruption.png", replace width(4000)
+		graph export "${directory}/outputs/F9_disruption.eps", replace 
 
 * Have a lovely day!
