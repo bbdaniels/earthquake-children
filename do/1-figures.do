@@ -206,7 +206,7 @@
       , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(none) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
         xtitle("Distance to Activated Fault (km) {&rarr}") ///
-        ylab(0 `""Far-from-fault" "Mean Weight"' -.5 "-0.5kg" -1 "-1kg" .5 "+0.5kg" 1 "+1kg")
+        ylab(0 "Reference" -.5 "-0.5kg" -1 "-1kg" .5 "+0.5kg" 1 "+1kg")
 
         graph save "${directory}/outputs/F6a_dist.gph", replace
 
@@ -262,7 +262,7 @@
       , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(white) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
         xtitle("Distance to Activated Fault (km) {&rarr}") ///
-        ylab(0 `""Far-from-fault" "Mean Height"' -4 "-4cm" 4 "+4cm" 2 "+2cm" -2 "-2cm")
+        ylab(0 "Reference" -4 "-4cm" 4 "+4cm" 2 "+2cm" -2 "-2cm")
 
   		graph save "${directory}/outputs/F6b_dist.gph", replace
 

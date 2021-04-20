@@ -1,4 +1,4 @@
-* 00000023
+* 00000024
 *! version 1.0.0
 * Do not erase or edit this file
 * It is used by Stata to track the ado and help
@@ -445,4 +445,14 @@ U 23
 d Benjamin Daniels
 f s/sumstats.ado
 f s/sumstats.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/master
+N betterbar.pkg
+D  4 Dec 2020
+U 24
+d Benjamin Daniels
+f b/betterbar.ado
+f b/betterbarci.ado
+f b/betterbarci.sthlp
+f b/betterbar.sthlp
 e
