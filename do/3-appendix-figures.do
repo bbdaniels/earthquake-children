@@ -328,7 +328,7 @@ bys food_item : egen mcom = mode(mSec30_q2_code)
 	  			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
 	            if indiv_near_quake==1, degree(1) lc(black) lp(dash) lw(medthick) astyle(ci) fc(gray%50) alc(%0)) ///
 	  		, $graph_opts $hist_opts title("Height-for-Age (`i'km)") ///
-	  			legend(on order(3 "Far from Fault" 5 "Close to Fault" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
+	  			legend(on size(small) order(3 "Far from Fault Line" 5 "Close to Fault Line" ) pos(1) r(1) ring(0) region( lc(white) ) ) ///
 	  			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 	  			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
 
