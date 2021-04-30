@@ -15,7 +15,7 @@
 		graph export "${directory}/outputs/F1_map.eps", replace 
 */
 
-* Figure 2: Household distance to activated Fault (km)
+* Figure 2: Household distance to activated Fault Line (km)
 
 	use "${directory}/data/analysis_hh.dta", clear
 
@@ -35,7 +35,7 @@
 		(rcap p75 pmax f in 1, msize(3) hor bcolor(black) lw(thin) )                 ///
 		(rbar p25 p75 f in 1, la(center) barwidth(25) hor fc(none) lp(solid) lw(thin) lc(black) la(center))                   ///
 		(rcap p50 p50 f in 1, msize(3) hor bcolor(black) lw(thin) )                    ///
-		, xlab(0(5)75, notick) xtit("Distance to Activated Fault (km) {&rarr}", align(left) placement(left)) ///
+		, xlab(0(5)75, notick) xtit("Distance to Activated Fault Line (km) {&rarr}", align(left) placement(left)) ///
 		ylab(0(100)500) ytit("Number of Households", align(center) placement(center)) legend(off) xsize(7)
 
 		graph export "${directory}/outputs/F2_distance.png", replace width(2000)
@@ -51,7 +51,7 @@
 		(lpoly indiv_dead_quake hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3 ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") xtit("") ytit("") ///
-		xtitle("Distance to Activated Fault (km) {&rarr}") ///
+		xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 		legend(off) subtitle("Died During Earthquake (N = `r(N)')", pos(12))
 
 		graph save "${directory}/outputs/F3_deadquake.gph", replace
@@ -62,7 +62,7 @@
 		(lpoly c_home_des hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & tag_hh == 1 ///
 	,	$graph_opts $hist_opts ylab($xpct) xtit("") ytit("") ///
-		xtitle("Distance to Activated Fault (km) {&rarr}") ///
+		xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 		legend(off) subtitle("Home Destroyed (N = `r(N)')", pos(12))
 
 		graph save "${directory}/outputs/F3_destroy.gph", replace
@@ -74,7 +74,7 @@
 		(lpoly isdead hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if hh_faultdist < 60 & indiv_age > 3   ///
 	,	$graph_opts $hist_opts ylab(0 "0%" .01 "1%" .02 "2%" .03 "3%" .04 "4%" .05 "5%" .06 "6%") ///
-		ytit("") xtitle("Distance to Activated Fault (km) {&rarr}") ///
+		ytit("") xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 		subtitle("Died After Earthquake (N = `r(N)')", pos(12)) 	legend(off)
 
 		graph save "${directory}/outputs/F3_death.gph", replace
@@ -85,7 +85,7 @@
 		(lpoly vil_facil_destroyed hh_faultdist, lc(black) yaxis(1) astyle(ci) bw(.5) degree(1)) ///
 		if tag_village == 1 & vil_uc_dfl_mean < 60 ///
 	,	$graph_opts $hist_opts ylab(${xpct}) xtit("")  ytit("") ///
-		xtitle("Distance to Activated Fault (km) {&rarr}") ///
+		xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 		legend(off) subtitle("Village Facilities Destruction (N = `r(N)')", pos(12))
 
 		graph save "${directory}/outputs/F3_infra.gph", replace
@@ -121,7 +121,7 @@
 			${graph_opts} xlab(${xpct}) xscale(alt) barcolor(gray black) ///
 			xoverhang xsize(6) xtit("Share of Households Owning {&rarr}") ///
 			legend(on c(2) pos(12) ring(1) symysize(small) symxsize(small) size(small) ///
-				textfirst order(1 "Near Fault (<20km)" 2 "Far from Fault (20km+)")) ylab(,labsize(small))
+				textfirst order(1 "Near Fault Line (<20km)" 2 "Far from Fault Line (20km+)")) ylab(,labsize(small))
 
 	graph export "${directory}/outputs/F4_assets.png", replace width(4000)
 	graph export "${directory}/outputs/F4_assets.eps", replace 
@@ -156,7 +156,7 @@
 			(lpoly hh_aid_immed hh_faultdist if c_home_des  , lw(thick) lp(##-) lc(black)  ) ///
 			if hh_faultdist < 50 ///
 		, ///
-			xtitle("Distance to Activated Fault (km) {&rarr}") ytitle("") $graph_opts $hist_opts  ///
+			xtitle("Distance to Activated Fault Line (km) {&rarr}") ytitle("") $graph_opts $hist_opts  ///
 			legend(on span size(small) ring(1) pos(6) c(4) ///
       order(2 "Total Cash Aid" 0 " " ///
 	      3 "Immediate Aid" 0 "(ex. later housing aid)" ///
@@ -183,7 +183,7 @@
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Weight-for-Age") ///
-			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
+			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" 1 "+1.0 SD" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
 
@@ -210,9 +210,9 @@
         , lc(black) lp(longdash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci weight_ex hh_faultdist if indiv_agecat == 3 ///
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
-      , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(none) ) ///
+      , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(none) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
         ylab(0 "Reference" -.5 "-0.5kg" -1 "-1kg" .5 "+0.5kg" 1 "+1kg")
 
         graph save "${directory}/outputs/F6a_dist.gph", replace
@@ -240,7 +240,7 @@
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
 		, $graph_opts $hist_opts title("Height-for-Age") ///
-			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
+			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
 
@@ -267,9 +267,9 @@
         , lc(black) lp(longdash) astyle(ci) fc(gray%30) alc(%0)) ///
       (lpolyci height_ex hh_faultdist if indiv_agecat == 3 ///
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
-      , $graph_opts xsize(7) legend(on pos(12) ring(1) region( lc(white) ) ///
+      , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(white) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
         ylab(0 "Reference" -4 "-4cm" 4 "+4cm" 2 "+2cm" -2 "-2cm")
 
   		graph save "${directory}/outputs/F6b_dist.gph", replace
@@ -342,7 +342,7 @@
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 0 ///
-    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Girls") ///
+    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Girls") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_girls.gph", replace
@@ -353,7 +353,7 @@
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 1 ///
-    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault (km) {&rarr}") title("Boys") ///
+    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Boys") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_boys.gph", replace
@@ -380,7 +380,7 @@
       if hh_faultdist <= 50 ///
 		, $graph_opts $hist_opts  ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
-			xtitle("Distance to Activated Fault (km) {&rarr}") ///
+			xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 			ytitle(" ") ylabel(-.2 `""-0.2" "SD""' 0 `" " " "Mean" " " "' .2 `""+0.2" "SD""' ) xsize(7)
 
       graph export "${directory}/outputs/F8a_edu_scores.png", replace width(4000)
@@ -399,7 +399,7 @@
       if hh_faultdist <= 50 ///
 		, $graph_opts $hist_opts ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
-			xsize(7) xtitle("Distance to Activated Fault (km) {&rarr}") ///
+			xsize(7) xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
 			ytitle(" ") ylabel(-2 "-2SD" 0 "Reference" -1 "-1 SD" )
 
       graph export "${directory}/outputs/F8b_edu_height.png", replace width(4000)
@@ -419,7 +419,7 @@
 		if hh_faultdist < 60 ///
 		, ylab( 0 4 8 12 16 `" " " "16" "Weeks" "' , angle(0) ) ytitle("") $graph_opts $hist_opts ///
 			legend(on order(4 "Bottom 50% of test scores"  3 "Top 50% of test scores" 2 "Pooled") cols(1) pos(2) ring(0) region( lc(white) ) ) ///
-			xtitle("Distance to Activated Fault (km) {&rarr}") xlab(0(10)60) xsize(7)
+			xtitle("Distance to Activated Fault Line (km) {&rarr}") xlab(0(10)60) xsize(7)
 
 			graph save "${directory}/outputs/F9a_disruption.gph", replace 
 			
