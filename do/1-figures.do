@@ -421,7 +421,7 @@
 		, $graph_opts $hist_opts ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xsize(7) xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-			ytitle(" ") ylabel(-2 "-2 SD" 0 "Reference" -1 "-1 SD" ) title("Height for Age")
+			ytitle(" ") ylabel(-2 "-2 SD" 0 "Reference" -1 "-1 SD" ) title("Height-for-Age")
 
       graph save "${directory}/outputs/F9b_edu_height.gph", replace
 
