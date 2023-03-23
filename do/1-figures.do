@@ -177,7 +177,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Weight-for-Age") ///
+		, $graph_opts $hist_opts title("Panel A: Weight-for-Age (Z-scores)") ///
 			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" 1 "+1.0 SD" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
@@ -207,7 +207,7 @@
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(none) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Weight-for-Age (kg)") ///
         ylab(0 "Reference" -.5 "-0.5kg" -1 "-1kg" .5 "+0.5kg" 1 "+1kg")
 
         graph save "${directory}/outputs/F6a_dist.gph", replace
@@ -222,7 +222,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Height-for-Age") ///
+		, $graph_opts $hist_opts title("Panel B: Height-for-Age (Z-scores)") ///
 			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
@@ -252,7 +252,7 @@
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(white) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Height-for-Age (cm)") ///
         ylab(0 "Reference" -4 "-4cm" 4 "+4cm" 2 "+2cm" -2 "-2cm")
 
   		graph save "${directory}/outputs/F6b_dist.gph", replace
@@ -280,7 +280,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Enrollment by Age") ///
+		, $graph_opts $hist_opts title("Panel A: Pooled By Age (Enrollment)") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(${xpct})
@@ -297,7 +297,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Test Scores by Age") ///
+		, $graph_opts $hist_opts title("Pooled By Age (Test Scores)") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
@@ -315,7 +315,7 @@
       , degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 0 ///
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-		  title("Girls Scores by Distance") ///
+		  title("Panel B: Scores by Distance (Girls)") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_girls.gph", replace
@@ -327,7 +327,7 @@
       , degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 1 ///
     , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-		  title("Boys Scores by Distance") ///
+		  title("Scores by Distance (Boys)") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_boys.gph", replace
@@ -403,7 +403,7 @@
       if hh_faultdist <= 50 ///
 		, $graph_opts $hist_opts  ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
-			xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Test Scores") ///
+			xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Panel A: Test Scores") ///
 			ytitle(" ") ylabel(-.2 `""-0.2" "SD""' 0 `" " " "Mean" " " "' .2 `""+0.2" "SD""' ) xsize(7)
 
       graph save "${directory}/outputs/F9a_edu_scores.gph", replace
@@ -421,7 +421,7 @@
 		, $graph_opts $hist_opts ///
 			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xsize(7) xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-			ytitle(" ") ylabel(-2 "-2 SD" 0 "Reference" -1 "-1 SD" ) title("Height-for-Age")
+			ytitle(" ") ylabel(-2 "-2 SD" 0 "Reference" -1 "-1 SD" ) title("Panel B: Height-for-Age")
 
       graph save "${directory}/outputs/F9b_edu_height.gph", replace
 
