@@ -430,6 +430,8 @@
 			  "${directory}/outputs/F9b_edu_height.gph" ///
 		  , c(1) altshrink
 
+			graph draw, ysize(6)
+
 			graph export "${directory}/outputs/F9_momedu.pdf", replace
 
 * Have a lovely day!
