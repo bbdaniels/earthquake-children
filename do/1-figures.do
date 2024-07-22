@@ -3,7 +3,7 @@
 /* Figure 1: Map – not reproducible without identifying GPS data
 
 
-  global gis "/Users/bbdaniels/Box/Earthquake"
+  global gis "/Users/bbdaniels/Library/CloudStorage/Box-Box/Earthquake"
 	use "${gis}/Data/GIS/studydbf.dta", clear
 
 	spmap using "${gis}/Data/GIS/study.dta", id(id) $graph_opts fc(gs14) oc(black) ///
@@ -11,8 +11,7 @@
 			legenda(off) legc fcolor(black black black) shape(x x T) prop(size) size(small) osize(thin thin medthick) ) ///
 		line( data("${gis}/Data/GIS/study_faults_clipped.dta") by(active) color(gray black) pattern(solid dash) size(thin thick))
 
-		graph export "${directory}/outputs/F1_map.png", replace width(4000)
-		graph export "${directory}/outputs/F1_map.eps", replace 
+		graph export "${directory}/outputs/F1_map.pdf", replace
 */
 
 * Figure 2: Household distance to activated Fault Line (km)
@@ -38,8 +37,7 @@
 		, xlab(0(5)75, notick) xtit("Distance to Activated Fault Line (km) {&rarr}", align(left) placement(left)) ///
 		ylab(0(100)500) ytit("Number of Households", align(center) placement(center)) legend(off) xsize(7)
 
-		graph export "${directory}/outputs/F2_distance.png", replace width(2000)
-		graph export "${directory}/outputs/F2_distance.eps", replace 
+		graph export "${directory}/outputs/F2_distance.pdf", replace
 
 * Figure 3: Home Destruction from Long Census
 
@@ -100,8 +98,7 @@
 			"${directory}/outputs/F3_death.gph" ///
 		, $comb_opts xsize(7)
 
-		graph export "${directory}/outputs/F3_damage.png", replace width(2000)
-		graph export "${directory}/outputs/F3_damage.eps", replace 
+		graph export "${directory}/outputs/F3_damage.pdf", replace
 
 * Figure 4. Assets
 
@@ -123,8 +120,7 @@
 			legend(on c(2) pos(12) ring(1) symysize(small) symxsize(small) size(small) ///
 				textfirst order(1 "Near Fault Line (<20km)" 2 "Far from Fault Line (20km+)")) ylab(,labsize(small))
 
-	graph export "${directory}/outputs/F4_assets.png", replace width(4000)
-	graph export "${directory}/outputs/F4_assets.eps", replace 
+	graph export "${directory}/outputs/F4_assets.pdf", replace
 
 * Figure 5. Aid
 
@@ -167,10 +163,9 @@
 				`total_150' `""150% of Median" "Annual Consumption" "(PKR `total_150')""' ///
 				, angle(0) labsize(small)) xsize(7)
 
-		graph export "${directory}/outputs/F5_aid.png", replace width(4000)
-		graph export "${directory}/outputs/F5_aid.eps", replace 
+		graph export "${directory}/outputs/F5_aid.pdf", replace
 
-* Figure 6a. Weight
+* Figure 6. Weight/Height
 
 	* Weight by age
 
@@ -182,7 +177,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_weight indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Weight-for-Age") ///
+		, $graph_opts $hist_opts title("Panel A: Weight-for-Age (Z-scores)") ///
 			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" 1 "+1.0 SD" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
@@ -212,22 +207,10 @@
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(none) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Weight-for-Age (kg)") ///
         ylab(0 "Reference" -.5 "-0.5kg" -1 "-1kg" .5 "+0.5kg" 1 "+1kg")
 
         graph save "${directory}/outputs/F6a_dist.gph", replace
-
-	* Combine
-
-    graph combine ///
-      "${directory}/outputs/F6a_age.gph" ///
-      "${directory}/outputs/F6a_dist.gph" ///
-      , ysize(6) c(1)
-
-		graph export "${directory}/outputs/F6a_weight.png", replace width(4000)
-		graph export "${directory}/outputs/F6a_weight.eps", replace 
-
-* Figure 6b. Height
 
 	* Height by age
 
@@ -239,7 +222,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_health_zanthro_height indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Height-for-Age") ///
+		, $graph_opts $hist_opts title("Panel B: Height-for-Age (Z-scores)") ///
 			legend(on size(small) order(3 "20km+ from Fault Line" 5 "<20km to Fault Line" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(0 "Reference" -1 "-1.0 SD" -2 "-2.0 SD" -3 "-3.0 SD" , angle(0))
@@ -269,7 +252,7 @@
         , lc(black) lp(solid) astyle(ci) fc(gray%30) alc(%0)) ///
       , $graph_opts xsize(7) legend(on size(small) pos(12) ring(1) region( lc(white) ) ///
           order(6 "Age 3+" 4 "Newborn - Age 2" 2 "In Utero") r(1)) ///
-        xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+        xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Height-for-Age (cm)") ///
         ylab(0 "Reference" -4 "-4cm" 4 "+4cm" 2 "+2cm" -2 "-2cm")
 
   		graph save "${directory}/outputs/F6b_dist.gph", replace
@@ -277,14 +260,15 @@
   * Combine
 
     graph combine ///
+			"${directory}/outputs/F6a_age.gph" ///
+			"${directory}/outputs/F6a_dist.gph" ///
       "${directory}/outputs/F6b_age.gph" ///
       "${directory}/outputs/F6b_dist.gph" ///
-      , ysize(6) c(1)
+      , c(2) altshrink
 
-    graph export "${directory}/outputs/F6b_height.png", replace width(4000)
-    graph export "${directory}/outputs/F6b_height.eps", replace 
+    graph export "${directory}/outputs/F6_height.pdf", replace
 
-* Figure 7a. Education
+* Figure 7. Enrollment/Education
 
 	* Enrollment
 
@@ -296,7 +280,7 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_school_enrolled_post indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Enrollment") ///
+		, $graph_opts $hist_opts title("Panel A: Pooled By Age (Enrollment)") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(${xpct})
@@ -313,24 +297,12 @@
           if indiv_near_quake==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
 			(lpolyci indiv_theta_mean indiv_childage_pre ///
           if indiv_near_quake==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-		, $graph_opts $hist_opts title("Test Scores") ///
+		, $graph_opts $hist_opts title("Pooled By Age (Test Scores)") ///
 			legend(on order(3 "20km+ from Fault" 5 "<20km to Fault" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
 			xtitle("Age During Earthquake {&rarr}") xscale(r(-1,11)) xlabel(-1(1)11 -1 `""In" "Utero""' 0 `""New-" "born""', labsize(small) notick) ///
 			ytitle(" ") ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
 			graph save 	"${directory}/outputs/F7a_scores.gph", replace
-
-	* Combine
-
-    grc1leg ///
-			"${directory}/outputs/F7a_enroll.gph" ///
-			"${directory}/outputs/F7a_scores.gph" ///
-			, c(1) ${comb_opts}
-
-    graph save "${directory}/outputs/F7a_education.gph" , replace
-    graph combine "${directory}/outputs/F7a_education.gph" , ysize(6)
-		graph export "${directory}/outputs/F7a_education.png", replace width(4000)
-		graph export "${directory}/outputs/F7a_education.eps", replace 
 
 * Figure 7b. Distance and learning
 
@@ -342,7 +314,8 @@
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 0 ///
-    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Girls") ///
+    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+		  title("Panel B: Scores by Distance (Girls)") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_girls.gph", replace
@@ -353,60 +326,22 @@
 		(lpolyci indiv_theta_mean hh_faultdist ///
       , degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
     if hh_faultdist < 60 & indiv_male == 1 ///
-    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Boys") ///
+    , ${graph_opts} ${hist_opts} xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+		  title("Scores by Distance (Boys)") ///
       ylabel(-.5 `""-0.5" "SD""' 0 `" " " "Mean" " " "' .5 `""+0.5" "SD""' )
 
     graph save "${directory}/outputs/F7b_boys.gph", replace
 
     graph combine ///
-      "${directory}/outputs/F7b_girls.gph" ///
+		"${directory}/outputs/F7a_enroll.gph" ///
+		"${directory}/outputs/F7a_scores.gph" ///
+		"${directory}/outputs/F7b_girls.gph" ///
       "${directory}/outputs/F7b_boys.gph" ///
-      , r(1) ycom xsize(7)
+      , colfirst altshrink
 
-			graph export "${directory}/outputs/F7b_scores.png", replace width(4000)
-			graph export "${directory}/outputs/F7b_scores.eps", replace 
+			graph export "${directory}/outputs/F7_scores.pdf", replace
 
-
-* Figure 8a. Maternal Education and Test Scores
-
-	use "${directory}/data/analysis_children.dta", clear
-	keep if m_missing == 0 & indiv_childage_pre <= 11
-
-		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
-			(lpolyci indiv_theta_mean hh_faultdist ///
-          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
-			(lpolyci indiv_theta_mean hh_faultdist ///
-          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-      if hh_faultdist <= 50 ///
-		, $graph_opts $hist_opts  ///
-			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
-			xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-			ytitle(" ") ylabel(-.2 `""-0.2" "SD""' 0 `" " " "Mean" " " "' .2 `""+0.2" "SD""' ) xsize(7)
-
-      graph export "${directory}/outputs/F8a_edu_scores.png", replace width(4000)
-      graph export "${directory}/outputs/F8a_edu_scores.eps", replace 
-
-* Figure 8b. Maternal Education and Height
-
-	use "${directory}/data/analysis_children.dta", clear
-	keep if m_missing == 0 & indiv_childage_pre <= 2
-
-		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
-			(lpolyci indiv_health_zanthro_height hh_faultdist ///
-          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
-			(lpolyci indiv_health_zanthro_height hh_faultdist ///
-          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
-      if hh_faultdist <= 50 ///
-		, $graph_opts $hist_opts ///
-			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
-			xsize(7) xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
-			ytitle(" ") ylabel(-2 "-2SD" 0 "Reference" -1 "-1 SD" )
-
-      graph export "${directory}/outputs/F8b_edu_height.png", replace width(4000)
-      graph export "${directory}/outputs/F8b_edu_height.eps", replace
-
-
-* Figure 9. Disruption
+* Figure 8. Disruption
 
 	use "${directory}/data/analysis_children.dta", clear
 
@@ -421,8 +356,8 @@
 			legend(on order(4 "Bottom 50% of test scores"  3 "Top 50% of test scores" 2 "Pooled") cols(1) pos(2) ring(0) region( lc(white) ) ) ///
 			xtitle("Distance to Activated Fault Line (km) {&rarr}") xlab(0(10)60) xsize(7)
 
-			graph save "${directory}/outputs/F9a_disruption.gph", replace 
-			
+			graph save "${directory}/outputs/F8a_disruption.gph", replace
+
 	use "${directory}/data/analysis_children.dta", clear
 
 		keep if m_missing == 0 & indiv_childage_pre <= 11 & hh_faultdist < 20
@@ -442,17 +377,61 @@
 		(rcap p75 pmax f in 1, msize(2) hor bcolor(black) lw(thin) )                 ///
 		(rbar p25 p75 f in 1, la(center) barwidth(25) hor fc(none) lp(solid) lw(thin) lc(black) la(center))                   ///
 		(rcap p50 p50 f in 1, msize(2) hor bcolor(black) lw(thin) )                    ///
-		, xlab(0(5)100, notick) xtit("Time Out of School (Weeks) {&rarr}", align(left) placement(left)) ///
-		ylab(0(100)500) ytit("Number of Children", align(center) placement(center)) legend(off) xsize(7)
+		, xlab(0 8 4(8)100, notick) xtit("Time Out of School (Weeks) {&rarr}", align(left) placement(left)) ///
+		ylab(0(100)400) ytit("Number of Children", align(center) placement(center)) legend(off) xsize(7)
 
-		graph save "${directory}/outputs/F9b_disruption.gph", replace 
-		
+		graph save "${directory}/outputs/F8b_disruption.gph", replace
+
 		graph combine ///
-		  "${directory}/outputs/F9a_disruption.gph" ///
-		  "${directory}/outputs/F9b_disruption.gph" ///
+		  "${directory}/outputs/F8a_disruption.gph" ///
+		  "${directory}/outputs/F8b_disruption.gph" ///
 	  , c(1) ysize(5)
-		
-		graph export "${directory}/outputs/F9_disruption.png", replace width(4000)
-		graph export "${directory}/outputs/F9_disruption.eps", replace 
+
+		graph export "${directory}/outputs/F8_disruption.pdf", replace
+
+* Figure 9. Maternal Education and Test Scores / Height
+
+  * Scores
+	use "${directory}/data/analysis_children.dta", clear
+	keep if m_missing == 0 & indiv_childage_pre <= 11
+
+		tw 	(histogram hh_faultdist if indiv_theta_mean!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
+			(lpolyci indiv_theta_mean hh_faultdist ///
+          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
+			(lpolyci indiv_theta_mean hh_faultdist ///
+          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
+      if hh_faultdist <= 50 ///
+		, $graph_opts $hist_opts  ///
+			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
+			xtitle("Distance to Activated Fault Line (km) {&rarr}") title("Panel A: Test Scores") ///
+			ytitle(" ") ylabel(-.2 `""-0.2" "SD""' 0 `" " " "Mean" " " "' .2 `""+0.2" "SD""' ) xsize(7)
+
+      graph save "${directory}/outputs/F9a_edu_scores.gph", replace
+
+  * Height
+	use "${directory}/data/analysis_children.dta", clear
+	keep if m_missing == 0 & indiv_childage_pre <= 2
+
+		tw 	(histogram hh_faultdist if indiv_health_zanthro_height!=. , freq gap(10) yaxis(2) start(0) w(2) bstyle(outline) bc(gs14) ) ///
+			(lpolyci indiv_health_zanthro_height hh_faultdist ///
+          if m_indiv_edu_binary==0, degree(1) lc(black) lp(solid) astyle(ci) fc(gray%50) alc(%0)) ///
+			(lpolyci indiv_health_zanthro_height hh_faultdist ///
+          if m_indiv_edu_binary==1, degree(1) lc(black) lp(dash) astyle(ci) fc(gray%50) alc(%0)) ///
+      if hh_faultdist <= 50 ///
+		, $graph_opts $hist_opts ///
+			legend(on order(3 "No Educated Mother" 5 "Mother Primary Education" ) pos(1) r(1) ring(1) region( lc(white) ) ) ///
+			xsize(7) xtitle("Distance to Activated Fault Line (km) {&rarr}") ///
+			ytitle(" ") ylabel(-2 "-2 SD" 0 "Reference" -1 "-1 SD" ) title("Panel B: Height-for-Age")
+
+      graph save "${directory}/outputs/F9b_edu_height.gph", replace
+
+			graph combine ///
+			  "${directory}/outputs/F9a_edu_scores.gph" ///
+			  "${directory}/outputs/F9b_edu_height.gph" ///
+		  , c(1) altshrink
+
+			graph draw, ysize(6)
+
+			graph export "${directory}/outputs/F9_momedu.pdf", replace
 
 * Have a lovely day!

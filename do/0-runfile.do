@@ -59,12 +59,12 @@ qui do "${directory}/ado/iecodebook.ado"
   copy "${data}/school-density.dta" "${directory}/data/schools.dta" , replace
   copy "${directory}/data/analysis_children.dta" "${directory}/data/analysis_children_raw.dta", replace
 	!rm "${directory}/data/analysis_children.dta"
-	
+
 	foreach dta in mercalli prices schools score_sheet {
 	  iecodebook export ///
       "${directory}/data/`dta'.dta" ///
     using "${directory}/data/`dta'.xlsx" ///
-    , replace reset copy hash 
+    , replace reset copy hash
 	}
 */
 
@@ -74,14 +74,14 @@ use "${directory}/data/analysis_all.dta" , clear
 	keep censusid indiv_occupation
 	ren indiv_occupation hh_occupation
 	  lab var hh_occupation "Head of Household Occupation"
-		
+
   tempfile occupation
-	save `occupation' 
+	save `occupation'
 
   use "${directory}/data/analysis_children_raw.dta" , clear
     merge m:1 censusid using "${directory}/data/mercalli.dta" , nogen keep(3)
     merge m:1 village_code using "${directory}/data/schools.dta" , nogen keep(3)
-		
+
     merge m:1 censusid using "`occupation'" , nogen keep(1 3)
 		  recode hh_occupation ///
 			  (7 8 = 1 "Laborer") (1 2 6 = 2 "Farmer or Trader") ///
@@ -100,7 +100,7 @@ use "${directory}/data/analysis_all.dta" , clear
 save "${directory}/data/analysis_children.dta" , replace
 
 // Run all program files by setting flag to (1)
-if (0) qui {
+if (1) qui {
   do "${directory}/do/1-figures.do"
   do "${directory}/do/2-tables.do"
   do "${directory}/do/3-appendix-figures.do"

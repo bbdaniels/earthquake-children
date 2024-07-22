@@ -44,21 +44,21 @@ use "${directory}/data/analysis_all.dta"  , clear
 		/// Print
 		using "$directory/outputs/T1_descriptives.xls" ///
 	,  	replace stats(mean sd p25 p50 p75 N)
-	
+
 * Program for Table 2ab: MDE Calculator
 
   cap prog drop mdereg
 	prog def mdereg
-		  
+
 		cap mat drop a
 		mat a = r(table)
 		local se = a[2,1]
 		local df = a[7,1]
 		local crit = a[8,1]
 		local mde = `se' * (`crit' + -(invt(`df',.2)))
-		
+
 		estadd scalar mde = `mde'
-		
+
   end
 
 
@@ -84,7 +84,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
-			
+
 			est sto `var'
 
 			}
@@ -106,7 +106,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
-			
+
 			est sto `var'
 
 			}
@@ -124,7 +124,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
-			
+
 			est sto `var'2
 
 			}
@@ -133,7 +133,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if indiv_age > 17 ///
 			, cl(village_code)
-			
+
 			mdereg
 
 			local theLabel : var label `var'
@@ -142,7 +142,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
-			
+
 			est sto `var'3
 
 			}
@@ -156,7 +156,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg `var' hh_faultdist hh_epidist hh_slope i.hh_district if tag_hh == 1 & touse_shock == 1 ///
 			, cl(village_code)
-			
+
 			mdereg
 
 			local theLabel : var label `var'
@@ -165,7 +165,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 			qui sum `var' if e(sample) == 1
 			local mean = `r(mean)'
 			estadd scalar mean = `mean'
-			
+
 			est sto `var'
 
 			}
@@ -188,13 +188,13 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 		xi: reg indiv_health_weight hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-			
+
 				mdereg
 
 				qui sum indiv_health_weight
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
-				
+
 				est sto indiv_health_weight
 
 		xi: reg indiv_health_height hh_faultdist `fault_controls' if indiv_age > 17 ///
@@ -205,30 +205,30 @@ use "${directory}/data/analysis_all.dta"  , clear
 				qui sum indiv_health_height
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
-				
+
 			  est sto indiv_health_height
 
 
 		xi: reg indiv_health_weight24 hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				
+
 				mdereg
 
 				qui sum indiv_health_weight24
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
-				
+
 				est sto indiv_health_weight24
 
 		xi: reg indiv_health_height24 hh_faultdist `fault_controls' if indiv_age > 17 ///
 				, cl(village_code)
-				
+
 				mdereg
 
 				qui sum indiv_health_height24
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
-				
+
 				est sto indiv_health_height24
 
 	* Household assets & public infrastructure
@@ -248,7 +248,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 
 			xi: reg `var' hh_faultdist `fault_controls' ///
 				, cl(village_code)
-				
+
 				mdereg
 
 				local theLabel : var label `var'
@@ -257,7 +257,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 				qui sum `var'
 				local mean = `r(mean)'
 				estadd scalar mean = `mean'
-				
+
 				est sto `var'
 
 				}
@@ -282,7 +282,7 @@ use "${directory}/data/analysis_all.dta"  , clear
   local other_controls "i.indiv_male i.indiv_age"
 
   xi: reg indiv_health_zanthro_weight hh_faultdist ///
-    i.agecat*hh_faultdist `fault_controls' `other_controls' /// 
+    i.agecat*hh_faultdist `fault_controls' `other_controls' ///
   , cl(village_code)
 
     estimates store reg1
@@ -428,18 +428,18 @@ use "${directory}/data/analysis_all.dta"  , clear
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
-		
+
 		est sto reg1
 
 	xi: ivreg2 indiv_theta_mean hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age >= 9, ffirst cl(village_code)
-	
+
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
-		
+
 		est sto reg2
 
 
@@ -447,22 +447,22 @@ use "${directory}/data/analysis_all.dta"  , clear
 		( m_indiv_edu_binary = instrument )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age <= 6 , ffirst cl(village_code)
-		
+
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
-		
+
 		est sto reg3
 
 	xi: ivreg2 indiv_health_zanthro_height hh_faultdist ///
 		( m_indiv_edu_binary m_edu_fault  = instrument i_instrument_faultdist )  ///
 		`fault_controls' `other_controls' `mother_controls' ///
 		if indiv_age <= 6 , ffirst cl(village_code)
-		
+
 		estadd scalar f = `e(cdf)'
 		su `e(depvar)' if e(sample)
 		estadd scalar mean = `r(mean)'
-		
+
 		est sto reg4
 
 	gen f = 0
@@ -473,7 +473,7 @@ use "${directory}/data/analysis_all.dta"  , clear
 	xml_tab ///
 		reg1 reg2 reg3 reg4 ///
 		, save("${directory}/outputs/T4b_momedu_iv.xls") ///
-		  replace below stats(mean N f  ) /// 
+		  replace below stats(mean N f  ) ///
 			keep( hh_faultdist m_indiv_edu_binary m_edu_fault _Iindiv_mal_1)
 
 * Have a lovely day!
